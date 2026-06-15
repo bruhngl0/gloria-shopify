@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "sbg-contact",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
