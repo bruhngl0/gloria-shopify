@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "sbg-collection",
+      "settings": {
+        "products_per_page": 12,
+        "columns": 3,
+        "aspect_ratio": "portrait",
+        "show_second_image": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "sbg-blog",
+      "settings": {
+        "articles_per_page": 6
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
