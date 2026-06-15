@@ -1,0 +1,451 @@
+{%- comment -%}
+  SBG About/Story Page Section
+  Translates the Next.js about layout into a highly customizable Shopify 2.0 section.
+{%- endcomment -%}
+
+<style type="text/css">
+  /* Warped border styling for Stylist image */
+  .sbg-warped-portrait {
+    border-radius: 30% 70% 70% 30% / 50% 30% 70% 50%;
+  }
+
+  /* Mission block spotlight follow */
+  .sbg-about-spotlight {
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.5s ease, box-shadow 0.5s ease;
+  }
+  .sbg-about-spotlight:hover {
+    border-color: rgba(197, 168, 128, 0.45);
+    box-shadow: 0 25px 50px -12px rgba(197, 168, 128, 0.08);
+  }
+
+  /* Principles and timeline styling hover */
+  .sbg-principle-card {
+    transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .sbg-principle-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(197, 168, 128, 0.3);
+    box-shadow: 0 20px 25px -5px rgba(197, 168, 128, 0.05);
+  }
+</style>
+
+<div class="bg-sbg-white min-h-screen pb-16 md:pb-24">
+  
+  <!-- SECTION 1: Editorial Header Banner -->
+  <div class="relative h-[40vh] md:h-[55vh] w-full bg-sbg-black overflow-hidden border-b border-sbg-border">
+    {%- if section.settings.hero_image != blank -%}
+      <img
+        src="{{ section.settings.hero_image | image_url: width: 2000 }}"
+        alt="{{ section.settings.hero_image.alt | default: 'Styled by Gloria Design Studio' }}"
+        class="object-cover w-full h-full opacity-85 select-none"
+      >
+    {%- else -%}
+      <img
+        src="{{ 'about-hero.jpg' | asset_url }}"
+        alt="Styled by Gloria Design Studio"
+        class="object-cover w-full h-full opacity-85 select-none"
+      >
+    {%- endif -%}
+    <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/45 via-black/10 to-transparent z-20 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-sbg-black/10 z-10"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    
+    <!-- SECTION 2: Page Title -->
+    <div class="text-center max-w-3xl mx-auto mb-16 md:mb-24 reveal-on-scroll">
+      <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-3">
+        {{ section.settings.title_sub | default: "Our Purpose" }}
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold tracking-[0.2em] text-sbg-black uppercase">
+        {{ section.settings.title | default: "The Story Behind SBG" }}
+      </h1>
+      <div class="h-[1px] w-16 bg-sbg-black mx-auto mt-4"></div>
+    </div>
+
+    <!-- SECTION 3: Two Column Origin Narrative -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center mb-24">
+      
+      <!-- Narrative Left Column -->
+      <div class="lg:col-span-7 space-y-8 text-sbg-grey text-center reveal-on-scroll" data-stagger-children="0.1">
+        <div class="space-y-6 stagger-item">
+          <h2 class="font-display text-2xl md:text-3xl font-bold text-sbg-black uppercase tracking-[0.2em]">
+            {{ section.settings.narrative_title | default: "The Origin Story" }}
+          </h2>
+          <div class="w-12 h-[1px] bg-sbg-black/35 mx-auto"></div>
+          
+          <div class="space-y-5 text-xs tracking-wider leading-relaxed text-sbg-black/80 font-normal italic">
+            {%- if section.settings.narrative_text != blank -%}
+              {{ section.settings.narrative_text }}
+            {%- else -%}
+              <p>“Styled by Gloria (SBG) was born out of a simple observation: women spend their entire lives trying to fit their bodies into standard, rigid clothing sizes. When a garment doesn't look right, we blame our bodies instead of the architecture of the clothes.”</p>
+              <p>“We set out to reverse this dynamic. We design pieces from the ground up to hold, contour, and adapt to your unique lines. By integrating custom adjustability features and selecting premium, heavy stretch crepes with structural memory, we make clothing that truly serves the shape.”</p>
+              <p>“Beyond our capsule collections, we believe education is the key to styling autonomy. Our virtual consultation programs teach women how to read their body lines, choose textiles that complement their shape, and build a lasting wardrobe with zero impulse purchases.”</p>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <!-- Bio Signature -->
+        <div class="pt-6 border-t border-sbg-border/60 max-w-md mx-auto space-y-4 stagger-item">
+          <span class="font-display text-sm font-bold tracking-widest text-sbg-black uppercase block">
+            {{ section.settings.signature | default: "— Gloria G." }}
+          </span>
+          <p class="text-[9px] tracking-[0.2em] text-sbg-grey uppercase font-semibold">
+            Social Office: 
+            <a
+              href="{{ section.settings.social_link | default: 'https://instagram.com/styledbygloria_g' }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline underline-offset-4 hover:text-sbg-black transition-colors"
+            >
+              {{ section.settings.social_handle | default: "@styledbygloria_g" }}
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Warped Stylist Portrait Right Column -->
+      <div class="lg:col-span-5 w-full relative max-w-sm mx-auto lg:max-w-none pt-6 pl-6 reveal-on-scroll">
+        <div class="relative w-full aspect-[4/5]">
+          <!-- Starburst Badge -->
+          <div
+            class="absolute -top-4 -left-4 w-18 h-18 bg-sbg-black text-sbg-white flex items-center justify-center text-[9px] font-bold tracking-[0.2em] uppercase z-20 shadow-[2px_2px_4px_rgba(0,0,0,0.15)] select-none"
+            style="clip-path: polygon(50% 0%, 63% 13%, 81% 10%, 83% 29%, 99% 31%, 90% 47%, 99% 63%, 83% 66%, 81% 84%, 63% 81%, 50% 99%, 37% 81%, 19% 84%, 17% 66%, 1% 63%, 10% 47%, 1% 31%, 17% 29%, 19% 10%, 37% 13%);"
+          >
+            {{ section.settings.badge_label | default: "Founder" }}
+          </div>
+
+          <!-- Warped Portrait Container -->
+          <div class="sbg-warped-portrait w-full h-full border-2 border-sbg-black overflow-hidden bg-sbg-offwhite shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] transition-transform hover:-translate-y-1 hover:scale-[1.01] duration-500">
+            {%- if section.settings.portrait_image != blank -%}
+              <img
+                src="{{ section.settings.portrait_image | image_url: width: 800 }}"
+                alt="Gloria"
+                class="sbg-warped-portrait object-cover w-full h-full"
+              >
+            {%- else -%}
+              <img
+                src="{{ 'gloria.jpg' | asset_url }}"
+                alt="Gloria"
+                class="sbg-warped-portrait object-cover w-full h-full"
+              >
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SECTION 4: Brand Core Design Standards -->
+    <section class="bg-sbg-white w-full py-20 border-t border-sbg-border/60">
+      <div class="text-center max-w-xl mx-auto mb-16 md:mb-24">
+        <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-gold block mb-3">
+          Atelier Standards
+        </span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold tracking-wide text-sbg-black uppercase">
+          Our Design Principles
+        </h2>
+        <div class="h-[1.5px] bg-sbg-gold mx-auto mt-4 w-12"></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16 reveal-on-scroll" data-stagger-children="0.15">
+        <!-- Principle 1 -->
+        <div class="sbg-principle-card p-8 border border-sbg-border/40 bg-sbg-offwhite/50 stagger-item text-left">
+          <span class="font-display text-4xl font-light text-sbg-gold opacity-70 block mb-4">01</span>
+          <h3 class="font-display text-lg font-bold tracking-wider text-sbg-black uppercase mb-3">
+            Structure Over Size
+          </h3>
+          <p class="text-xs tracking-wider leading-relaxed text-sbg-grey">
+            Standard sizes are an average that serve nobody. We build garments around skeletal proportions, drape balance points, and fabric recovery.
+          </p>
+        </div>
+
+        <!-- Principle 2 -->
+        <div class="sbg-principle-card p-8 border border-sbg-border/40 bg-sbg-offwhite/50 stagger-item text-left">
+          <span class="font-display text-4xl font-light text-sbg-gold opacity-70 block mb-4">02</span>
+          <h3 class="font-display text-lg font-bold tracking-wider text-sbg-black uppercase mb-3">
+            Tactile Memory
+          </h3>
+          <p class="text-xs tracking-wider leading-relaxed text-sbg-grey">
+            Every yarn and weight is vetted for structural retention. Our Viscose-rich Italian double crepe is chosen specifically to hold and smooth contours.
+          </p>
+        </div>
+
+        <!-- Principle 3 -->
+        <div class="sbg-principle-card p-8 border border-sbg-border/40 bg-sbg-offwhite/50 stagger-item text-left">
+          <span class="font-display text-4xl font-light text-sbg-gold opacity-70 block mb-4">03</span>
+          <h3 class="font-display text-lg font-bold tracking-wider text-sbg-black uppercase mb-3">
+            Styling Autonomy
+          </h3>
+          <p class="text-xs tracking-wider leading-relaxed text-sbg-grey">
+            We don't believe in dependence. Our consults train you to understand your own structural geometry, ensuring dressing remains simple and intuitive.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Mission Statement Block -->
+    <div id="SGB-MissionStatement" class="sbg-about-spotlight relative bg-sbg-offwhite border border-sbg-border p-12 md:p-16 text-center max-w-4xl mx-auto mb-20 reveal-on-scroll">
+      <!-- Spotlight cursor follow overlay -->
+      <div id="sbg-mission-spotlight" class="absolute inset-0 pointer-events-none transition-opacity duration-300" style="background: radial-gradient(600px circle at center, rgba(197, 168, 128, 0.02), transparent 80%);"></div>
+      
+      <!-- Double border design -->
+      <div class="absolute inset-3 border border-sbg-border/30 pointer-events-none transition-colors duration-500"></div>
+
+      <!-- Large decorative quotation marks -->
+      <span class="font-serif text-[140px] text-stone-200/40 select-none absolute -top-4 left-6 leading-none pointer-events-none">&ldquo;</span>
+      <span class="font-serif text-[140px] text-stone-200/40 select-none absolute -bottom-16 right-6 leading-none pointer-events-none">&rdquo;</span>
+
+      <div class="relative z-10 space-y-6">
+        <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block">
+          {{ section.settings.mission_badge | default: "Our Mission Statement" }}
+        </span>
+        <div class="h-[1.5px] bg-sbg-gold mx-auto w-16"></div>
+        <p class="font-display text-xl md:text-3xl font-light tracking-wide text-sbg-black italic max-w-2xl mx-auto leading-relaxed pt-2">
+          {{ section.settings.mission_quote | default: '"To educate, empower, and design for real silhouettes — helping every woman respect and love her body more."' }}
+        </p>
+        <div class="text-[9px] font-bold tracking-[0.25em] uppercase text-sbg-grey/85 pt-4">
+          — Gloria G., Founder
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: History Timeline Atelier -->
+    <section class="bg-sbg-offwhite w-full py-20 md:py-32 border-t border-b border-sbg-border/60 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 text-left">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center max-w-xl mx-auto mb-16 md:mb-24">
+          <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-gold block mb-3">
+            Atelier Timeline
+          </span>
+          <h2 class="font-display text-3xl md:text-4xl font-bold tracking-wide text-sbg-black uppercase">
+            The Journey of SBG
+          </h2>
+          <div class="h-[1.5px] bg-sbg-gold mx-auto mt-4 w-12"></div>
+        </div>
+
+        <div class="relative border-l border-sbg-border/60 pl-8 ml-4 space-y-12 reveal-on-scroll" data-stagger-children="0.1">
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'timeline_milestone' -%}
+                <div class="relative group stagger-item" {{ block.shopify_attributes }}>
+                  <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
+                  <div class="space-y-2">
+                    <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">
+                      {{ block.settings.year }}
+                    </span>
+                    <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">
+                      {{ block.settings.title }}
+                    </h3>
+                    <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
+                      {{ block.settings.description }}
+                    </p>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            <!-- Fallback Milestones -->
+            <div class="relative group stagger-item">
+              <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
+              <div class="space-y-2">
+                <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">2020</span>
+                <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">The Blueprint</h3>
+                <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
+                  Founder Gloria G. departs traditional commercial fashion design to map vertical proportions and skeletal silhouettes, seeking to reverse sizing bias.
+                </p>
+              </div>
+            </div>
+
+            <div class="relative group stagger-item">
+              <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
+              <div class="space-y-2">
+                <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">2022</span>
+                <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">Como Textile Labs</h3>
+                <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
+                  Collaborating directly with double-knit circular loom mills in Como, Italy, we develop a heavyweight viscosity crepe fabric with elastic memory.
+                </p>
+              </div>
+            </div>
+
+            <div class="relative group stagger-item">
+              <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
+              <div class="space-y-2">
+                <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">2024</span>
+                <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">Virtual Consultation Launch</h3>
+                <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
+                  Launching remote personal styling programs, guiding clients internationally to identify shape proportions, fabric drape, and wardrobe geometry.
+                </p>
+              </div>
+            </div>
+
+            <div class="relative group stagger-item">
+              <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
+              <div class="space-y-2">
+                <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">2026</span>
+                <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">Storefront Debut</h3>
+                <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
+                  SBG launches our digital storefront offering the signature customizable 'One for All' dress, introducing structural fitting to the public.
+                </p>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: Bottom Call-to-Actions -->
+    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-16 reveal-on-scroll">
+      <a
+        href="{{ routes.root_url }}collections/all"
+        class="inline-flex items-center justify-center px-8 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-black text-sbg-white hover:bg-sbg-white hover:text-sbg-black transition-all duration-300 w-full sm:w-60 text-center"
+      >
+        Shop The Collection
+      </a>
+      <a
+        href="{{ routes.root_url }}pages/services"
+        class="inline-flex items-center justify-center px-8 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-white text-sbg-black hover:bg-sbg-black hover:text-sbg-white transition-all duration-300 w-full sm:w-60 text-center"
+      >
+        Book a Consultation
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Spotlight follow inside mission quote block
+  (function() {
+    const box = document.getElementById('SGB-MissionStatement');
+    const overlay = document.getElementById('sbg-mission-spotlight');
+
+    if (box && overlay) {
+      box.addEventListener('mousemove', function(e) {
+        const rect = box.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        overlay.style.background = 'radial-gradient(600px circle at ' + x + 'px ' + y + 'px, rgba(197, 168, 128, 0.08), transparent 80%)';
+      });
+
+      box.addEventListener('mouseleave', function() {
+        overlay.style.background = 'radial-gradient(600px circle at center, rgba(197, 168, 128, 0.02), transparent 80%)';
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "SBG About Studio",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image Banner"
+    },
+    {
+      "type": "text",
+      "id": "title_sub",
+      "label": "Page Subtitle",
+      "default": "Our Purpose"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Main Title",
+      "default": "The Story Behind SBG"
+    },
+    {
+      "type": "header",
+      "content": "Origin Narrative"
+    },
+    {
+      "type": "text",
+      "id": "narrative_title",
+      "label": "Narrative Header",
+      "default": "The Origin Story"
+    },
+    {
+      "type": "richtext",
+      "id": "narrative_text",
+      "label": "Narrative Paragraphs",
+      "info": "Leave blank to use defaults"
+    },
+    {
+      "type": "text",
+      "id": "signature",
+      "label": "Author Signature",
+      "default": "— Gloria G."
+    },
+    {
+      "type": "text",
+      "id": "social_handle",
+      "label": "Social Handle Label",
+      "default": "@styledbygloria_g"
+    },
+    {
+      "type": "url",
+      "id": "social_link",
+      "label": "Social Link Url"
+    },
+    {
+      "type": "image_picker",
+      "id": "portrait_image",
+      "label": "Stylist Portrait Image"
+    },
+    {
+      "type": "text",
+      "id": "badge_label",
+      "label": "Portrait Badge Label",
+      "default": "Founder"
+    },
+    {
+      "type": "header",
+      "content": "Mission Statement"
+    },
+    {
+      "type": "text",
+      "id": "mission_badge",
+      "label": "Mission Badge Text",
+      "default": "Our Mission Statement"
+    },
+    {
+      "type": "textarea",
+      "id": "mission_quote",
+      "label": "Mission Quote Content",
+      "default": "\"To educate, empower, and design for real silhouettes — helping every woman respect and love her body more.\""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "timeline_milestone",
+      "name": "Timeline Milestone",
+      "settings": [
+        {
+          "type": "text",
+          "id": "year",
+          "label": "Milestone Year",
+          "default": "2026"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Milestone Title",
+          "default": "Storefront Debut"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Milestone Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG About Studio"
+    }
+  ]
+}
+{% endschema %}
