@@ -1,0 +1,123 @@
+{%- comment -%}
+  SBG Customer Register — Editorial registration form
+{%- endcomment -%}
+
+<section class="bg-sbg-white w-full min-h-[calc(100vh-64px)] flex items-center justify-center py-16 md:py-24 select-none">
+  <div class="w-full max-w-md mx-auto px-6">
+
+    {%- comment -%} Header {%- endcomment -%}
+    <div class="text-center mb-10">
+      <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-3">{{ 'customer.register.subtitle' | t }}</span>
+      <h1 class="font-display text-3xl md:text-4xl font-bold tracking-[0.15em] uppercase text-sbg-black">
+        {{ 'customer.register.title' | t }}
+      </h1>
+      <div class="h-[1px] w-12 bg-sbg-black mx-auto mt-4 mb-4"></div>
+      <p class="text-[10px] tracking-wider text-sbg-grey leading-relaxed">
+        {{ 'customer.register.description' | t }}
+      </p>
+    </div>
+
+    {%- comment -%} Register Form {%- endcomment -%}
+    {%- form 'create_customer' -%}
+      <div class="space-y-5">
+        {%- if form.errors -%}
+          <div class="border border-red-300 bg-red-50 p-4 text-[10px] tracking-wider uppercase text-red-700">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label for="FirstName" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">
+              {{ 'customer.register.first_name' | t }}
+            </label>
+            <input
+              type="text"
+              name="customer[first_name]"
+              id="FirstName"
+              autocomplete="given-name"
+              required
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black placeholder:text-sbg-grey/60 focus:outline-none focus:border-sbg-black transition-colors"
+              placeholder="First"
+            >
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="LastName" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">
+              {{ 'customer.register.last_name' | t }}
+            </label>
+            <input
+              type="text"
+              name="customer[last_name]"
+              id="LastName"
+              autocomplete="family-name"
+              required
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black placeholder:text-sbg-grey/60 focus:outline-none focus:border-sbg-black transition-colors"
+              placeholder="Last"
+            >
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="Email" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">
+            {{ 'customer.register.email_label' | t }}
+          </label>
+          <input
+            type="email"
+            name="customer[email]"
+            id="Email"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+            class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black placeholder:text-sbg-grey/60 focus:outline-none focus:border-sbg-black transition-colors"
+            placeholder="{{ 'customer.register.email_placeholder' | t }}"
+          >
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="CreatePassword" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">
+            {{ 'customer.register.password_label' | t }}
+          </label>
+          <input
+            type="password"
+            name="customer[password]"
+            id="CreatePassword"
+            autocomplete="new-password"
+            required
+            class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black placeholder:text-sbg-grey/60 focus:outline-none focus:border-sbg-black transition-colors"
+            placeholder="{{ 'customer.register.password_placeholder' | t }}"
+          >
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3.5 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all"
+        >
+          {{ 'customer.register.submit' | t }}
+        </button>
+      </div>
+    {%- endform -%}
+
+    {%- comment -%} Login CTA {%- endcomment -%}
+    <div class="mt-10 pt-8 border-t border-sbg-border/60 text-center">
+      <p class="text-[10px] tracking-wider text-sbg-grey uppercase mb-3">
+        {{ 'customer.register.existing_customer' | t }}
+      </p>
+      <a
+        href="{{ routes.account_login_url }}"
+        class="inline-block px-8 py-3 text-[10px] font-bold uppercase tracking-[0.25em] border border-sbg-black text-sbg-black hover:bg-sbg-black hover:text-sbg-white transition-all"
+      >
+        {{ 'customer.register.sign_in' | t }}
+      </a>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Customer Register",
+  "settings": []
+}
+{% endschema %}

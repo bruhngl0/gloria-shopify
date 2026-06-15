@@ -52,16 +52,16 @@
         </p>
         <div class="space-y-2 pb-2">
           <p class="font-body text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-white/50">
-            FOLLOW US
+            {{ 'general.social.follow_us' | t }}
           </p>
           <div class="flex space-x-4">
             {%- if section.settings.email_address != blank -%}
-              <a href="mailto:{{ section.settings.email_address }}" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Email Office">
+              <a href="mailto:{{ section.settings.email_address }}" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="{{ 'general.accessibility.email_office' | t }}">
                 <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M3 4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.11-.9-2-2-2H3zm18 4.75L12 14.12 3 8.75V6l9 5.38L21 6v2.75z"/></svg>
               </a>
             {%- endif -%}
             {%- if settings.social_instagram_link != blank -%}
-              <a href="{{ settings.social_instagram_link }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Instagram Profile">
+              <a href="{{ settings.social_instagram_link }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="{{ 'general.accessibility.instagram_profile' | t }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
               </a>
             {%- endif -%}
@@ -72,7 +72,7 @@
       <!-- Desktop Static Footer actions -->
       <div class="hidden md:block mt-4 space-y-2">
         <p class="font-body text-[10px] font-bold tracking-[0.2em] uppercase text-sbg-white/50">
-          FOLLOW US
+          {{ 'general.social.follow_us' | t }}
         </p>
         <div class="flex space-x-4">
           {%- if section.settings.email_address != blank -%}
@@ -195,12 +195,12 @@
       <div id="footer-newsletter" class="footer-accordion-content md:block pt-2">
         <div class="flex space-x-5 pb-2">
           {%- if section.settings.email_address != blank -%}
-            <a href="mailto:{{ section.settings.email_address }}" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Email Newsletter">
+            <a href="mailto:{{ section.settings.email_address }}" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="{{ 'general.accessibility.email_newsletter' | t }}">
               <svg viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7"><path d="M3 4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.11-.9-2-2-2H3zm18 4.75L12 14.12 3 8.75V6l9 5.38L21 6v2.75z"/></svg>
             </a>
           {%- endif -%}
           {%- if section.settings.whatsapp_number != blank -%}
-            <a href="https://wa.me/{{ section.settings.whatsapp_number | replace: ' ', '' | replace: '+', '' }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Chat on WhatsApp">
+            <a href="https://wa.me/{{ section.settings.whatsapp_number | replace: ' ', '' | replace: '+', '' }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="{{ 'general.accessibility.chat_whatsapp' | t }}">
               <svg viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7"><path d="M12.012 2c-5.506 0-9.988 4.482-9.988 9.988 0 1.76.459 3.475 1.33 4.996L2.025 22l5.176-1.358c1.477.807 3.137 1.23 4.811 1.23 5.505 0 9.987-4.482 9.987-9.988C22 6.482 17.518 2 12.012 2zm6.046 14.28c-.246.696-1.245 1.286-1.745 1.344-.45.053-1.042.083-1.685-.121-.409-.13-1.61-.532-3.455-1.344-3.155-1.385-5.187-4.577-5.344-4.789-.158-.212-1.28-1.706-1.28-3.256 0-1.55.808-2.31 1.097-2.61.29-.3.633-.377.844-.377.211 0 .422.003.606.012.193.009.45-.072.702.536.257.62.877 2.134.954 2.293.076.158.127.342.023.551-.105.21-.158.342-.317.525-.158.183-.332.408-.475.547-.158.152-.323.318-.14.63.183.313.812 1.342 1.74 2.17 1.196 1.066 2.204 1.396 2.518 1.553.314.158.497.13.682-.083.185-.212.788-.918.998-1.232.211-.314.422-.26.712-.152.29.108 1.84.869 2.157 1.028.317.158.528.236.606.37.079.135.079.782-.167 1.478z"/></svg>
             </a>
           {%- endif -%}
@@ -213,7 +213,7 @@
   <!-- Bottom Copyright Bar -->
   <div class="py-4 text-center">
     <p class="font-body text-[9px] tracking-widest text-sbg-white/50 uppercase">
-      &copy; {{ 'now' | date: '%Y' }} {{ shop.name | uppercase }}. ALL RIGHTS RESERVED.
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name | uppercase }}. {{ 'general.meta.copyright' | t | upcase }}
     </p>
   </div>
 </footer>

@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "sbg-customer-login",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,182 @@
+{%- comment -%}
+  SBG Customer Login — Editorial login form with brand-consistent styling
+{%- endcomment -%}
+
+<section class="bg-sbg-white w-full min-h-[calc(100vh-64px)] flex items-center justify-center py-16 md:py-24 select-none">
+  <div class="w-full max-w-md mx-auto px-6">
+
+    {%- comment -%} Header {%- endcomment -%}
+    <div class="text-center mb-10">
+      <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-3">{{ 'customer.login.subtitle' | t }}</span>
+      <h1 class="font-display text-3xl md:text-4xl font-bold tracking-[0.15em] uppercase text-sbg-black">
+        {{ 'customer.login.title' | t }}
+      </h1>
+      <div class="h-[1px] w-12 bg-sbg-black mx-auto mt-4"></div>
+    </div>
+
+    {%- comment -%} Login Form {%- endcomment -%}
+    {%- form 'customer_login' -%}
+      <div class="space-y-5">
+        {%- if form.errors -%}
+          <div class="border border-red-300 bg-red-50 p-4 text-[10px] tracking-wider uppercase text-red-700">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="space-y-1.5">
+          <label for="CustomerEmail" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">
+            {{ 'customer.login.email_label' | t }}
+          </label>
+          <input
+            type="email"
+            name="customer[email]"
+            id="CustomerEmail"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+            class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black placeholder:text-sbg-grey/60 focus:outline-none focus:border-sbg-black transition-colors"
+            placeholder="{{ 'customer.login.email_placeholder' | t }}"
+          >
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="CustomerPassword" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">
+            {{ 'customer.login.password_label' | t }}
+          </label>
+          <input
+            type="password"
+            name="customer[password]"
+            id="CustomerPassword"
+            autocomplete="current-password"
+            required
+            class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black placeholder:text-sbg-grey/60 focus:outline-none focus:border-sbg-black transition-colors"
+            placeholder="{{ 'customer.login.password_placeholder' | t }}"
+          >
+        </div>
+
+        <div class="text-right">
+          <a href="#recover" id="RecoverLink" class="text-[9px] tracking-[0.15em] uppercase text-sbg-grey hover:text-sbg-black underline underline-offset-4 transition-colors">
+            {{ 'customer.login.forgot_password' | t }}
+          </a>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3.5 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all"
+        >
+          {{ 'customer.login.sign_in' | t }}
+        </button>
+      </div>
+    {%- endform -%}
+
+    {%- comment -%} Password Recovery Form (hidden by default) {%- endcomment -%}
+    <div id="RecoverForm" class="hidden">
+      <div class="text-center mb-8">
+        <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-3">{{ 'customer.recover.subtitle' | t }}</span>
+        <h2 class="font-display text-2xl font-bold tracking-[0.15em] uppercase text-sbg-black">
+          {{ 'customer.recover.title' | t }}
+        </h2>
+        <p class="text-[10px] tracking-wider text-sbg-grey mt-3 leading-relaxed">
+          {{ 'customer.recover.description' | t }}
+        </p>
+      </div>
+
+      {%- form 'recover_customer_password' -%}
+        <div class="space-y-5">
+          {%- if form.errors -%}
+            <div class="border border-red-300 bg-red-50 p-4 text-[10px] tracking-wider uppercase text-red-700">
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          {%- if form.posted_successfully? -%}
+            <div class="border border-green-300 bg-green-50 p-4 text-[10px] tracking-wider uppercase text-green-700">
+              {{ 'customer.recover.success' | t }}
+            </div>
+          {%- endif -%}
+
+          <div class="space-y-1.5">
+            <label for="RecoverEmail" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">
+              {{ 'customer.login.email_label' | t }}
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="RecoverEmail"
+              autocomplete="email"
+              autocorrect="off"
+              autocapitalize="off"
+              required
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black placeholder:text-sbg-grey/60 focus:outline-none focus:border-sbg-black transition-colors"
+              placeholder="{{ 'customer.login.email_placeholder' | t }}"
+            >
+          </div>
+
+          <button
+            type="submit"
+            class="w-full py-3.5 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all"
+          >
+            {{ 'customer.recover.submit' | t }}
+          </button>
+
+          <button
+            type="button"
+            id="RecoverCancel"
+            class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] border border-sbg-border text-sbg-black hover:bg-sbg-offwhite transition-all"
+          >
+            {{ 'customer.recover.cancel' | t }}
+          </button>
+        </div>
+      {%- endform -%}
+    </div>
+
+    {%- comment -%} Register CTA {%- endcomment -%}
+    <div class="mt-10 pt-8 border-t border-sbg-border/60 text-center">
+      <p class="text-[10px] tracking-wider text-sbg-grey uppercase mb-3">
+        {{ 'customer.login.new_customer' | t: shop_name: shop.name }}
+      </p>
+      <a
+        href="{{ routes.account_register_url }}"
+        class="inline-block px-8 py-3 text-[10px] font-bold uppercase tracking-[0.25em] border border-sbg-black text-sbg-black hover:bg-sbg-black hover:text-sbg-white transition-all"
+      >
+        {{ 'customer.login.create_account' | t }}
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function() {
+    const loginForm = document.querySelector('[data-login-form]') || document.getElementById('RecoverForm').previousElementSibling;
+    const recoverForm = document.getElementById('RecoverForm');
+    const recoverLink = document.getElementById('RecoverLink');
+    const recoverCancel = document.getElementById('RecoverCancel');
+
+    function showRecover() {
+      if (loginForm) loginForm.closest('form').parentElement.classList.add('hidden');
+      recoverForm.classList.remove('hidden');
+    }
+
+    function showLogin() {
+      if (loginForm) loginForm.closest('form').parentElement.classList.remove('hidden');
+      recoverForm.classList.add('hidden');
+    }
+
+    if (recoverLink) recoverLink.addEventListener('click', function(e) { e.preventDefault(); showRecover(); });
+    if (recoverCancel) recoverCancel.addEventListener('click', showLogin);
+
+    // Auto-show recover form if URL hash is #recover or if recover form was posted
+    if (window.location.hash === '#recover' || recoverForm.querySelector('.border-green-300')) {
+      showRecover();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Customer Login",
+  "settings": []
+}
+{% endschema %}

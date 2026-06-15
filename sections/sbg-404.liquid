@@ -7,17 +7,17 @@
   <div class="mx-auto max-w-xl px-4 sm:px-6 lg:px-8 space-y-8 reveal-on-scroll" data-stagger-children="0.1">
     
     <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-gold block stagger-item">
-      ERROR 404
+      {{ 'sections.four_oh_four.error_label' | t }}
     </span>
 
     <h1 class="font-display text-4xl md:text-5xl font-bold tracking-[0.2em] text-sbg-black uppercase leading-tight stagger-item">
-      SILHOUETTE NOT FOUND
+      {{ 'sections.four_oh_four.title' | t }}
     </h1>
 
     <div class="h-[1.5px] w-12 bg-sbg-gold mx-auto stagger-item"></div>
 
     <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-sm mx-auto stagger-item">
-      The styling page, journal entry, or collection range you requested could not be located. It is possible the draft coordinates have been moved.
+      {{ 'sections.four_oh_four.description' | t }}
     </p>
 
     <div class="pt-4 stagger-item">
@@ -25,7 +25,7 @@
         href="{{ routes.root_url }}"
         class="inline-flex items-center justify-center px-8 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-black text-sbg-white hover:bg-sbg-white hover:text-sbg-black transition-all duration-300 w-full sm:w-auto"
       >
-        RETURN HOME
+        {{ 'sections.four_oh_four.return_home' | t }}
       </a>
     </div>
 

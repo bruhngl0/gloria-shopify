@@ -5,10 +5,10 @@
 {%- if cart.item_count == 0 -%}
   <div class="flex flex-col items-center justify-center py-20 text-center space-y-4">
     <p class="text-sm tracking-wider text-sbg-grey uppercase font-display">
-      Your bag is currently empty
+      {{ 'general.cart.empty' | t }}
     </p>
     <a href="/collections/all" onclick="window.sbg.closeCart()" class="inline-flex items-center justify-center px-6 py-3 border border-sbg-black text-xs font-semibold uppercase tracking-widest bg-sbg-black text-sbg-white hover:bg-sbg-white hover:text-sbg-black transition-all duration-300">
-      Shop the Collection
+      {{ 'general.cart.shop_collection' | t }}
     </a>
   </div>
 {%- else -%}
@@ -23,7 +23,7 @@
               <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.image.alt | default: item.product.title }}" class="w-full h-full object-cover">
             {%- else -%}
               <div class="w-full h-full bg-sbg-hover flex items-center justify-center text-[10px] text-sbg-grey">
-                No Image
+                {{ 'general.cart.no_image' | t }}
               </div>
             {%- endif -%}
           </div>
@@ -52,18 +52,18 @@
             <!-- Qty Selectors & Remove Actions -->
             <div class="flex items-center justify-between mt-4">
               <div class="flex items-center border border-sbg-border">
-                <button onclick="window.sbg.updateQuantityAJAX('{{ item.key }}', {{ item.quantity | minus: 1 }})" class="px-2 py-1 text-sbg-black hover:bg-sbg-hover transition-colors" aria-label="Decrease quantity">
+                <button onclick="window.sbg.updateQuantityAJAX('{{ item.key }}', {{ item.quantity | minus: 1 }})" class="px-2 py-1 text-sbg-black hover:bg-sbg-hover transition-colors" aria-label="{{ 'general.accessibility.decrease_quantity' | t }}">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3"><line x1="5" x2="19" y1="12" y2="12"/></svg>
                 </button>
                 <span class="px-3 text-xs font-semibold text-sbg-black">
                   {{ item.quantity }}
                 </span>
-                <button onclick="window.sbg.updateQuantityAJAX('{{ item.key }}', {{ item.quantity | plus: 1 }})" class="px-2 py-1 text-sbg-black hover:bg-sbg-hover transition-colors" aria-label="Increase quantity">
+                <button onclick="window.sbg.updateQuantityAJAX('{{ item.key }}', {{ item.quantity | plus: 1 }})" class="px-2 py-1 text-sbg-black hover:bg-sbg-hover transition-colors" aria-label="{{ 'general.accessibility.increase_quantity' | t }}">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
                 </button>
               </div>
 
-              <button onclick="window.sbg.updateQuantityAJAX('{{ item.key }}', 0)" class="p-1 text-sbg-grey hover:text-sbg-black transition-colors" aria-label="Remove item">
+              <button onclick="window.sbg.updateQuantityAJAX('{{ item.key }}', 0)" class="p-1 text-sbg-grey hover:text-sbg-black transition-colors" aria-label="{{ 'general.accessibility.remove_item' | t }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
               </button>
             </div>
@@ -75,21 +75,21 @@
     <!-- Summary & Checkout Buttons -->
     <div class="border-t border-sbg-border px-4 py-6 bg-sbg-offwhite space-y-6 -mx-6 -mb-4">
       <div class="flex justify-between items-center text-xs tracking-wider uppercase">
-        <span class="text-sbg-grey font-medium">Subtotal</span>
+        <span class="text-sbg-grey font-medium">{{ 'general.cart.subtotal' | t }}</span>
         <span class="font-bold text-sbg-black">
           {{ cart.total_price | money }}
         </span>
       </div>
       <p class="text-[10px] tracking-wider text-sbg-grey uppercase leading-normal">
-        Shipping, duties, and taxes calculated at checkout.
+        {{ 'general.cart.shipping_note' | t }}
       </p>
 
       <div class="space-y-3">
         <a href="/checkout" class="w-full inline-flex items-center justify-center px-6 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.99] transition-all text-center">
-          Proceed to Checkout
+          {{ 'general.cart.checkout' | t }}
         </a>
         <button onclick="window.sbg.closeCart()" class="w-full inline-flex items-center justify-center px-6 py-3 border border-sbg-border text-xs font-semibold uppercase tracking-widest bg-sbg-white text-sbg-black hover:bg-sbg-hover transition-colors text-center">
-          Continue Shopping
+          {{ 'general.cart.continue_shopping' | t }}
         </button>
       </div>
     </div>

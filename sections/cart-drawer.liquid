@@ -7,9 +7,9 @@
   <!-- Header -->
   <div class="flex items-center justify-between border-b border-sbg-border px-6 py-5">
     <h3 class="font-display text-base font-bold tracking-[0.15em] text-sbg-black uppercase">
-      Your Bag
+      {{ 'general.cart.your_bag' | t }}
     </h3>
-    <button onclick="window.sbg.closeCart()" class="p-1 text-sbg-black hover:text-sbg-grey transition-colors" aria-label="Close cart">
+    <button onclick="window.sbg.closeCart()" class="p-1 text-sbg-black hover:text-sbg-grey transition-colors" aria-label="{{ 'general.accessibility.close_cart' | t }}">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
     </button>
   </div>

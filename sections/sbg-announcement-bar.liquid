@@ -33,7 +33,7 @@
     </div>
 
     {%- if section.settings.show_close_button -%}
-      <button onclick="closeAnnouncementBar()" class="announcement-bar-close p-1 focus:outline-none cursor-pointer absolute right-4 top-1/2 -translate-y-1/2" aria-label="Close announcement">
+      <button onclick="closeAnnouncementBar()" class="announcement-bar-close p-1 focus:outline-none cursor-pointer absolute right-4 top-1/2 -translate-y-1/2" aria-label="{{ 'general.accessibility.close_announcement' | t }}">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     {%- endif -%}

@@ -2,9 +2,228 @@
   "general": {
     "cart": {
       "title": "Cart",
-      "empty": "Your cart is empty",
+      "your_bag": "Your Bag",
+      "empty": "Your bag is currently empty",
+      "shop_collection": "Shop the Collection",
+      "subtotal": "Subtotal",
       "checkout": "Proceed to Checkout",
-      "continue_shopping": "Continue Shopping"
+      "continue_shopping": "Continue Shopping",
+      "shipping_note": "Shipping, duties, and taxes calculated at checkout.",
+      "no_image": "No Image",
+      "bag_count": "BAG"
+    },
+    "accessibility": {
+      "close_cart": "Close cart",
+      "close_menu": "Close menu",
+      "open_menu": "Open menu",
+      "open_cart": "Open cart",
+      "close_popup": "Close popup",
+      "close_modal": "Close modal",
+      "close_sizing_chart": "Close sizing chart",
+      "close_announcement": "Close announcement",
+      "decrease_quantity": "Decrease quantity",
+      "increase_quantity": "Increase quantity",
+      "remove_item": "Remove item",
+      "submit_search": "Submit search",
+      "previous_image": "Previous image",
+      "next_image": "Next image",
+      "email_office": "Email Office",
+      "instagram_profile": "Instagram Profile",
+      "chat_whatsapp": "Chat on WhatsApp",
+      "email_newsletter": "Email Newsletter",
+      "skip_to_content": "Skip to content"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page_of": "Page {{ current }} of {{ total }}"
+    },
+    "meta": {
+      "copyright": "All Rights Reserved"
+    },
+    "social": {
+      "follow_us": "Follow Us"
+    }
+  },
+  "sections": {
+    "header": {
+      "menu_label": "Menu"
+    },
+    "footer": {
+      "brand_tagline": "Body-Type Intentional Custom Fashion."
+    },
+    "hero": {
+      "atelier_shot": "Atelier Shot",
+      "colorway": "Colorway",
+      "select_size": "Select Size",
+      "sizing_chart": "Sizing Chart",
+      "add_to_bag": "Add to Bag",
+      "out_of_stock": "Out of Stock",
+      "preparing": "Preparing Atelier...",
+      "added": "Added to Profile ✓",
+      "error_adding": "Error Adding",
+      "studio_spec": "Studio Spec",
+      "shipping_to": "Shipping To",
+      "language": "Language",
+      "english": "English",
+      "international": "International",
+      "scroll_to_explore": "Scroll to Explore ↓",
+      "instagram": "Instagram",
+      "fabric_care": "Fabric & Care",
+      "shipping_returns": "Shipping & Returns",
+      "fit_advice": "Fit & Construction Advice",
+      "fabric_care_details": "Heavyweight stretch crepe (280 g/m²). Composition: 58% spandex, 42% rayon. Offers high recovery and smoothing compression. Machine wash cold on gentle cycle, lay flat to dry. Do not bleach. Cool iron if needed.",
+      "shipping_details": "Complimentary express shipping on orders over $250. Orders are processed within 1-2 business days. Returns are accepted within 14 days of delivery for store credit or exchange. Items must be unworn and in original packaging.",
+      "fit_details": "Features a double-lined bodice for maximum smoothing and drape. The side ruching is highly adjustable: pull it tight to raise the hem and create dynamic draping, or loosen it for a longer, sleek columnar silhouette. Fits true to size; if you are in between sizes, choose your size based on your hip measurement.",
+      "the_signature_sku": "The Signature SKU"
+    },
+    "cover_hero": {
+      "explore_collection": "Explore The Collection"
+    },
+    "collection": {
+      "atelier_range": "Atelier Range",
+      "showing_pieces": "Showing {{ count }} pieces",
+      "sort_by": "Sort By:",
+      "sale": "Sale",
+      "from_price": "From {{ price }}"
+    },
+    "search": {
+      "catalogue_search": "Catalogue Search",
+      "results_for": "Results for \"{{ terms }}\"",
+      "search_atelier": "Search Atelier",
+      "search_placeholder": "Search items, fabrics, styling programs...",
+      "matched_items": "Matched {{ count }} items",
+      "no_results": "No entries found. Try adjusting keywords or viewing collections.",
+      "view_page": "View Page"
+    },
+    "four_oh_four": {
+      "error_label": "Error 404",
+      "title": "Silhouette Not Found",
+      "description": "The styling page, journal entry, or collection range you requested could not be located. It is possible the draft coordinates have been moved.",
+      "return_home": "Return Home"
+    },
+    "size_guide": {
+      "size": "Size",
+      "bust": "Bust (in)",
+      "waist": "Waist (in)",
+      "hips": "Hips (in)"
+    },
+    "promo_popup": {
+      "success_message": "Welcome to the Atelier."
+    }
+  },
+  "customer": {
+    "login": {
+      "subtitle": "Client Portal",
+      "title": "Sign In",
+      "email_label": "Email Address",
+      "password_label": "Password",
+      "email_placeholder": "your@email.com",
+      "password_placeholder": "••••••••",
+      "forgot_password": "Forgot Password?",
+      "sign_in": "Sign In",
+      "new_customer": "New to {{ shop_name }}?",
+      "create_account": "Create Account"
+    },
+    "recover": {
+      "subtitle": "Account Recovery",
+      "title": "Reset Password",
+      "description": "Enter your email and we'll send you a link to reset your password.",
+      "submit": "Send Reset Link",
+      "cancel": "Back to Sign In",
+      "success": "We've sent you an email with a link to update your password."
+    },
+    "register": {
+      "subtitle": "Join the Atelier",
+      "title": "Create Account",
+      "description": "Register for order tracking, saved addresses, and exclusive access.",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "email_label": "Email Address",
+      "password_label": "Password",
+      "email_placeholder": "your@email.com",
+      "password_placeholder": "Minimum 5 characters",
+      "submit": "Create Account",
+      "existing_customer": "Already have an account?",
+      "sign_in": "Sign In"
+    },
+    "account": {
+      "subtitle": "Client Portal",
+      "title": "Welcome, {{ name }}",
+      "sign_out": "Sign Out",
+      "order_history": "Order History",
+      "order_count": "{{ count }} {{ count | pluralize: 'Order', 'Orders' }}",
+      "order": "Order",
+      "date": "Date",
+      "status": "Status",
+      "total": "Total",
+      "no_orders": "No orders yet",
+      "start_shopping": "Start Shopping",
+      "account_details": "Account Details",
+      "manage_addresses": "Manage Addresses"
+    },
+    "order": {
+      "subtitle": "Order Details",
+      "back_to_account": "← Back to Account",
+      "placed_on": "Placed on {{ date }}",
+      "product": "Product",
+      "price": "Price",
+      "quantity": "Qty",
+      "total": "Total",
+      "order_summary": "Order Summary",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "shipping": "Shipping",
+      "tax": "Tax",
+      "shipping_address": "Shipping Address",
+      "billing_address": "Billing Address"
+    },
+    "addresses": {
+      "subtitle": "Address Book",
+      "title": "Your Addresses",
+      "add_new": "Add New Address",
+      "new_address": "New Address",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "company": "Company",
+      "phone": "Phone",
+      "address": "Address",
+      "address2": "Apartment, Suite, etc.",
+      "city": "City",
+      "country": "Country/Region",
+      "province": "Province/State",
+      "zip": "Postal/Zip Code",
+      "set_default": "Set as default address",
+      "save": "Save Address",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "delete_confirm": "Are you sure you want to delete this address?",
+      "default_label": "Default",
+      "no_addresses": "No addresses saved yet.",
+      "update": "Update"
+    },
+    "reset_password": {
+      "subtitle": "Account Security",
+      "title": "Reset Password",
+      "description": "Enter your new password below.",
+      "new_password": "New Password",
+      "confirm_password": "Confirm Password",
+      "new_password_placeholder": "Minimum 5 characters",
+      "confirm_placeholder": "Re-enter password",
+      "submit": "Reset Password"
+    },
+    "activate": {
+      "subtitle": "Welcome",
+      "title": "Activate Account",
+      "description": "Create a password to activate your account.",
+      "password_label": "Password",
+      "confirm_label": "Confirm Password",
+      "password_placeholder": "Create a password",
+      "confirm_placeholder": "Confirm password",
+      "submit": "Activate Account",
+      "decline": "Don't want an account?",
+      "decline_link": "Decline invitation"
     }
   }
 }

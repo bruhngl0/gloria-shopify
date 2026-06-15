@@ -1,0 +1,165 @@
+{%- comment -%}
+  SBG Customer Order — Editorial order detail view
+{%- endcomment -%}
+
+<section class="bg-sbg-white w-full py-16 md:py-24 select-none">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+
+    {%- comment -%} Breadcrumb {%- endcomment -%}
+    <div class="mb-8">
+      <a href="{{ routes.account_url }}" class="text-[9px] tracking-[0.2em] uppercase text-sbg-grey hover:text-sbg-black transition-colors">
+        &larr; Back to Account
+      </a>
+    </div>
+
+    {%- comment -%} Header {%- endcomment -%}
+    <div class="text-center mb-12">
+      <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-3">Order Details</span>
+      <h1 class="font-display text-3xl md:text-4xl font-bold tracking-[0.15em] uppercase text-sbg-black">
+        {{ order.name }}
+      </h1>
+      <div class="h-[1px] w-12 bg-sbg-black mx-auto mt-4 mb-4"></div>
+      <p class="text-[10px] tracking-wider text-sbg-grey uppercase">
+        Placed on {{ order.created_at | date: '%B %d, %Y at %I:%M %p' }}
+      </p>
+    </div>
+
+    {%- comment -%} Order Status Badges {%- endcomment -%}
+    <div class="flex items-center justify-center space-x-4 mb-12">
+      <span class="inline-block px-3 py-1.5 text-[8px] font-bold tracking-widest uppercase border
+        {%- if order.financial_status == 'paid' %} bg-green-50 text-green-700 border-green-200
+        {%- elsif order.financial_status == 'pending' %} bg-yellow-50 text-yellow-700 border-yellow-200
+        {%- elsif order.financial_status == 'refunded' %} bg-red-50 text-red-700 border-red-200
+        {%- else %} bg-sbg-offwhite text-sbg-grey border-sbg-border
+        {%- endif -%}
+      ">
+        {{ order.financial_status_label }}
+      </span>
+      <span class="inline-block px-3 py-1.5 text-[8px] font-bold tracking-widest uppercase border
+        {%- if order.fulfillment_status == 'fulfilled' %} bg-green-50 text-green-700 border-green-200
+        {%- elsif order.fulfillment_status == 'partial' %} bg-yellow-50 text-yellow-700 border-yellow-200
+        {%- else %} bg-sbg-offwhite text-sbg-grey border-sbg-border
+        {%- endif -%}
+      ">
+        {{ order.fulfillment_status_label }}
+      </span>
+    </div>
+
+    {%- comment -%} Line Items {%- endcomment -%}
+    <div class="border border-sbg-border/60 mb-8">
+      <div class="border-b border-sbg-border/60 hidden md:grid md:grid-cols-12 py-3 px-6">
+        <div class="col-span-6 text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black">Product</div>
+        <div class="col-span-2 text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black text-center">Price</div>
+        <div class="col-span-2 text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black text-center">Qty</div>
+        <div class="col-span-2 text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black text-right">Total</div>
+      </div>
+
+      {%- for line_item in order.line_items -%}
+        <div class="grid grid-cols-1 md:grid-cols-12 items-center py-5 px-6 border-b border-sbg-border/40 last:border-b-0 gap-4">
+          <div class="col-span-6 flex items-center space-x-4">
+            {%- if line_item.image -%}
+              <div class="w-16 h-20 bg-sbg-offwhite border border-sbg-border/40 flex-shrink-0 overflow-hidden">
+                <img src="{{ line_item.image | image_url: width: 200 }}" alt="{{ line_item.title }}" class="w-full h-full object-cover">
+              </div>
+            {%- endif -%}
+            <div class="space-y-1">
+              <p class="text-xs font-semibold tracking-wider text-sbg-black uppercase">
+                {%- if line_item.product.url != blank -%}
+                  <a href="{{ line_item.product.url }}" class="hover:underline underline-offset-4">{{ line_item.title }}</a>
+                {%- else -%}
+                  {{ line_item.title }}
+                {%- endif -%}
+              </p>
+              {%- if line_item.variant.title != 'Default Title' -%}
+                <p class="text-[9px] tracking-wider text-sbg-grey uppercase">{{ line_item.variant.title }}</p>
+              {%- endif -%}
+              {%- if line_item.sku != blank -%}
+                <p class="text-[8px] tracking-widest text-sbg-grey/60 uppercase">SKU: {{ line_item.sku }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="col-span-2 text-[10px] tracking-wider text-sbg-grey text-center">
+            {{ line_item.original_price | money }}
+          </div>
+          <div class="col-span-2 text-[10px] tracking-wider text-sbg-grey text-center">
+            {{ line_item.quantity }}
+          </div>
+          <div class="col-span-2 text-xs font-semibold tracking-wider text-sbg-black text-right">
+            {{ line_item.final_line_price | money }}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Order Summary & Addresses {%- endcomment -%}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      {%- comment -%} Order Totals {%- endcomment -%}
+      <div class="border border-sbg-border/60 p-6">
+        <h3 class="text-[10px] font-bold tracking-[0.25em] uppercase text-sbg-black mb-4 pb-3 border-b border-sbg-border/60">
+          Order Summary
+        </h3>
+        <div class="space-y-2.5 text-[10px] tracking-wider">
+          <div class="flex justify-between text-sbg-grey">
+            <span>Subtotal</span>
+            <span>{{ order.line_items_subtotal_price | money }}</span>
+          </div>
+
+          {%- for discount_application in order.discount_applications -%}
+            <div class="flex justify-between text-green-700">
+              <span>Discount ({{ discount_application.title }})</span>
+              <span>-{{ discount_application.total_allocated_amount | money }}</span>
+            </div>
+          {%- endfor -%}
+
+          {%- for shipping_method in order.shipping_methods -%}
+            <div class="flex justify-between text-sbg-grey">
+              <span>Shipping ({{ shipping_method.title }})</span>
+              <span>{{ shipping_method.price | money }}</span>
+            </div>
+          {%- endfor -%}
+
+          {%- for tax_line in order.tax_lines -%}
+            <div class="flex justify-between text-sbg-grey">
+              <span>Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)</span>
+              <span>{{ tax_line.price | money }}</span>
+            </div>
+          {%- endfor -%}
+
+          <div class="flex justify-between font-bold text-sbg-black pt-3 border-t border-sbg-border/60">
+            <span class="uppercase">Total</span>
+            <span>{{ order.total_price | money }} {{ order.currency }}</span>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Shipping Address {%- endcomment -%}
+      <div class="border border-sbg-border/60 p-6">
+        <h3 class="text-[10px] font-bold tracking-[0.25em] uppercase text-sbg-black mb-4 pb-3 border-b border-sbg-border/60">
+          Shipping Address
+        </h3>
+        <div class="text-[10px] tracking-wider text-sbg-grey leading-relaxed">
+          {{ order.shipping_address | format_address }}
+        </div>
+      </div>
+
+      {%- comment -%} Billing Address {%- endcomment -%}
+      <div class="border border-sbg-border/60 p-6">
+        <h3 class="text-[10px] font-bold tracking-[0.25em] uppercase text-sbg-black mb-4 pb-3 border-b border-sbg-border/60">
+          Billing Address
+        </h3>
+        <div class="text-[10px] tracking-wider text-sbg-grey leading-relaxed">
+          {{ order.billing_address | format_address }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Customer Order",
+  "settings": []
+}
+{% endschema %}

@@ -7,7 +7,7 @@
   <div class="bg-sbg-white border border-sbg-border max-w-lg w-full p-8 relative flex flex-col justify-between shadow-2xl">
     
     <!-- Close button -->
-    <button onclick="closeSizingChart()" class="absolute top-4 right-4 p-2 text-sbg-black hover:text-sbg-grey focus:outline-none" aria-label="Close sizing chart">
+    <button onclick="closeSizingChart()" class="absolute top-4 right-4 p-2 text-sbg-black hover:text-sbg-grey focus:outline-none" aria-label="{{ 'general.accessibility.close_sizing_chart' | t }}">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
     </button>
 
@@ -25,10 +25,10 @@
         <table class="w-full text-left border-collapse text-[10px] uppercase tracking-wider text-sbg-grey">
           <thead>
             <tr class="border-b border-sbg-border">
-              <th class="py-2.5 font-bold text-sbg-black">Size</th>
-              <th class="py-2.5 font-bold text-sbg-black">Bust (in)</th>
-              <th class="py-2.5 font-bold text-sbg-black">Waist (in)</th>
-              <th class="py-2.5 font-bold text-sbg-black">Hips (in)</th>
+              <th class="py-2.5 font-bold text-sbg-black">{{ 'sections.size_guide.size' | t }}</th>
+              <th class="py-2.5 font-bold text-sbg-black">{{ 'sections.size_guide.bust' | t }}</th>
+              <th class="py-2.5 font-bold text-sbg-black">{{ 'sections.size_guide.waist' | t }}</th>
+              <th class="py-2.5 font-bold text-sbg-black">{{ 'sections.size_guide.hips' | t }}</th>
             </tr>
           </thead>
           <tbody>

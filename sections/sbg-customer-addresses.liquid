@@ -1,0 +1,277 @@
+{%- comment -%}
+  SBG Customer Addresses — Manage shipping addresses with add/edit forms
+{%- endcomment -%}
+
+<section class="bg-sbg-white w-full py-16 md:py-24 select-none">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+
+    {%- comment -%} Breadcrumb {%- endcomment -%}
+    <div class="mb-8">
+      <a href="{{ routes.account_url }}" class="text-[9px] tracking-[0.2em] uppercase text-sbg-grey hover:text-sbg-black transition-colors">
+        &larr; Back to Account
+      </a>
+    </div>
+
+    {%- comment -%} Header {%- endcomment -%}
+    <div class="text-center mb-12">
+      <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-3">Address Book</span>
+      <h1 class="font-display text-3xl md:text-4xl font-bold tracking-[0.15em] uppercase text-sbg-black">
+        Your Addresses
+      </h1>
+      <div class="h-[1px] w-12 bg-sbg-black mx-auto mt-4"></div>
+    </div>
+
+    {%- comment -%} Add New Address Button {%- endcomment -%}
+    <div class="text-center mb-10">
+      <button
+        type="button"
+        id="AddAddressToggle"
+        class="inline-block px-8 py-3 text-[10px] font-bold uppercase tracking-[0.25em] border border-sbg-black text-sbg-black hover:bg-sbg-black hover:text-sbg-white transition-all"
+      >
+        Add New Address
+      </button>
+    </div>
+
+    {%- comment -%} Add New Address Form (hidden by default) {%- endcomment -%}
+    <div id="AddAddressForm" class="hidden mb-12 border border-sbg-border/60 p-6 md:p-8">
+      <h2 class="text-[10px] font-bold tracking-[0.25em] uppercase text-sbg-black mb-6 pb-4 border-b border-sbg-border/60">
+        New Address
+      </h2>
+
+      {%- form 'customer_address', customer.new_address -%}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="space-y-1.5">
+            <label for="AddressFirstNameNew" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">First Name</label>
+            <input type="text" name="address[first_name]" id="AddressFirstNameNew" autocomplete="given-name" value="{{ form.first_name }}"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+          </div>
+          <div class="space-y-1.5">
+            <label for="AddressLastNameNew" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Last Name</label>
+            <input type="text" name="address[last_name]" id="AddressLastNameNew" autocomplete="family-name" value="{{ form.last_name }}"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+          </div>
+          <div class="space-y-1.5">
+            <label for="AddressCompanyNew" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Company</label>
+            <input type="text" name="address[company]" id="AddressCompanyNew" autocomplete="organization" value="{{ form.company }}"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+          </div>
+          <div class="space-y-1.5">
+            <label for="AddressPhoneNew" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Phone</label>
+            <input type="tel" name="address[phone]" id="AddressPhoneNew" autocomplete="tel" value="{{ form.phone }}"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+          </div>
+          <div class="md:col-span-2 space-y-1.5">
+            <label for="AddressAddress1New" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Address</label>
+            <input type="text" name="address[address1]" id="AddressAddress1New" autocomplete="address-line1" value="{{ form.address1 }}"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+          </div>
+          <div class="md:col-span-2 space-y-1.5">
+            <label for="AddressAddress2New" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Apartment, Suite, etc.</label>
+            <input type="text" name="address[address2]" id="AddressAddress2New" autocomplete="address-line2" value="{{ form.address2 }}"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+          </div>
+          <div class="space-y-1.5">
+            <label for="AddressCityNew" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">City</label>
+            <input type="text" name="address[city]" id="AddressCityNew" autocomplete="address-level2" value="{{ form.city }}"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+          </div>
+          <div class="space-y-1.5">
+            <label for="AddressCountryNew" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Country/Region</label>
+            <select name="address[country]" id="AddressCountryNew" data-default="{{ form.country }}" autocomplete="country"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+              {{ all_country_option_tags }}
+            </select>
+          </div>
+          <div class="space-y-1.5">
+            <label for="AddressProvinceNew" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Province/State</label>
+            <select name="address[province]" id="AddressProvinceNew" data-default="{{ form.province }}" autocomplete="address-level1"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+            </select>
+          </div>
+          <div class="space-y-1.5">
+            <label for="AddressZipNew" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Postal/Zip Code</label>
+            <input type="text" name="address[zip]" id="AddressZipNew" autocomplete="postal-code" value="{{ form.zip }}"
+              class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+          </div>
+        </div>
+
+        <div class="flex items-center mt-5 mb-6">
+          <input type="checkbox" name="address[default]" id="AddressDefaultNew" value="1"
+            class="h-4 w-4 border-sbg-border text-sbg-black focus:ring-sbg-black">
+          <label for="AddressDefaultNew" class="ml-2 text-[10px] tracking-wider text-sbg-grey uppercase">
+            Set as default address
+          </label>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <button type="submit" class="px-8 py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all">
+            Save Address
+          </button>
+          <button type="button" onclick="document.getElementById('AddAddressForm').classList.add('hidden')"
+            class="px-6 py-3 text-[10px] font-bold uppercase tracking-[0.25em] border border-sbg-border text-sbg-grey hover:text-sbg-black hover:border-sbg-black transition-all">
+            Cancel
+          </button>
+        </div>
+      {%- endform -%}
+    </div>
+
+    {%- comment -%} Existing Addresses {%- endcomment -%}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {%- for address in customer.addresses -%}
+        <div class="border border-sbg-border/60 p-6 relative" id="address-card-{{ address.id }}">
+          {%- if address == customer.default_address -%}
+            <span class="absolute top-4 right-4 text-[8px] font-bold tracking-widest uppercase text-sbg-gold border border-sbg-gold/40 bg-sbg-gold/5 px-2 py-0.5">
+              Default
+            </span>
+          {%- endif -%}
+
+          <div class="text-[10px] tracking-wider text-sbg-grey leading-relaxed mb-6">
+            <p class="font-semibold text-sbg-black mb-1">{{ address.first_name }} {{ address.last_name }}</p>
+            {%- if address.company != blank -%}<p>{{ address.company }}</p>{%- endif -%}
+            <p>{{ address.address1 }}</p>
+            {%- if address.address2 != blank -%}<p>{{ address.address2 }}</p>{%- endif -%}
+            <p>{{ address.city }}, {{ address.province_code }} {{ address.zip }}</p>
+            <p>{{ address.country }}</p>
+            {%- if address.phone != blank -%}<p class="mt-1">{{ address.phone }}</p>{%- endif -%}
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <button
+              type="button"
+              onclick="toggleEditForm('{{ address.id }}')"
+              class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black hover:underline underline-offset-4 transition-colors"
+            >
+              Edit
+            </button>
+            {%- form 'customer_address', address -%}
+              <input type="hidden" name="_method" value="delete">
+              <button
+                type="submit"
+                onclick="return confirm('Are you sure you want to delete this address?')"
+                class="text-[9px] font-bold tracking-[0.2em] uppercase text-red-600 hover:underline underline-offset-4 transition-colors"
+              >
+                Delete
+              </button>
+            {%- endform -%}
+          </div>
+
+          {%- comment -%} Inline Edit Form {%- endcomment -%}
+          <div id="EditAddressForm_{{ address.id }}" class="hidden mt-6 pt-6 border-t border-sbg-border/60">
+            {%- form 'customer_address', address -%}
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label for="AddressFirstName_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">First Name</label>
+                  <input type="text" name="address[first_name]" id="AddressFirstName_{{ address.id }}" value="{{ address.first_name }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                </div>
+                <div class="space-y-1.5">
+                  <label for="AddressLastName_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Last Name</label>
+                  <input type="text" name="address[last_name]" id="AddressLastName_{{ address.id }}" value="{{ address.last_name }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                </div>
+                <div class="space-y-1.5">
+                  <label for="AddressCompany_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Company</label>
+                  <input type="text" name="address[company]" id="AddressCompany_{{ address.id }}" value="{{ address.company }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                </div>
+                <div class="space-y-1.5">
+                  <label for="AddressPhone_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Phone</label>
+                  <input type="tel" name="address[phone]" id="AddressPhone_{{ address.id }}" value="{{ address.phone }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                </div>
+                <div class="md:col-span-2 space-y-1.5">
+                  <label for="AddressAddress1_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Address</label>
+                  <input type="text" name="address[address1]" id="AddressAddress1_{{ address.id }}" value="{{ address.address1 }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                </div>
+                <div class="md:col-span-2 space-y-1.5">
+                  <label for="AddressAddress2_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Apartment, Suite, etc.</label>
+                  <input type="text" name="address[address2]" id="AddressAddress2_{{ address.id }}" value="{{ address.address2 }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                </div>
+                <div class="space-y-1.5">
+                  <label for="AddressCity_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">City</label>
+                  <input type="text" name="address[city]" id="AddressCity_{{ address.id }}" value="{{ address.city }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                </div>
+                <div class="space-y-1.5">
+                  <label for="AddressCountry_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Country/Region</label>
+                  <select name="address[country]" id="AddressCountry_{{ address.id }}" data-default="{{ address.country }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                    {{ all_country_option_tags }}
+                  </select>
+                </div>
+                <div class="space-y-1.5">
+                  <label for="AddressProvince_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Province/State</label>
+                  <select name="address[province]" id="AddressProvince_{{ address.id }}" data-default="{{ address.province }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                  </select>
+                </div>
+                <div class="space-y-1.5">
+                  <label for="AddressZip_{{ address.id }}" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">Postal/Zip Code</label>
+                  <input type="text" name="address[zip]" id="AddressZip_{{ address.id }}" value="{{ address.zip }}"
+                    class="w-full border border-sbg-border bg-sbg-white px-3 py-2.5 text-xs tracking-wider text-sbg-black focus:outline-none focus:border-sbg-black transition-colors">
+                </div>
+              </div>
+
+              <div class="flex items-center mt-4 mb-5">
+                <input type="checkbox" name="address[default]" id="AddressDefault_{{ address.id }}" value="1" {% if address == customer.default_address %}checked{% endif %}
+                  class="h-4 w-4 border-sbg-border text-sbg-black focus:ring-sbg-black">
+                <label for="AddressDefault_{{ address.id }}" class="ml-2 text-[10px] tracking-wider text-sbg-grey uppercase">Set as default</label>
+              </div>
+
+              <div class="flex items-center space-x-4">
+                <button type="submit" class="px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 transition-all">
+                  Update
+                </button>
+                <button type="button" onclick="toggleEditForm('{{ address.id }}')"
+                  class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.25em] border border-sbg-border text-sbg-grey hover:text-sbg-black transition-all">
+                  Cancel
+                </button>
+              </div>
+            {%- endform -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if customer.addresses.size == 0 -%}
+      <div class="text-center py-16 border border-sbg-border/40">
+        <p class="text-[10px] tracking-wider text-sbg-grey uppercase">
+          No addresses saved yet.
+        </p>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+  document.getElementById('AddAddressToggle').addEventListener('click', function() {
+    const form = document.getElementById('AddAddressForm');
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden')) {
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  function toggleEditForm(id) {
+    const form = document.getElementById('EditAddressForm_' + id);
+    if (form) form.classList.toggle('hidden');
+  }
+
+  // Shopify country/province selector
+  if (typeof Shopify !== 'undefined' && Shopify.CountryProvinceSelector) {
+    new Shopify.CountryProvinceSelector('AddressCountryNew', 'AddressProvinceNew', { hideElement: 'AddressProvinceContainerNew' });
+    {%- for address in customer.addresses -%}
+      new Shopify.CountryProvinceSelector('AddressCountry_{{ address.id }}', 'AddressProvince_{{ address.id }}', { hideElement: 'AddressProvinceContainer_{{ address.id }}' });
+    {%- endfor -%}
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Customer Addresses",
+  "settings": []
+}
+{% endschema %}

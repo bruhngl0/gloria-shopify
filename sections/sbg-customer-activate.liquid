@@ -1,0 +1,81 @@
+{%- comment -%}
+  SBG Customer Activate Account — Account activation form for new invites
+{%- endcomment -%}
+
+<section class="bg-sbg-white w-full min-h-[calc(100vh-64px)] flex items-center justify-center py-16 md:py-24 select-none">
+  <div class="w-full max-w-md mx-auto px-6">
+
+    {%- comment -%} Header {%- endcomment -%}
+    <div class="text-center mb-10">
+      <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-3">Welcome</span>
+      <h1 class="font-display text-3xl md:text-4xl font-bold tracking-[0.15em] uppercase text-sbg-black">
+        Activate Account
+      </h1>
+      <div class="h-[1px] w-12 bg-sbg-black mx-auto mt-4 mb-4"></div>
+      <p class="text-[10px] tracking-wider text-sbg-grey leading-relaxed">
+        Create a password to activate your account.
+      </p>
+    </div>
+
+    {%- comment -%} Activate Form {%- endcomment -%}
+    {%- form 'activate_customer_password' -%}
+      <div class="space-y-5">
+        {%- if form.errors -%}
+          <div class="border border-red-300 bg-red-50 p-4 text-[10px] tracking-wider uppercase text-red-700">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="space-y-1.5">
+          <label for="ActivatePassword" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">
+            Password
+          </label>
+          <input
+            type="password"
+            name="customer[password]"
+            id="ActivatePassword"
+            autocomplete="new-password"
+            required
+            class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black placeholder:text-sbg-grey/60 focus:outline-none focus:border-sbg-black transition-colors"
+            placeholder="Create a password"
+          >
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="ActivatePasswordConfirm" class="text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-black block">
+            Confirm Password
+          </label>
+          <input
+            type="password"
+            name="customer[password_confirmation]"
+            id="ActivatePasswordConfirm"
+            autocomplete="new-password"
+            required
+            class="w-full border border-sbg-border bg-sbg-white px-4 py-3 text-xs tracking-wider text-sbg-black placeholder:text-sbg-grey/60 focus:outline-none focus:border-sbg-black transition-colors"
+            placeholder="Confirm password"
+          >
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3.5 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all"
+        >
+          Activate Account
+        </button>
+
+        <p class="text-center text-[10px] tracking-wider text-sbg-grey">
+          Don't want an account?
+          <a href="{{ routes.account_login_url }}" class="text-sbg-black hover:underline underline-offset-4">Decline invitation</a>
+        </p>
+      </div>
+    {%- endform -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Customer Activate",
+  "settings": []
+}
+{% endschema %}

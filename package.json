@@ -1,0 +1,27 @@
+{
+  "name": "shopify-theme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "css:build": "npx tailwindcss -i ./src/input.css -o ./assets/sbg-theme.css --minify",
+    "css:watch": "npx tailwindcss -i ./src/input.css -o ./assets/sbg-theme.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bruhngl0/gloria-shopify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bruhngl0/gloria-shopify/issues"
+  },
+  "homepage": "https://github.com/bruhngl0/gloria-shopify#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19"
+  }
+}
