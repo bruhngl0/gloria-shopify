@@ -35,69 +35,140 @@
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 reveal-on-scroll" data-stagger-children="0.05">
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full sbg-insta-grid">
       
-      <!-- Loop through 12 static curated items -->
-      {%- liquid
-        assign items_media = "dress-black-model.jpg,shortdes.mp4,about-hero.jpg,dress-red-front.jpg,stylist-gloria.jpg,one.png,dress-blue-front.jpg,two.png,three.png,gloria.jpg,dress-black-detail.jpg,point.png" | split: ","
-        assign items_type = "image,video,image,image,image,image,image,image,image,image,image,image" | split: ","
-        assign items_thumbs = ",dress-black-detail.jpg,,,,, ,,,,,," | split: ","
-        assign items_captions = "Signature drape calibrations — Model Atelier Shot,Atelier motion studies. Adjusting drape speed and natural body flow.,Inside the design headquarters: research logs and pattern drawings.,French Crepe swatch study: Crimson Red signature silhouette.,Founder Gloria G. mapping structural silhouette lines.,Fabric density explorations. 280G stretch crepe memory testing.,французький blue swatch edition — limited run calibration.,Drape texture details. Double-backed cowl neckline contour.,Pattern drafting layouts for custom profile contours.,Refining the silhouette. Creative direction and shape mapping.,Atelier detail crop: cowl neck alignment and bias cut.,Creative direction log. Curation sequence for the storefront." | split: ","
-      -%}
-
-      {%- for i in (0..11) -%}
-        {%- assign media = items_media[i] -%}
-        {%- assign type = items_type[i] -%}
-        {%- assign thumb = items_thumbs[i] | strip -%}
-        {%- assign caption = items_captions[i] -%}
-        
-        <div class="sbg-insta-card relative w-full aspect-square cursor-pointer group {% if i >= 6 %}hidden md:block{% endif %}" data-index="{{ i }}" data-link="https://www.instagram.com/styledbygloria_g/">
-          <div class="sbg-insta-card-inner w-full h-full relative overflow-hidden bg-sbg-offwhite border border-sbg-white/5 rounded-sm transition-transform duration-300 ease-out">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign media_url = ''
+            assign is_video = false
+            assign video_poster_url = ''
             
-            <!-- Media element layer -->
-            <div class="relative w-full h-full select-none" style="transform: translateZ(15px);">
-              {%- if type == 'video' -%}
-                {%- if thumb != blank -%}
-                  <img src="{{ thumb | asset_url }}" alt="{{ caption }}" class="sbg-insta-poster absolute inset-0 object-cover w-full h-full transition-transform duration-700 group-hover:scale-105">
+            if block.settings.video != blank
+              assign is_video = true
+              if block.settings.image != blank
+                assign video_poster_url = block.settings.image | image_url: width: 600
+              endif
+            endif
+            
+            assign card_link = block.settings.link | default: "https://www.instagram.com/styledbygloria_g/"
+            assign card_caption = block.settings.caption | default: ""
+          -%}
+          
+          <div class="sbg-insta-card relative w-full aspect-square cursor-pointer group {% if forloop.index0 >= 6 %}hidden md:block{% endif %}" data-index="{{ forloop.index0 }}" data-link="{{ card_link }}" {{ block.shopify_attributes }}>
+            <div class="sbg-insta-card-inner w-full h-full relative overflow-hidden bg-sbg-offwhite border border-sbg-white/5 rounded-sm transition-transform duration-300 ease-out">
+              
+              <div class="relative w-full h-full select-none" style="transform: translateZ(15px);">
+                {%- if is_video -%}
+                  {%- if video_poster_url != blank -%}
+                    <img src="{{ video_poster_url }}" alt="{{ card_caption | escape }}" class="sbg-insta-poster absolute inset-0 object-cover w-full h-full transition-transform duration-700 group-hover:scale-105">
+                  {%- else -%}
+                    {{ 'image' | placeholder_svg_tag: 'absolute inset-0 w-full h-full object-cover bg-sbg-hover' }}
+                  {%- endif -%}
+                  {{ block.settings.video | video_tag: loop: true, muted: true, playsinline: true, class: 'sbg-insta-video absolute inset-0 object-cover w-full h-full z-10 opacity-0 transition-opacity duration-300' }}
                 {%- else -%}
-                  {{ 'image' | placeholder_svg_tag: 'absolute inset-0 w-full h-full object-cover bg-sbg-hover' }}
+                  {%- if block.settings.image != blank -%}
+                    <img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ card_caption | escape }}" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105">
+                  {%- else -%}
+                    {{ 'image' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
+                  {%- endif -%}
                 {%- endif -%}
-                <video src="{{ media | asset_url }}" loop muted playsinline class="sbg-insta-video absolute inset-0 object-cover w-full h-full z-10 opacity-0 transition-opacity duration-300"></video>
-              {%- else -%}
-                <img src="{{ media | asset_url }}" alt="{{ caption }}" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105">
-              {%- endif -%}
-            </div>
+              </div>
 
-            <!-- Hover Overlay -->
-            <div class="absolute inset-0 bg-sbg-black/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 z-20" style="transform: translateZ(35px);">
-              <div class="flex justify-between items-start">
-                {%- if type == 'video' -%}
-                  <span class="bg-sbg-white/10 text-sbg-white p-1 rounded-full backdrop-blur-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="h-3 w-3"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              <!-- Hover Overlay -->
+              <div class="absolute inset-0 bg-sbg-black/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 z-20" style="transform: translateZ(35px);">
+                <div class="flex justify-between items-start">
+                  {%- if is_video -%}
+                    <span class="bg-sbg-white/10 text-sbg-white p-1 rounded-full backdrop-blur-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="h-3 w-3"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                    </span>
+                  {%- else -%}
+                    <span></span>
+                  {%- endif -%}
+                  
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-sbg-white/85 group-hover:text-sbg-white transition-colors">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                </div>
+
+                <div class="space-y-1.5 transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
+                  <p class="text-[9px] text-sbg-white/95 uppercase tracking-[0.18em] leading-relaxed line-clamp-3">
+                    {{ card_caption }}
+                  </p>
+                  <span class="text-[7.5px] text-sbg-white/60 tracking-widest uppercase block pt-1 border-t border-sbg-white/10">
+                    VIEW POST &gt;
                   </span>
-                {%- else -%}
-                  <span></span>
-                {%- endif -%}
-                
-                <!-- Instagram Monogram SVG -->
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-sbg-white/85 group-hover:text-sbg-white transition-colors">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                </svg>
+                </div>
               </div>
 
-              <div class="space-y-1.5 transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
-                <p class="text-[9px] text-sbg-white/95 uppercase tracking-[0.18em] leading-relaxed line-clamp-3">
-                  {{ caption }}
-                </p>
-                <span class="text-[7.5px] text-sbg-white/60 tracking-widest uppercase block pt-1 border-t border-sbg-white/10">
-                  VIEW POST &gt;
-                </span>
-              </div>
             </div>
-
           </div>
-        </div>
-      {%- endfor -%}
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Loop through 12 static curated items -->
+        {%- liquid
+          assign items_media = "dress-black-model.jpg,shortdes.mp4,about-hero.jpg,dress-red-front.jpg,stylist-gloria.jpg,one.png,dress-blue-front.jpg,two.png,three.png,gloria.jpg,dress-black-detail.jpg,point.png" | split: ","
+          assign items_type = "image,video,image,image,image,image,image,image,image,image,image,image" | split: ","
+          assign items_thumbs = ",dress-black-detail.jpg,,,,, ,,,,,," | split: ","
+          assign items_captions = "Signature drape calibrations — Model Atelier Shot,Atelier motion studies. Adjusting drape speed and natural body flow.,Inside the design headquarters: research logs and pattern drawings.,French Crepe swatch study: Crimson Red signature silhouette.,Founder Gloria G. mapping structural silhouette lines.,Fabric density explorations. 280G stretch crepe memory testing.,французький blue swatch edition — limited run calibration.,Drape texture details. Double-backed cowl neckline contour.,Pattern drafting layouts for custom profile contours.,Refining the silhouette. Creative direction and shape mapping.,Atelier detail crop: cowl neck alignment and bias cut.,Creative direction log. Curation sequence for the storefront." | split: ","
+        -%}
+
+        {%- for i in (0..11) -%}
+          {%- assign media = items_media[i] -%}
+          {%- assign type = items_type[i] -%}
+          {%- assign thumb = items_thumbs[i] | strip -%}
+          {%- assign caption = items_captions[i] -%}
+          
+          <div class="sbg-insta-card relative w-full aspect-square cursor-pointer group {% if i >= 6 %}hidden md:block{% endif %}" data-index="{{ i }}" data-link="https://www.instagram.com/styledbygloria_g/">
+            <div class="sbg-insta-card-inner w-full h-full relative overflow-hidden bg-sbg-offwhite border border-sbg-white/5 rounded-sm transition-transform duration-300 ease-out">
+              
+              <!-- Media element layer -->
+              <div class="relative w-full h-full select-none" style="transform: translateZ(15px);">
+                {%- if type == 'video' -%}
+                  {%- if thumb != blank -%}
+                    <img src="{{ thumb | asset_url }}" alt="{{ caption }}" class="sbg-insta-poster absolute inset-0 object-cover w-full h-full transition-transform duration-700 group-hover:scale-105">
+                  {%- else -%}
+                    {{ 'image' | placeholder_svg_tag: 'absolute inset-0 w-full h-full object-cover bg-sbg-hover' }}
+                  {%- endif -%}
+                  <video src="{{ media | asset_url }}" loop muted playsinline class="sbg-insta-video absolute inset-0 object-cover w-full h-full z-10 opacity-0 transition-opacity duration-300"></video>
+                {%- else -%}
+                  <img src="{{ media | asset_url }}" alt="{{ caption }}" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105">
+                {%- endif -%}
+              </div>
+
+              <!-- Hover Overlay -->
+              <div class="absolute inset-0 bg-sbg-black/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 z-20" style="transform: translateZ(35px);">
+                <div class="flex justify-between items-start">
+                  {%- if type == 'video' -%}
+                    <span class="bg-sbg-white/10 text-sbg-white p-1 rounded-full backdrop-blur-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="h-3 w-3"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                    </span>
+                  {%- else -%}
+                    <span></span>
+                  {%- endif -%}
+                  
+                  <!-- Instagram Monogram SVG -->
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-sbg-white/85 group-hover:text-sbg-white transition-colors">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                </div>
+
+                <div class="space-y-1.5 transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
+                  <p class="text-[9px] text-sbg-white/95 uppercase tracking-[0.18em] leading-relaxed line-clamp-3">
+                    {{ caption }}
+                  </p>
+                  <span class="text-[7.5px] text-sbg-white/60 tracking-widest uppercase block pt-1 border-t border-sbg-white/10">
+                    VIEW POST &gt;
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
 
     </div>
   </div>
@@ -117,9 +188,11 @@
 </section>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // 1. Premium 3D mouse-tilt hover effect
+  function initInstagramFeed() {
     document.querySelectorAll('.sbg-insta-card').forEach(function(card) {
+      if (card.classList.contains('js-initialized')) return;
+      card.classList.add('js-initialized');
+
       const inner = card.querySelector('.sbg-insta-card-inner');
       const video = card.querySelector('.sbg-insta-video');
       const poster = card.querySelector('.sbg-insta-poster');
@@ -140,7 +213,6 @@
       });
 
       card.addEventListener('mouseenter', function() {
-        // Play video if it exists
         if (video) {
           video.style.opacity = '1';
           video.currentTime = 0;
@@ -154,7 +226,6 @@
         inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
         inner.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
 
-        // Stop and hide video
         if (video) {
           video.style.opacity = '0';
           video.pause();
@@ -169,7 +240,10 @@
         }
       });
     });
-  });
+  }
+
+  document.addEventListener('DOMContentLoaded', initInstagramFeed);
+  document.addEventListener('shopify:section:load', initInstagramFeed);
 </script>
 
 {% schema %}
@@ -187,6 +261,34 @@
       "id": "title",
       "label": "Header Title",
       "default": "Curated Atelier Flow"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "instagram_item",
+      "name": "Lookbook Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card Link"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Hover Video (Optional)"
+        }
+      ]
     }
   ],
   "presets": [
