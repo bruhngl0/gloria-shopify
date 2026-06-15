@@ -24,7 +24,7 @@
 <div id="CartDrawerOverlay" class="fixed inset-0 z-40 bg-sbg-black/30 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500" onclick="window.sbg.closeCart()"></div>
 
 <script>
-  // Monitor Cart Drawer class changes to toggle overlay opacity & accessibility
+  // Monitor Cart Drawer class changes to toggle overlay visibility
   (function() {
     const drawer = document.getElementById('CartDrawer');
     const overlay = document.getElementById('CartDrawerOverlay');
@@ -44,34 +44,6 @@
     });
 
     observer.observe(drawer, { attributes: true });
-
-      // Handle AJAX Quantity changes and Removals with added debugging
-      window.sbg.updateQuantityAJAX = function(id, qty) {
-        console.log('Updating cart item', {id: id, qty: qty});
-        const drawerContent = document.getElementById('CartDrawerContent');
-        drawerContent.classList.add('opacity-50');
-
-        fetch(window.Shopify.routes.root + 'cart/change.js', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: id, quantity: qty })
-        })
-        .then(res => {
-          if (!res.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return res.json();
-        })
-        .then(cart => {
-          console.log('Cart updated', cart);
-          window.sbg.refreshCart();
-        })
-        .catch(err => {
-          console.error('Error updating cart item:', err);
-          drawerContent.classList.remove('opacity-50');
-        });
-      };
   })();
 </script>
 
