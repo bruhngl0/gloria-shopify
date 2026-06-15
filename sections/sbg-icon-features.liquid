@@ -1,0 +1,147 @@
+{%- comment -%}
+  SBG Icon Feature Row
+  Display highlights like "Free shipping", "Bespoke tailoring", or "Lifetime guidelines".
+{%- endcomment -%}
+
+<style type="text/css">
+  .sbg-feature-card {
+    transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  .sbg-feature-card:hover {
+    transform: translateY(-4px);
+  }
+</style>
+
+<div class="w-full py-16 border-b border-sbg-border/60 select-none bg-sbg-offwhite text-sbg-black">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ section.settings.columns | default: 3 }} gap-10 md:gap-12 reveal-on-scroll" data-stagger-children="0.1">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          <div class="sbg-feature-card flex flex-col items-center text-center space-y-4 p-6 stagger-item" {{ block.shopify_attributes }}>
+            <!-- SVG Icon Wrapper -->
+            <div class="p-3 bg-sbg-white border border-sbg-border/60 rounded-full flex items-center justify-center text-sbg-black">
+              {%- if block.settings.icon == 'custom' and block.settings.custom_svg != blank -%}
+                {{ block.settings.custom_svg }}
+              {%- else -%}
+                {%- case block.settings.icon -%}
+                  {%- when 'shipping' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M10 17h4"/><path d="M2 10h20"/><path d="M6 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="18.5" r="2.5"/><circle cx="16.5" cy="18.5" r="2.5"/></svg>
+                  {%- when 'returns' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M16 3h5v5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 21H3v-5"/></svg>
+                  {%- when 'handmade' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M19 18h2a1 1 0 0 0 1-1v-5.5a1.5 1.5 0 0 0-1.5-1.5H14"/><circle cx="6.5" cy="18.5" r="2.5"/><circle cx="16.5" cy="18.5" r="2.5"/></svg>
+                  {%- when 'design' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                {%- endcase -%}
+              {%- endif -%}
+            </div>
+
+            <!-- Content -->
+            <div class="space-y-1">
+              <h3 class="text-[10px] font-bold tracking-widest uppercase text-sbg-black">
+                {{ block.settings.title }}
+              </h3>
+              <p class="text-[11px] tracking-wider leading-relaxed text-sbg-grey max-w-xs mx-auto">
+                {{ block.settings.description }}
+              </p>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Fallback feature rows -->
+        <div class="sbg-feature-card flex flex-col items-center text-center space-y-4 p-6 stagger-item">
+          <div class="p-3 bg-sbg-white border border-sbg-border/60 rounded-full flex items-center justify-center text-sbg-black">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M10 17h4"/><path d="M2 10h20"/><path d="M6 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="18.5" r="2.5"/><circle cx="16.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-[10px] font-bold tracking-widest uppercase text-sbg-black">FREE WORLDWIDE DELIVERY</h3>
+            <p class="text-[11px] tracking-wider leading-relaxed text-sbg-grey max-w-xs mx-auto">On orders over $250. Express atelier courier.</p>
+          </div>
+        </div>
+
+        <div class="sbg-feature-card flex flex-col items-center text-center space-y-4 p-6 stagger-item">
+          <div class="p-3 bg-sbg-white border border-sbg-border/60 rounded-full flex items-center justify-center text-sbg-black">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M16 3h5v5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 21H3v-5"/></svg>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-[10px] font-bold tracking-widest uppercase text-sbg-black">14-DAY ATELIER RETURNS</h3>
+            <p class="text-[11px] tracking-wider leading-relaxed text-sbg-grey max-w-xs mx-auto">Complimentary exchanges or credit mappings.</p>
+          </div>
+        </div>
+
+        <div class="sbg-feature-card flex flex-col items-center text-center space-y-4 p-6 stagger-item">
+          <div class="p-3 bg-sbg-white border border-sbg-border/60 rounded-full flex items-center justify-center text-sbg-black">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-[10px] font-bold tracking-widest uppercase text-sbg-black">BODY LINE DRAFTED</h3>
+            <p class="text-[11px] tracking-wider leading-relaxed text-sbg-grey max-w-xs mx-auto">Hand-modeled around vertical shape proportions.</p>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SBG Icon Features Row",
+  "settings": [
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on Desktop",
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Highlight",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Feature Icon",
+          "options": [
+            { "value": "shipping", "label": "Shipping Truck" },
+            { "value": "returns", "label": "Return Loop" },
+            { "value": "handmade", "label": "Sewing Machine" },
+            { "value": "design", "label": "Circle Target" },
+            { "value": "custom", "label": "Custom SVG Code" }
+          ],
+          "default": "shipping"
+        },
+        {
+          "type": "textarea",
+          "id": "custom_svg",
+          "label": "Custom SVG Code",
+          "info": "Paste raw SVG XML code if Custom is selected."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Highlight Feature"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Short Summary",
+          "default": "Short explanation..."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Icon Features Row"
+    }
+  ]
+}
+{% endschema %}

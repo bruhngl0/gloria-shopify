@@ -1,0 +1,185 @@
+{%- comment -%}
+  SBG Editorial Lookbook Collage Grid
+  Asymmetric lookbook blocks for custom curation of fashion editorials.
+{%- endcomment -%}
+
+<style type="text/css">
+  .sbg-collage-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(224, 224, 224, 0.6);
+  }
+  .sbg-collage-img {
+    transition: transform 0.9s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  .sbg-collage-card:hover .sbg-collage-img {
+    transform: scale(1.03);
+  }
+</style>
+
+<div class="bg-sbg-white w-full py-20 border-b border-sbg-border/60 select-none">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-16 reveal-on-scroll" data-stagger-children="0.1">
+      <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-2 stagger-item">
+        {{ section.settings.sub_label | default: "Visual Edit" }}
+      </span>
+      <h2 class="font-display text-3xl md:text-4xl font-bold tracking-[0.2em] text-sbg-black uppercase stagger-item">
+        {{ section.settings.title | default: "Atelier Collage" }}
+      </h2>
+      <div class="h-[1px] w-16 bg-sbg-black mx-auto mt-4 stagger-item"></div>
+    </div>
+
+    <!-- Asymmetric Collage Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 auto-rows-[250px] md:auto-rows-[300px] reveal-on-scroll" data-stagger-children="0.12">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign col_span_class = 'md:col-span-4'
+            assign row_span_class = 'row-span-1'
+            
+            case block.settings.size
+              when 'large'
+                assign col_span_class = 'md:col-span-8'
+                assign row_span_class = 'md:row-span-2'
+              when 'tall'
+                assign col_span_class = 'md:col-span-4'
+                assign row_span_class = 'md:row-span-2'
+              when 'wide'
+                assign col_span_class = 'md:col-span-8'
+                assign row_span_class = 'row-span-1'
+            endcase
+          -%}
+          
+          <div class="sbg-collage-card group bg-sbg-offwhite rounded-sm {{ col_span_class }} {{ row_span_class }} stagger-item" {{ block.shopify_attributes }}>
+            {%- if block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}" class="block w-full h-full relative">
+            {%- else -%}
+              <div class="w-full h-full relative">
+            {%- endif -%}
+
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                alt="{{ block.settings.title | default: 'Lookbook' }}"
+                class="sbg-collage-img object-cover w-full h-full"
+              >
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
+            {%- endif -%}
+
+            <!-- Label Overlay -->
+            {%- if block.settings.title != blank or block.settings.subtitle != blank -%}
+              <div class="absolute inset-0 bg-sbg-black/15 group-hover:bg-sbg-black/35 transition-colors duration-500 flex flex-col justify-end p-6 md:p-8 text-sbg-white">
+                <div class="text-left space-y-1 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  {%- if block.settings.subtitle != blank -%}
+                    <span class="text-[8px] font-bold tracking-[0.25em] text-sbg-white/80 uppercase block">
+                      {{ block.settings.subtitle }}
+                    </span>
+                  {%- endif -%}
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="font-display text-lg md:text-xl font-bold tracking-wider uppercase">
+                      {{ block.settings.title }}
+                    </h3>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.link != blank -%}
+              </a>
+            {%- else -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Fallback Collage Blocks -->
+        <div class="sbg-collage-card group bg-sbg-offwhite rounded-sm md:col-span-8 md:row-span-2 stagger-item">
+          <img src="{{ 'about-hero.jpg' | asset_url }}" class="sbg-collage-img object-cover w-full h-full">
+          <div class="absolute inset-0 bg-sbg-black/25 flex flex-col justify-end p-6 text-sbg-white text-left">
+            <span class="text-[8px] font-bold tracking-[0.25em] uppercase text-sbg-white/80 block">Atelier Story</span>
+            <h3 class="font-display text-lg md:text-xl font-bold tracking-wider uppercase">DESIGN BLUEPRINT</h3>
+          </div>
+        </div>
+
+        <div class="sbg-collage-card group bg-sbg-offwhite rounded-sm md:col-span-4 md:row-span-2 stagger-item">
+          <img src="{{ 'dress-black-model.jpg' | asset_url }}" class="sbg-collage-img object-cover w-full h-full">
+          <div class="absolute inset-0 bg-sbg-black/25 flex flex-col justify-end p-6 text-sbg-white text-left">
+            <span class="text-[8px] font-bold tracking-[0.25em] uppercase text-sbg-white/80 block">Signature Look</span>
+            <h3 class="font-display text-lg md:text-xl font-bold tracking-wider uppercase">THE ONE DRESS</h3>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SBG Lookbook Collage",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label",
+      "default": "Visual Edit"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "Atelier Collage"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collage_block",
+      "name": "Collage Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Card Layout Size",
+          "options": [
+            { "value": "small", "label": "Small (4 cols wide, 1 row tall)" },
+            { "value": "wide", "label": "Wide (8 cols wide, 1 row tall)" },
+            { "value": "tall", "label": "Tall (4 cols wide, 2 rows tall)" },
+            { "value": "large", "label": "Large (8 cols wide, 2 rows tall)" }
+          ],
+          "default": "small"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card Title",
+          "default": "Visual Story"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Card Subtitle",
+          "default": "Atelier Curation"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card Link Url"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Lookbook Collage"
+    }
+  ]
+}
+{% endschema %}

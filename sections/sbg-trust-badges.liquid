@@ -1,0 +1,83 @@
+{%- comment -%}
+  SBG Trust Badges & Secure Checkout Indicators
+{%- endcomment -%}
+
+<div class="bg-sbg-white w-full py-12 border-b border-sbg-border/60 select-none">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 text-center space-y-6">
+    
+    {%- if section.settings.heading != blank -%}
+      <h3 class="text-[9px] font-bold tracking-[0.3em] uppercase text-sbg-grey">
+        {{ section.settings.heading }}
+      </h3>
+    {%- endif -%}
+
+    <div class="flex flex-wrap items-center justify-center gap-6 opacity-85">
+      {%- if section.settings.show_shopify_badges -%}
+        {%- for type in shop.enabled_payment_types -%}
+          <div class="h-6 flex items-center justify-center text-sbg-black">
+            {{ type | payment_type_svg_tag: class: 'h-5 w-auto' }}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          <div class="flex flex-col items-center justify-center p-2" {{ block.shopify_attributes }}>
+            {%- if block.settings.badge_image != blank -%}
+              <img src="{{ block.settings.badge_image | image_url: height: 40 }}" alt="{{ block.settings.label }}" class="h-8 w-auto object-contain">
+            {%- endif -%}
+            {%- if block.settings.label != blank -%}
+              <span class="text-[8px] tracking-widest text-sbg-grey uppercase mt-1.5 block font-semibold">
+                {{ block.settings.label }}
+              </span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SBG Trust Badges",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading Title",
+      "default": "Secure Transactions"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shopify_badges",
+      "label": "Show Native Payment Badges",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "custom_badge",
+      "name": "Custom Seal / Badge",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "badge_image",
+          "label": "Badge Seal Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Badge Label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Trust Badges"
+    }
+  ]
+}
+{% endschema %}

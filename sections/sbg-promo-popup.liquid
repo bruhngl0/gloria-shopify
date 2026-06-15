@@ -1,0 +1,191 @@
+{%- comment -%}
+  SBG Promotional Newsletter Popup Overlay Modal
+{%- endcomment -%}
+
+{%- if section.settings.enable_popup -%}
+  <div id="SBG-PromoPopup" class="fixed inset-0 z-50 bg-sbg-black/40 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500 flex items-center justify-center p-4 select-none">
+    <div class="bg-sbg-white border border-sbg-border max-w-md w-full p-8 md:p-10 relative flex flex-col justify-between shadow-2xl">
+      
+      <!-- Close button -->
+      <button onclick="closePromoPopup()" class="absolute top-4 right-4 p-2 text-sbg-black hover:text-sbg-grey focus:outline-none" aria-label="Close popup">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+
+      <div class="text-center space-y-6">
+        <!-- Badge -->
+        <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-sbg-gold block">
+          {{ section.settings.sub_label | default: "Atelier Invitation" }}
+        </span>
+
+        <!-- Title -->
+        <h3 class="font-display text-2xl md:text-3xl font-bold tracking-wide text-sbg-black uppercase">
+          {{ section.settings.title | default: "Join The Club" }}
+        </h3>
+        
+        <div class="h-[1.5px] w-12 bg-sbg-gold mx-auto mt-2"></div>
+
+        <!-- Description -->
+        <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-sm mx-auto">
+          {{ section.settings.description | default: "Subscribe to receive 10% off your initial draping order, structural body tutorials, and boutique drops." }}
+        </p>
+
+        <!-- Newsletter form -->
+        <div class="pt-2">
+          {%- form 'customer', id: 'ContactPopupNewsletter' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+
+            {%- if form.posted_successfully? -%}
+              <div class="flex flex-col items-center justify-center space-y-2 py-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                <p class="text-xs font-semibold tracking-wider text-green-800 uppercase">
+                  Welcome to the Atelier.
+                </p>
+                <script>
+                  // Auto close popup on success after a delay
+                  setTimeout(closePromoPopup, 2500);
+                </script>
+              </div>
+            {%- else -%}
+              <div class="space-y-4">
+                {%- if form.errors -%}
+                  <div class="p-3 bg-red-50 border border-red-200 text-red-800 text-[10px] tracking-wider text-left">
+                    {{ form.errors | default_errors }}
+                  </div>
+                {%- endif -%}
+
+                <div class="flex flex-col space-y-2">
+                  <input
+                    type="email"
+                    name="contact[email]"
+                    id="PopupNewsletter-Email"
+                    value="{{ form.email }}"
+                    placeholder="{{ section.settings.placeholder | default: 'Your email address' }}"
+                    required
+                    class="w-full px-4 py-3 border border-sbg-border text-xs tracking-wider transition-colors focus:outline-none focus:border-sbg-black bg-sbg-white text-sbg-black placeholder-sbg-grey/55 text-center"
+                  >
+                  <button
+                    type="submit"
+                    class="w-full py-3.5 border border-sbg-black bg-sbg-black text-sbg-white text-[10px] font-bold uppercase tracking-widest hover:bg-sbg-white hover:text-sbg-black transition-colors focus:outline-none"
+                  >
+                    {{ section.settings.button_text | default: "Subscribe" }}
+                  </button>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const popup = document.getElementById('SBG-PromoPopup');
+      if (!popup) return;
+
+      // Check dismissed status
+      if (sessionStorage.getItem('sbg-popup-dismissed') === 'true') return;
+
+      const showPopup = () => {
+        popup.classList.remove('opacity-0', 'pointer-events-none');
+        popup.classList.add('opacity-100', 'pointer-events-auto');
+        document.body.classList.add('overflow-hidden');
+      };
+
+      window.closePromoPopup = function() {
+        popup.classList.add('opacity-0', 'pointer-events-none');
+        popup.classList.remove('opacity-100', 'pointer-events-auto');
+        document.body.classList.remove('overflow-hidden');
+        sessionStorage.setItem('sbg-popup-dismissed', 'true');
+      };
+
+      // Close popup on click outside
+      popup.addEventListener('click', function(e) {
+        if (e.target === popup) {
+          closePromoPopup();
+        }
+      });
+
+      // Trigger exit intent
+      if ({{ section.settings.trigger_exit_intent | json }}) {
+        document.addEventListener('mouseleave', function(e) {
+          if (e.clientY < 20) {
+            showPopup();
+          }
+        });
+      }
+
+      // Trigger delay
+      const delay = parseInt({{ section.settings.trigger_delay | default: 5 }}) * 1000;
+      if (delay > 0) {
+        setTimeout(showPopup, delay);
+      }
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SBG Promo Popup",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_popup",
+      "label": "Enable Promo Popup",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "trigger_exit_intent",
+      "label": "Trigger on Exit Intent",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "trigger_delay",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "s",
+      "label": "Trigger Delay (Seconds)",
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label",
+      "default": "Atelier Invitation"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "Join The Dispatch"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description text",
+      "default": "Subscribe to receive 10% off your initial draping order, structural body tutorials, and boutique drops."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Input Placeholder",
+      "default": "jane@example.com"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Subscribe Button Text",
+      "default": "Subscribe"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Promo Popup"
+    }
+  ]
+}
+{% endschema %}

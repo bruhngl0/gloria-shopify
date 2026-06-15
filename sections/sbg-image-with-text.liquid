@@ -1,0 +1,141 @@
+{%- comment -%}
+  SBG Image with Text Section
+  Editorial split layout with custom text, images, and alignment settings.
+{%- endcomment -%}
+
+<style type="text/css">
+  .sbg-split-img-container {
+    overflow: hidden;
+  }
+  .sbg-split-img {
+    transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  .sbg-split-img-container:hover .sbg-split-img {
+    transform: scale(1.03);
+  }
+</style>
+
+<div class="bg-sbg-white w-full py-16 md:py-24 border-b border-sbg-border/60 select-none">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+      
+      <!-- Image Column -->
+      <div class="lg:col-span-6 w-full {% if section.settings.image_alignment == 'right' %}lg:order-2{% endif %} reveal-on-scroll">
+        <div class="sbg-split-img-container relative border border-sbg-border bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% elsif section.settings.aspect_ratio == 'landscape' %}aspect-video{% else %}aspect-[3/4]{% endif %}">
+          {%- if section.settings.image != blank -%}
+            <img
+              src="{{ section.settings.image | image_url: width: 1200 }}"
+              alt="{{ section.settings.image.alt | default: section.settings.title }}"
+              class="sbg-split-img object-cover w-full h-full"
+            >
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover opacity-85' }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Text Column -->
+      <div class="lg:col-span-6 space-y-6 text-center lg:text-left reveal-on-scroll" data-stagger-children="0.1">
+        {%- if section.settings.sub_label != blank -%}
+          <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block stagger-item">
+            {{ section.settings.sub_label }}
+          </span>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h2 class="font-display text-3xl md:text-4xl font-bold tracking-wide text-sbg-black uppercase leading-tight stagger-item">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+
+        <div class="h-[1.5px] w-12 bg-sbg-black mx-auto lg:mx-0 stagger-item"></div>
+
+        {%- if section.settings.text != blank -%}
+          <div class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-xl mx-auto lg:mx-0 stagger-item">
+            {{ section.settings.text }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          <div class="pt-4 stagger-item">
+            <a
+              href="{{ section.settings.button_link }}"
+              class="inline-flex items-center justify-center px-8 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-black text-sbg-white hover:bg-sbg-white hover:text-sbg-black transition-all duration-300 w-full sm:w-auto"
+            >
+              {{ section.settings.button_label }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SBG Image with Text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Section Image"
+    },
+    {
+      "type": "select",
+      "id": "image_alignment",
+      "label": "Image Alignment (Desktop)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Image Aspect Ratio",
+      "options": [
+        { "value": "square", "label": "Square (1:1)" },
+        { "value": "portrait", "label": "Portrait (3:4)" },
+        { "value": "landscape", "label": "Landscape (16:9)" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label",
+      "default": "Editorial Spotlight"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Structural Precision"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Body Text",
+      "default": "<p>Write editorial text blocks to showcase design narratives, bespoke styling details, or collection profiles.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Discover More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Image with Text"
+    }
+  ]
+}
+{% endschema %}

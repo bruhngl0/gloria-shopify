@@ -1,0 +1,123 @@
+{%- comment -%}
+  SBG Full-Width Immersive Editorial Video Section
+{%- endcomment -%}
+
+<style type="text/css">
+  .sbg-video-overlay {
+    background-color: rgba(10, 10, 10, {{ section.settings.overlay_opacity }}%);
+  }
+</style>
+
+<div class="relative w-full {% if section.settings.full_height %}h-screen{% else %}h-[60vh] md:h-[75vh]{% endif %} bg-sbg-black overflow-hidden select-none border-b border-sbg-border/60">
+  
+  <!-- Video Player -->
+  {%- if section.settings.video_url != blank -%}
+    {{ section.settings.video_url | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, class: 'absolute inset-0 w-full h-full object-cover z-0' }}
+  {%- else -%}
+    <!-- Default asset fallback lookbook video -->
+    <video src="{{ 'shortdes.mp4' | asset_url }}" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0"></video>
+  {%- endif -%}
+
+  <!-- Vignette Overlay -->
+  <div class="sbg-video-overlay absolute inset-0 z-10 transition-colors duration-500"></div>
+
+  <!-- Content Block -->
+  <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center p-6 text-sbg-white">
+    <div class="max-w-2xl space-y-6 reveal-on-scroll" data-stagger-children="0.1">
+      {%- if section.settings.sub_label != blank -%}
+        <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-white/80 block stagger-item">
+          {{ section.settings.sub_label }}
+        </span>
+      {%- endif -%}
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="font-display text-4xl md:text-6xl font-bold tracking-[0.2em] uppercase leading-tight stagger-item">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+
+      <div class="h-[1.5px] w-16 bg-sbg-white/40 mx-auto stagger-item"></div>
+
+      {%- if section.settings.description != blank -%}
+        <p class="text-xs tracking-wider leading-relaxed text-sbg-white/80 max-w-lg mx-auto stagger-item">
+          {{ section.settings.description }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <div class="pt-4 stagger-item">
+          <a
+            href="{{ section.settings.button_link }}"
+            class="inline-flex items-center justify-center px-8 py-4 border border-sbg-white text-xs font-bold uppercase tracking-widest bg-sbg-white text-sbg-black hover:bg-transparent hover:text-sbg-white transition-all duration-300 w-full sm:w-auto"
+          >
+            {{ section.settings.button_label }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "SBG Video Showcase",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video_url",
+      "label": "Custom Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_height",
+      "label": "Full Screen Height (100vh)",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Dark Vignette Opacity",
+      "default": 35
+    },
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label",
+      "default": "Studio Motion"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Header Title",
+      "default": "Atelier Drapery"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Summary Paragraph",
+      "default": "Observe the fluid dynamics and natural gravity flow of our custom circular visco-crepe fabric lines."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Text",
+      "default": "Shop The Silhouette"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Video Showcase"
+    }
+  ]
+}
+{% endschema %}

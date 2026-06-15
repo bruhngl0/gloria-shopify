@@ -1,0 +1,181 @@
+{%- comment -%}
+  SBG Global Size Guide Modal Section
+  Provides the sizing table modal triggered by clicking 'Sizing Chart' buttons.
+{%- endcomment -%}
+
+<div id="SBG-GlobalSizeGuideModal" class="fixed inset-0 z-50 bg-sbg-black/30 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4 select-none">
+  <div class="bg-sbg-white border border-sbg-border max-w-lg w-full p-8 relative flex flex-col justify-between shadow-2xl">
+    
+    <!-- Close button -->
+    <button onclick="closeSizingChart()" class="absolute top-4 right-4 p-2 text-sbg-black hover:text-sbg-grey focus:outline-none" aria-label="Close sizing chart">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+
+    <div>
+      <h3 class="font-display text-xl font-bold tracking-widest uppercase text-sbg-black mb-2 text-left">
+        {{ section.settings.title | default: "Size Guide" }}
+      </h3>
+      {%- if section.settings.description != blank -%}
+        <p class="text-[10px] tracking-wider uppercase text-sbg-grey mb-6 text-left">
+          {{ section.settings.description }}
+        </p>
+      {%- endif -%}
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-[10px] uppercase tracking-wider text-sbg-grey">
+          <thead>
+            <tr class="border-b border-sbg-border">
+              <th class="py-2.5 font-bold text-sbg-black">Size</th>
+              <th class="py-2.5 font-bold text-sbg-black">Bust (in)</th>
+              <th class="py-2.5 font-bold text-sbg-black">Waist (in)</th>
+              <th class="py-2.5 font-bold text-sbg-black">Hips (in)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- if section.blocks.size > 0 -%}
+              {%- for block in section.blocks -%}
+                <tr class="border-b border-sbg-border/60" {{ block.shopify_attributes }}>
+                  <td class="py-3 font-semibold text-sbg-black">{{ block.settings.size }}</td>
+                  <td class="py-3">{{ block.settings.bust }}</td>
+                  <td class="py-3">{{ block.settings.waist }}</td>
+                  <td class="py-3">{{ block.settings.hips }}</td>
+                </tr>
+              {%- endfor -%}
+            {%- else -%}
+              <!-- Fallback measurements -->
+              <tr class="border-b border-sbg-border/60">
+                <td class="py-3 font-semibold text-sbg-black">XS</td>
+                <td class="py-3">31 - 32.5</td>
+                <td class="py-3">24 - 25.5</td>
+                <td class="py-3">34 - 35.5</td>
+              </tr>
+              <tr class="border-b border-sbg-border/60">
+                <td class="py-3 font-semibold text-sbg-black">S</td>
+                <td class="py-3">33 - 34.5</td>
+                <td class="py-3">26 - 27.5</td>
+                <td class="py-3">36 - 37.5</td>
+              </tr>
+              <tr class="border-b border-sbg-border/60">
+                <td class="py-3 font-semibold text-sbg-black">M</td>
+                <td class="py-3">35 - 36.5</td>
+                <td class="py-3">28 - 29.5</td>
+                <td class="py-3">38 - 39.5</td>
+              </tr>
+              <tr class="border-b border-sbg-border/60">
+                <td class="py-3 font-semibold text-sbg-black">L</td>
+                <td class="py-3">37 - 38.5</td>
+                <td class="py-3">30 - 31.5</td>
+                <td class="py-3">40 - 41.5</td>
+              </tr>
+              <tr class="border-b border-sbg-border/60">
+                <td class="py-3 font-semibold text-sbg-black">XL</td>
+                <td class="py-3">39 - 41</td>
+                <td class="py-3">32 - 34</td>
+                <td class="py-3">42 - 44</td>
+              </tr>
+            {%- endif -%}
+          </tbody>
+        </table>
+      </div>
+      
+      {%- if section.settings.note != blank -%}
+        <div class="mt-6 text-[9.5px] tracking-wider leading-relaxed text-sbg-grey uppercase text-left border-t border-sbg-border/40 pt-4">
+          {{ section.settings.note }}
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+<script>
+  window.openSizingChart = function() {
+    const modal = document.getElementById('SBG-GlobalSizeGuideModal');
+    if (modal) {
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100', 'pointer-events-auto');
+      document.body.classList.add('overflow-hidden');
+    }
+  };
+
+  window.closeSizingChart = function() {
+    const modal = document.getElementById('SBG-GlobalSizeGuideModal');
+    if (modal) {
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.classList.remove('opacity-100', 'pointer-events-auto');
+      document.body.classList.remove('overflow-hidden');
+    }
+  };
+
+  // Close sizing modal on click outside
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('SBG-GlobalSizeGuideModal');
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeSizingChart();
+        }
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "SBG Global Size Guide",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Modal Title",
+      "default": "Size Guide"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Subtitle",
+      "default": "Structural Silhouette Chart"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Fit Note / Advice",
+      "default": "Measurements are shown in inches. Styled by Gloria specializes in body-type proportions. Custom adjustments are available via styling programs."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "size_row",
+      "name": "Size Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "size",
+          "label": "Size Label",
+          "default": "S"
+        },
+        {
+          "type": "text",
+          "id": "bust",
+          "label": "Bust Range"
+        },
+        {
+          "type": "text",
+          "id": "waist",
+          "label": "Waist Range"
+        },
+        {
+          "type": "text",
+          "id": "hips",
+          "label": "Hips Range"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Global Size Guide"
+    }
+  ]
+}
+{% endschema %}
