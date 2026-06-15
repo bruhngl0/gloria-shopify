@@ -1,0 +1,125 @@
+{%- comment -%}
+  SBG Fabric and textiles section with side specifications and mirrored parallax image
+{%- endcomment -%}
+
+<section class="bg-sbg-white w-full py-20 md:py-32 border-t border-sbg-border/60 select-none">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+      <!-- Left Column: Asymmetrical Copy & Metrics -->
+      <div class="lg:col-span-5 space-y-8 order-2 lg:order-1 reveal-on-scroll">
+        <div class="space-y-4">
+          <span class="text-[10px] font-bold tracking-widest text-sbg-gold uppercase block">
+            {{ section.settings.sub_label | default: 'Atelier & Textiles' }}
+          </span>
+          <h2 class="font-display text-3xl md:text-4xl font-bold tracking-wide text-sbg-black uppercase">
+            {{ section.settings.title | default: 'The Architecture of Stretch Crepe' }}
+          </h2>
+          <p class="text-xs tracking-wider leading-relaxed text-sbg-grey">
+            {{ section.settings.description | default: 'Our signature capsule collections leverage a bespoke heavyweight crepe engineered with structural memory. Unlike standard fabrics that stretch thin and pull, our Viscose-rich weave contours to your lines, holding its shape while adapting dynamically to your movements.' }}
+          </p>
+        </div>
+
+        <!-- Spec List -->
+        <div class="border-t border-sbg-border/60 pt-6 space-y-4">
+          <span class="text-[10px] font-bold tracking-widest text-sbg-grey uppercase block">
+            Textile Specifications
+          </span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <span class="text-[9px] font-bold text-sbg-grey/65 uppercase tracking-wider block">Weight Index</span>
+              <span class="text-xs text-sbg-black font-medium tracking-wide">{{ section.settings.weight_index | default: '380 GSM (Heavyweight)' }}</span>
+            </div>
+            <div class="space-y-1">
+              <span class="text-[9px] font-bold text-sbg-grey/65 uppercase tracking-wider block">Composition</span>
+              <span class="text-xs text-sbg-black font-medium tracking-wide">{{ section.settings.composition | default: '74% Viscose, 18% Polyamide, 8% Elastane' }}</span>
+            </div>
+            <div class="space-y-1">
+              <span class="text-[9px] font-bold text-sbg-grey/65 uppercase tracking-wider block">Weave Structure</span>
+              <span class="text-xs text-sbg-black font-medium tracking-wide">{{ section.settings.weave_structure | default: 'Double-knit stretch crepe' }}</span>
+            </div>
+            <div class="space-y-1">
+              <span class="text-[9px] font-bold text-sbg-grey/65 uppercase tracking-wider block">Mill Location</span>
+              <span class="text-xs text-sbg-black font-medium tracking-wide">{{ section.settings.mill_location | default: 'Como, Italy' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Mirror Immersive Image -->
+      <div class="lg:col-span-7 relative group order-1 lg:order-2 reveal-on-scroll">
+        <div class="absolute inset-0 border border-sbg-border translate-x-4 -translate-y-4 transition-transform duration-500 group-hover:translate-x-2 group-hover:-translate-y-2 pointer-events-none"></div>
+        <div class="relative w-full aspect-[4/5] border border-sbg-black overflow-hidden bg-sbg-offwhite z-10">
+          <div class="w-full h-full scale-x-[-1]">
+            {%- if section.settings.fabric_image != blank -%}
+              <img src="{{ section.settings.fabric_image | image_url: width: 1000 }}" alt="Fabric detail zoom" class="w-full h-full object-cover">
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover bg-sbg-hover opacity-70' }}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SBG Fabric Details",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label Text",
+      "default": "Atelier & Textiles"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "The Architecture of Stretch Crepe"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Our signature capsule collections leverage a bespoke heavyweight crepe engineered with structural memory. Unlike standard fabrics that stretch thin and pull, our Viscose-rich weave contours to your lines, holding its shape while adapting dynamically to your movements."
+    },
+    {
+      "type": "text",
+      "id": "weight_index",
+      "label": "Weight Index",
+      "default": "380 GSM (Heavyweight)"
+    },
+    {
+      "type": "text",
+      "id": "composition",
+      "label": "Composition",
+      "default": "74% Viscose, 18% Polyamide, 8% Elastane"
+    },
+    {
+      "type": "text",
+      "id": "weave_structure",
+      "label": "Weave Structure",
+      "default": "Double-knit stretch crepe with structural memory"
+    },
+    {
+      "type": "text",
+      "id": "mill_location",
+      "label": "Mill Location",
+      "default": "Como, Italy"
+    },
+    {
+      "type": "image_picker",
+      "id": "fabric_image",
+      "label": "Fabric Detail Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Fabric Details"
+    }
+  ]
+}
+{% endschema %}

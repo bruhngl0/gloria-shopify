@@ -1,0 +1,75 @@
+{%- comment -%}
+  SBG AJAX-based sliding cart drawer
+{%- endcomment -%}
+
+<!-- Cart Drawer Container -->
+<div id="CartDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-sbg-white shadow-2xl flex flex-col focus:outline-none transition-transform duration-500 ease-in-out transform translate-x-full h-full">
+  <!-- Header -->
+  <div class="flex items-center justify-between border-b border-sbg-border px-6 py-5">
+    <h3 class="font-display text-base font-bold tracking-[0.15em] text-sbg-black uppercase">
+      Your Bag
+    </h3>
+    <button onclick="window.sbg.closeCart()" class="p-1 text-sbg-black hover:text-sbg-grey transition-colors" aria-label="Close cart">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Cart Drawer Scrollable Content Area -->
+  <div id="CartDrawerContent" class="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+    {%- render 'cart-drawer-items' -%}
+  </div>
+</div>
+
+<!-- Simple Background overlay -->
+<div id="CartDrawerOverlay" class="fixed inset-0 z-40 bg-sbg-black/30 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500" onclick="window.sbg.closeCart()"></div>
+
+<script>
+  // Monitor Cart Drawer class changes to toggle overlay opacity & accessibility
+  (function() {
+    const drawer = document.getElementById('CartDrawer');
+    const overlay = document.getElementById('CartDrawerOverlay');
+
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.attributeName === 'class') {
+          if (drawer.classList.contains('translate-x-full')) {
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            overlay.classList.remove('opacity-100', 'pointer-events-auto');
+          } else {
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            overlay.classList.add('opacity-100', 'pointer-events-auto');
+          }
+        }
+      });
+    });
+
+    observer.observe(drawer, { attributes: true });
+
+    // Handle AJAX Quantity changes and Removals
+    window.sbg.updateQuantityAJAX = function(line, qty) {
+      const drawerContent = document.getElementById('CartDrawerContent');
+      drawerContent.classList.add('opacity-50');
+
+      fetch(window.Shopify.routes.root + 'cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ line: line, quantity: qty })
+      })
+      .then(res => res.json())
+      .then(cart => {
+        window.sbg.refreshCart();
+      })
+      .catch(err => {
+        console.error("Error updating cart item:", err);
+        drawerContent.classList.remove('opacity-50');
+      });
+    };
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "SBG Cart Drawer",
+  "settings": []
+}
+{% endschema %}

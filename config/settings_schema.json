@@ -1,0 +1,33 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Styled by Gloria",
+    "theme_version": "1.0.0",
+    "theme_author": "Antigravity",
+    "theme_documentation_url": "https://styledbygloria.com",
+    "theme_support_url": "https://styledbygloria.com"
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram Link",
+        "default": "https://instagram.com/styledbygloria_g"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok Link",
+        "default": "https://tiktok.com/@styledbygloria_g"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube Link",
+        "default": "https://youtube.com"
+      }
+    ]
+  }
+]

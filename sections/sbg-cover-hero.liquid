@@ -1,0 +1,198 @@
+{%- comment -%}
+  SBG Home page Cover Collage Hero with dynamic text ticker and scroll down indicator
+{%- endcomment -%}
+
+<style type="text/css">
+  @keyframes ticker-slide {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-content {
+    display: flex;
+    white-space: nowrap;
+    width: max-content;
+    animation: ticker-slide 32s linear infinite;
+    will-change: transform;
+  }
+
+  /* Fade & slide animations synced with Splash Screen Loader */
+  .hero-animate-left {
+    opacity: 0;
+    transform: translate3d(-40px, 40px, 0);
+    transition: opacity 1.4s ease-out, transform 1.4s ease-out;
+    transition-delay: 0.4s;
+    will-change: opacity, transform;
+  }
+  .sbg-loaded .hero-animate-left {
+    opacity: 0.85;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .hero-animate-center {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+    transition-delay: 0.2s;
+    will-change: opacity, transform;
+  }
+  .sbg-loaded .hero-animate-center {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .hero-animate-right {
+    opacity: 0;
+    transform: translate3d(40px, 40px, 0);
+    transition: opacity 1.4s ease-out, transform 1.4s ease-out;
+    transition-delay: 0.5s;
+    will-change: opacity, transform;
+  }
+  .sbg-loaded .hero-animate-right {
+    opacity: 0.85;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .hero-animate-ticker {
+    opacity: 0;
+    transition: opacity 1.5s ease-out;
+    transition-delay: 0.7s;
+    will-change: opacity;
+  }
+  .sbg-loaded .hero-animate-ticker {
+    opacity: 1;
+  }
+
+  .hero-animate-scroll {
+    opacity: 0;
+    transition: opacity 1.2s ease-out;
+    transition-delay: 0.9s;
+    will-change: opacity;
+  }
+  .sbg-loaded .hero-animate-scroll {
+    opacity: 1;
+  }
+</style>
+
+<section class="relative w-full min-h-screen pt-20 flex items-center justify-center bg-sbg-white overflow-hidden select-none border-b border-sbg-border">
+  <!-- Top Dark Vignette overlay for Header legibility -->
+  <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/45 via-black/10 to-transparent z-30 pointer-events-none"></div>
+
+  <!-- Editorial Grid Background -->
+  <div class="absolute inset-0 bg-[linear-gradient(to_right,#F0F0F0_1px,transparent_1px),linear-gradient(to_bottom,#F0F0F0_1px,transparent_1px)] bg-[size:40px_40px] opacity-30 pointer-events-none"></div>
+
+  <!-- Center Image Collage (Symmetrical Staggered Triptych) -->
+  <div class="relative w-full h-[72vh] md:h-[65vh] max-w-5xl mx-auto flex items-center justify-center gap-0 md:gap-8 z-10 px-4">
+    
+    <!-- Left Card -->
+    <div class="hero-animate-left absolute left-4 top-2 md:relative md:left-auto md:top-auto w-[40%] sm:w-[25%] md:w-[24%] aspect-[3/4] border border-sbg-border/60 bg-sbg-offwhite z-0 shadow-sm md:shadow-md overflow-hidden md:mt-12 hover:scale-105 transition-transform duration-500">
+      {%- if section.settings.image_left != blank -%}
+        <img src="{{ section.settings.image_left | image_url: width: 600 }}" alt="{{ section.settings.image_left.alt | default: 'SBG campaign' }}" class="w-full h-full object-cover">
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-sbg-hover object-cover opacity-50' }}
+      {%- endif -%}
+    </div>
+
+    <!-- Main Center Portrait Image Card -->
+    <div class="hero-animate-center relative w-[56%] sm:w-[45%] md:w-[42%] aspect-[3/4] border-2 border-sbg-black bg-sbg-offwhite z-10 shadow-md md:shadow-[10px_10px_0px_rgba(10,10,10,1)] overflow-hidden hover:scale-[1.02] transition-transform duration-500">
+      {%- if section.settings.image_center != blank -%}
+        <img src="{{ section.settings.image_center | image_url: width: 800 }}" alt="{{ section.settings.image_center.alt | default: 'SBG silhouette campaign' }}" class="w-full h-full object-cover">
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-sbg-hover object-cover opacity-80' }}
+      {%- endif -%}
+    </div>
+
+    <!-- Right Card -->
+    <div class="hero-animate-right absolute right-4 bottom-2 md:relative md:right-auto md:top-auto w-[40%] sm:w-[25%] md:w-[24%] aspect-[3/4] border border-sbg-border/60 bg-sbg-offwhite z-0 shadow-sm md:shadow-md overflow-hidden md:mt-12 hover:scale-105 transition-transform duration-500">
+      {%- if section.settings.image_right != blank -%}
+        <img src="{{ section.settings.image_right | image_url: width: 600 }}" alt="{{ section.settings.image_right.alt | default: 'SBG lookbook' }}" class="w-full h-full object-cover">
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-sbg-hover object-cover opacity-50' }}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- Horizontal Scrolling Ticker -->
+  <div class="hero-animate-ticker absolute bottom-28 left-0 w-full z-10 pointer-events-none select-none border-t border-b border-sbg-black/15 py-4 bg-sbg-white/30 backdrop-blur-sm overflow-hidden">
+    <div class="ticker-content">
+      {%- liquid
+        assign words_raw = section.settings.ticker_words | default: 'Silhouette, Symmetry, Drape, Line, Balance, Harmony, Intentional, Proportions'
+        assign words = words_raw | split: ','
+      -%}
+      {%- for i in (1..4) -%}
+        {%- for word in words -%}
+          <span class="font-display text-xl sm:text-3xl text-sbg-black/70 uppercase tracking-[0.3em] mx-10 inline-flex items-center gap-6">
+            {{ word | strip }}
+            <span class="text-sbg-gold/70 font-body text-xs font-bold">•</span>
+          </span>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <!-- Bottom Title & Scroll Indicator -->
+  <div onclick="document.getElementById('sbg-buy-box')?.scrollIntoView({ behavior: 'smooth' })" class="hero-animate-scroll absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 cursor-pointer z-20 text-center w-full px-4">
+    <p class="text-[10px] md:text-xs tracking-[0.25em] font-semibold text-sbg-black uppercase select-none">
+      {{ section.settings.top_label | default: 'BODY-TYPE INTENTIONAL FASHION' }}
+    </p>
+    <div class="flex flex-col items-center space-y-2">
+      <span class="text-[8.5px] tracking-[0.2em] text-sbg-grey uppercase select-none">
+        Explore The Collection
+      </span>
+      <div id="scroll-line" class="w-[1px] h-8 bg-sbg-black/60 transition-transform duration-1000"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    const scrollLine = document.getElementById('scroll-line');
+    if (scrollLine) {
+      setInterval(() => {
+        scrollLine.style.transform = 'translateY(8px)';
+        setTimeout(() => {
+          scrollLine.style.transform = 'translateY(0)';
+        }, 900);
+      }, 1800);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "SBG Cover Hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_left",
+      "label": "Left Collage Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_center",
+      "label": "Center Collage Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_right",
+      "label": "Right Collage Image"
+    },
+    {
+      "type": "text",
+      "id": "ticker_words",
+      "label": "Ticker Words (Comma separated)",
+      "default": "Silhouette, Symmetry, Drape, Line, Balance, Harmony, Intentional, Proportions"
+    },
+    {
+      "type": "text",
+      "id": "top_label",
+      "label": "Top Label Text",
+      "default": "BODY-TYPE INTENTIONAL FASHION"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Cover Hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,193 @@
+{%- comment -%}
+  SBG Editorial Sticky Header with dynamic visibility and transparent/solid states
+{%- endcomment -%}
+
+<style type="text/css">
+  .nav-link-fancy {
+    position: relative;
+  }
+  .nav-link-fancy::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: currentColor;
+    transform-origin: bottom right;
+    transition: transform 0.35s ease-out;
+  }
+  .nav-link-fancy:hover::after,
+  .nav-link-fancy.active::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+</style>
+
+<header id="SBG-Header" class="fixed top-0 left-0 w-full z-40 transition-all duration-300 ease-in-out bg-transparent border-b border-transparent">
+  <!-- Desktop Grid Layout -->
+  <div class="hidden md:grid grid-cols-12 h-16 w-full items-center">
+    <!-- Logo / Wordmark (Left partition) -->
+    <div class="col-span-3 flex items-center h-full pl-[60px] lg:pl-[65px]">
+      <a href="{{ routes.root_url }}" class="header-text-color font-display text-lg md:text-xl font-bold tracking-[0.2em] transition-colors uppercase text-sbg-black hover:opacity-85">
+        {{ section.settings.logo_text | default: shop.name }}
+      </a>
+    </div>
+
+    <!-- Desktop Nav Links -->
+    <div class="col-span-6 flex items-center justify-center h-full">
+      <nav class="flex space-x-8">
+        {%- for link in section.settings.menu.links -%}
+          <a href="{{ link.url }}" class="header-text-color text-sm tracking-wider uppercase transition-colors nav-link-fancy pb-1 text-sbg-black hover:text-sbg-grey {% if link.active %}font-semibold active{% else %}font-normal{% endif %}">
+            {{ link.title }}
+          </a>
+        {%- endfor -%}
+      </nav>
+    </div>
+
+    <!-- Icons & Actions (Right partition) -->
+    <div class="col-span-3 flex items-center justify-end h-full pr-6 lg:pr-8 space-x-4">
+      <button onclick="window.sbg.openCart()" class="header-text-color relative p-2 transition-colors text-sbg-black hover:text-sbg-grey" aria-label="Open cart" id="header-cart-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count-badge absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-sbg-black text-[9px] font-bold text-sbg-white hidden">0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Layout -->
+  <div class="flex md:hidden h-14 w-full items-center justify-between px-4">
+    <a href="{{ routes.root_url }}" class="header-text-color font-display text-lg font-bold tracking-[0.2em] transition-colors uppercase text-sbg-black hover:opacity-85">
+      {{ section.settings.logo_text | default: shop.name }}
+    </a>
+
+    <div class="flex items-center space-x-4">
+      <button onclick="window.sbg.openCart()" class="header-text-color relative p-2 transition-colors text-sbg-black hover:text-sbg-grey" aria-label="Open cart" id="header-cart-btn-mobile">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count-badge absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-sbg-black text-[9px] font-bold text-sbg-white hidden">0</span>
+      </button>
+
+      <button id="mobile-menu-trigger" class="header-text-color p-2 transition-colors text-sbg-black hover:text-sbg-grey" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu Fullscreen Overlay -->
+<div id="MobileMenuOverlay" class="fixed inset-0 w-full h-full bg-sbg-white z-50 transform translate-x-full transition-transform duration-500 ease-in-out flex flex-col justify-between">
+  <!-- Top bar -->
+  <div class="flex items-center justify-between h-14 px-4 border-b border-sbg-border/60">
+    <span class="font-display text-lg font-bold tracking-[0.2em] uppercase text-sbg-black">Menu</span>
+    <button id="mobile-menu-close" class="p-2 text-sbg-black hover:text-sbg-grey" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex flex-col space-y-6 px-8 py-12 justify-center flex-1">
+    {%- for link in section.settings.menu.links -%}
+      <a href="{{ link.url }}" class="font-display text-3xl font-light tracking-[0.1em] uppercase text-sbg-black hover:text-sbg-grey transition-colors {% if link.active %}font-medium{% endif %}">
+        {{ link.title }}
+      </a>
+    {%- endfor -%}
+  </nav>
+
+  <!-- Bottom Details -->
+  <div class="p-8 border-t border-sbg-border/60 bg-sbg-offwhite">
+    <p class="text-[10px] tracking-widest text-sbg-grey uppercase font-bold mb-2">Styled by Gloria</p>
+    <p class="text-xs text-sbg-grey">Body-Type Intentional Custom Fashion.</p>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const header = document.getElementById('SBG-Header');
+    const mobileTrigger = document.getElementById('mobile-menu-trigger');
+    const mobileClose = document.getElementById('mobile-menu-close');
+    const mobileMenu = document.getElementById('MobileMenuOverlay');
+    let lastScrollY = window.scrollY;
+
+    // Check if we are on Homepage/About page for background transparency
+    const isOverlayPage = window.location.pathname === '/' || window.location.pathname === window.Shopify.routes.root || window.location.pathname.includes('/about');
+
+    function updateHeader() {
+      const currentScrollY = window.scrollY;
+      const isScrolled = currentScrollY > 40;
+
+      // Transparent/Solid Class Update
+      if (isOverlayPage && !isScrolled) {
+        header.classList.remove('bg-sbg-white/95', 'border-sbg-border/60', 'backdrop-blur-md', 'shadow-sm');
+        header.classList.add('bg-transparent', 'border-transparent');
+        header.querySelectorAll('.header-text-color').forEach(el => {
+          // If on about page, load white text when header is transparent
+          if (window.location.pathname.includes('/about')) {
+            el.classList.add('text-white');
+            el.classList.remove('text-sbg-black');
+          } else {
+            el.classList.add('text-sbg-black');
+            el.classList.remove('text-white');
+          }
+        });
+      } else {
+        header.classList.add('bg-sbg-white/95', 'border-sbg-border/60', 'backdrop-blur-md', 'shadow-sm');
+        header.classList.remove('bg-transparent', 'border-transparent');
+        header.querySelectorAll('.header-text-color').forEach(el => {
+          el.classList.add('text-sbg-black');
+          el.classList.remove('text-white');
+        });
+      }
+
+      // Hide / Reveal Header on Scroll
+      if (currentScrollY < 50) {
+        header.classList.remove('-translate-y-full');
+      } else {
+        if (lastScrollY > currentScrollY) {
+          header.classList.remove('-translate-y-full');
+        } else {
+          header.classList.add('-translate-y-full');
+        }
+      }
+
+      lastScrollY = currentScrollY;
+    }
+
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    updateHeader(); // Run on mount
+
+    // Mobile Menu Triggers
+    if (mobileTrigger && mobileMenu) {
+      mobileTrigger.addEventListener('click', function() {
+        mobileMenu.classList.remove('translate-x-full');
+        document.body.classList.add('overflow-hidden');
+      });
+    }
+
+    if (mobileClose && mobileMenu) {
+      mobileClose.addEventListener('click', function() {
+        mobileMenu.classList.add('translate-x-full');
+        document.body.classList.remove('overflow-hidden');
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "SBG Header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text override",
+      "default": "Styled by Gloria"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

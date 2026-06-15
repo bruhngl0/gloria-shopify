@@ -1,0 +1,51 @@
+{
+  "sections": {
+    "cover-hero": {
+      "type": "sbg-cover-hero",
+      "settings": {}
+    },
+    "buy-box": {
+      "type": "sbg-hero",
+      "settings": {}
+    },
+    "mission": {
+      "type": "sbg-mission",
+      "settings": {}
+    },
+    "fabric": {
+      "type": "sbg-fabric",
+      "settings": {}
+    },
+    "featured-product": {
+      "type": "sbg-featured-product",
+      "settings": {}
+    },
+    "methodology": {
+      "type": "sbg-methodology",
+      "settings": {}
+    },
+    "instagram": {
+      "type": "sbg-instagram",
+      "settings": {}
+    },
+    "difference": {
+      "type": "sbg-difference",
+      "settings": {}
+    },
+    "services-teaser": {
+      "type": "sbg-services-teaser",
+      "settings": {}
+    }
+  },
+  "order": [
+    "cover-hero",
+    "buy-box",
+    "mission",
+    "fabric",
+    "featured-product",
+    "methodology",
+    "instagram",
+    "difference",
+    "services-teaser"
+  ]
+}

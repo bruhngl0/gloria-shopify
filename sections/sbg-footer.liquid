@@ -1,0 +1,283 @@
+{%- comment -%}
+  SBG Editorial Grid Footer with collapsible mobile accordions
+{%- endcomment -%}
+
+<style type="text/css">
+  .footer-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+  }
+  .footer-accordion-content.open {
+    max-height: 500px;
+    opacity: 1;
+  }
+  .footer-chevron {
+    transition: transform 0.3s ease-out;
+  }
+  .footer-chevron.open {
+    transform: rotate(180deg);
+  }
+</style>
+
+<footer class="bg-sbg-black border-t border-white/10 w-full overflow-hidden select-none font-body">
+  <!-- 5-Column Grid Layout -->
+  <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-white/10 border-b border-white/10 w-full">
+
+    <!-- Column 1: Brand & Contact Coordinates -->
+    <div class="col-span-1 md:col-span-3 p-6 md:p-8 flex flex-col space-y-6">
+      <!-- Mobile Accordion Header -->
+      <button onclick="toggleFooterAccordion('footer-brand', 'chevron-brand')" class="w-full flex items-center justify-between text-left md:hidden" aria-expanded="false">
+        <h2 class="font-display text-xl font-bold tracking-[0.18em] uppercase text-sbg-white">
+          {{ section.settings.brand_title | default: shop.name }}
+        </h2>
+        <svg id="chevron-brand" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer-chevron h-4 w-4 text-sbg-white/70"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <!-- Desktop Static Header -->
+      <div class="hidden md:block">
+        <h2 class="font-display text-xl md:text-2xl font-bold tracking-[0.2em] uppercase text-sbg-white mb-4">
+          {{ section.settings.brand_title | default: shop.name }}
+        </h2>
+        <p class="font-body text-[10px] tracking-[0.15em] leading-relaxed uppercase text-sbg-white/80">
+          {{ section.settings.brand_address | newline_to_br }}
+        </p>
+      </div>
+
+      <!-- Mobile Collapsible Content -->
+      <div id="footer-brand" class="footer-accordion-content md:hidden space-y-6">
+        <p class="font-body text-[10px] tracking-[0.15em] leading-relaxed uppercase text-sbg-white/80 pt-2">
+          {{ section.settings.brand_address | newline_to_br }}
+        </p>
+        <div class="space-y-2 pb-2">
+          <p class="font-body text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-white/50">
+            FOLLOW US
+          </p>
+          <div class="flex space-x-4">
+            {%- if section.settings.email_address != blank -%}
+              <a href="mailto:{{ section.settings.email_address }}" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Email Office">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M3 4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.11-.9-2-2-2H3zm18 4.75L12 14.12 3 8.75V6l9 5.38L21 6v2.75z"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_instagram_link != blank -%}
+              <a href="{{ settings.social_instagram_link }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Instagram Profile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Static Footer actions -->
+      <div class="hidden md:block mt-4 space-y-2">
+        <p class="font-body text-[10px] font-bold tracking-[0.2em] uppercase text-sbg-white/50">
+          FOLLOW US
+        </p>
+        <div class="flex space-x-4">
+          {%- if section.settings.email_address != blank -%}
+            <a href="mailto:{{ section.settings.email_address }}" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Email Office">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M3 4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.11-.9-2-2-2H3zm18 4.75L12 14.12 3 8.75V6l9 5.38L21 6v2.75z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_instagram_link != blank -%}
+            <a href="{{ settings.social_instagram_link }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Instagram Profile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 2: 01/ Menu 1 links -->
+    <div class="col-span-1 md:col-span-2 p-6 md:p-8 flex flex-col md:space-y-4">
+      <button onclick="toggleFooterAccordion('footer-menu1', 'chevron-menu1')" class="w-full flex items-center justify-between text-left md:hidden">
+        <span class="font-body text-[10px] tracking-[0.18em] font-bold text-sbg-white/80">
+          01/ {{ section.settings.menu1_title | default: 'Navigation' }}
+        </span>
+        <svg id="chevron-menu1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer-chevron h-4 w-4 text-sbg-white/70"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <span class="hidden md:inline font-body text-[10px] tracking-[0.18em] font-bold text-sbg-white/80">
+        01/ {{ section.settings.menu1_title | default: 'Navigation' }}
+      </span>
+
+      <div id="footer-menu1" class="footer-accordion-content md:block">
+        <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
+          {%- for link in section.settings.menu1.links -%}
+            <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Column 3: 02/ Menu 2 links -->
+    <div class="col-span-1 md:col-span-2 p-6 md:p-8 flex flex-col md:space-y-4">
+      <button onclick="toggleFooterAccordion('footer-menu2', 'chevron-menu2')" class="w-full flex items-center justify-between text-left md:hidden">
+        <span class="font-body text-[10px] tracking-[0.18em] font-bold text-sbg-white/80">
+          02/ {{ section.settings.menu2_title | default: 'Support' }}
+        </span>
+        <svg id="chevron-menu2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer-chevron h-4 w-4 text-sbg-white/70"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <span class="hidden md:inline font-body text-[10px] tracking-[0.18em] font-bold text-sbg-white/80">
+        02/ {{ section.settings.menu2_title | default: 'Support' }}
+      </span>
+
+      <div id="footer-menu2" class="footer-accordion-content md:block">
+        <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
+          {%- for link in section.settings.menu2.links -%}
+            <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Column 4: 03/ Menu 3 links -->
+    <div class="col-span-1 md:col-span-2 p-6 md:p-8 flex flex-col md:space-y-4">
+      <button onclick="toggleFooterAccordion('footer-menu3', 'chevron-menu3')" class="w-full flex items-center justify-between text-left md:hidden">
+        <span class="font-body text-[10px] tracking-[0.18em] font-bold text-sbg-white/80">
+          03/ {{ section.settings.menu3_title | default: 'Collections' }}
+        </span>
+        <svg id="chevron-menu3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer-chevron h-4 w-4 text-sbg-white/70"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <span class="hidden md:inline font-body text-[10px] tracking-[0.18em] font-bold text-sbg-white/80">
+        03/ {{ section.settings.menu3_title | default: 'Collections' }}
+      </span>
+
+      <div id="footer-menu3" class="footer-accordion-content md:block">
+        <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
+          {%- for link in section.settings.menu3.links -%}
+            <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Column 5: Newsletter Promotion & Reach Out Actions -->
+    <div class="col-span-1 md:col-span-3 p-6 md:p-8 flex flex-col space-y-6">
+      <button onclick="toggleFooterAccordion('footer-newsletter', 'chevron-newsletter')" class="w-full flex items-center justify-between text-left md:hidden">
+        <h3 class="font-display text-lg font-bold tracking-[0.15em] uppercase text-sbg-white leading-tight">
+          {{ section.settings.promo_text | default: 'REACH OUT TO SAVE 10% ON NEW PIECES' }}
+        </h3>
+        <svg id="chevron-newsletter" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer-chevron h-4 w-4 text-sbg-white/70"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <div class="hidden md:block">
+        <h3 class="font-display text-base md:text-lg font-bold tracking-[0.15em] uppercase text-sbg-white leading-tight">
+          {{ section.settings.promo_text | default: 'REACH OUT TO SAVE 10% ON NEW PIECES' }}
+        </h3>
+      </div>
+
+      <div id="footer-newsletter" class="footer-accordion-content md:block pt-2">
+        <div class="flex space-x-5 pb-2">
+          {%- if section.settings.email_address != blank -%}
+            <a href="mailto:{{ section.settings.email_address }}" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Email Newsletter">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7"><path d="M3 4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.11-.9-2-2-2H3zm18 4.75L12 14.12 3 8.75V6l9 5.38L21 6v2.75z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.whatsapp_number != blank -%}
+            <a href="https://wa.me/{{ section.settings.whatsapp_number | replace: ' ', '' | replace: '+', '' }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Chat on WhatsApp">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7"><path d="M12.012 2c-5.506 0-9.988 4.482-9.988 9.988 0 1.76.459 3.475 1.33 4.996L2.025 22l5.176-1.358c1.477.807 3.137 1.23 4.811 1.23 5.505 0 9.987-4.482 9.987-9.988C22 6.482 17.518 2 12.012 2zm6.046 14.28c-.246.696-1.245 1.286-1.745 1.344-.45.053-1.042.083-1.685-.121-.409-.13-1.61-.532-3.455-1.344-3.155-1.385-5.187-4.577-5.344-4.789-.158-.212-1.28-1.706-1.28-3.256 0-1.55.808-2.31 1.097-2.61.29-.3.633-.377.844-.377.211 0 .422.003.606.012.193.009.45-.072.702.536.257.62.877 2.134.954 2.293.076.158.127.342.023.551-.105.21-.158.342-.317.525-.158.183-.332.408-.475.547-.158.152-.323.318-.14.63.183.313.812 1.342 1.74 2.17 1.196 1.066 2.204 1.396 2.518 1.553.314.158.497.13.682-.083.185-.212.788-.918.998-1.232.211-.314.422-.26.712-.152.29.108 1.84.869 2.157 1.028.317.158.528.236.606.37.079.135.079.782-.167 1.478z"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Copyright Bar -->
+  <div class="py-4 text-center">
+    <p class="font-body text-[9px] tracking-widest text-sbg-white/50 uppercase">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name | uppercase }}. ALL RIGHTS RESERVED.
+    </p>
+  </div>
+</footer>
+
+<script>
+  function toggleFooterAccordion(contentId, chevronId) {
+    if (window.innerWidth >= 768) return; // Only run on mobile
+    const content = document.getElementById(contentId);
+    const chevron = document.getElementById(chevronId);
+    if (content.classList.contains('open')) {
+      content.classList.remove('open');
+      chevron.classList.remove('open');
+    } else {
+      content.classList.add('open');
+      chevron.classList.add('open');
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "SBG Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_title",
+      "label": "Brand Title",
+      "default": "STYLED BY GLORIA"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_address",
+      "label": "Brand Address",
+      "default": "@STYLED BY GLORIA\nHAUTE ATELIER SECTOR, 4B\nCREATIVE CLUSTER\nBANGALORE, INDIA"
+    },
+    {
+      "type": "text",
+      "id": "email_address",
+      "label": "Contact Email",
+      "default": "studio@styledbygloria.com"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp Contact Number",
+      "default": "+91 00000 00000"
+    },
+    {
+      "type": "link_list",
+      "id": "menu1",
+      "label": "Menu 1 Linklist"
+    },
+    {
+      "type": "text",
+      "id": "menu1_title",
+      "label": "Menu 1 Title",
+      "default": "Gloria"
+    },
+    {
+      "type": "link_list",
+      "id": "menu2",
+      "label": "Menu 2 Linklist"
+    },
+    {
+      "type": "text",
+      "id": "menu2_title",
+      "label": "Menu 2 Title",
+      "default": "Customer Service"
+    },
+    {
+      "type": "link_list",
+      "id": "menu3",
+      "label": "Menu 3 Linklist"
+    },
+    {
+      "type": "text",
+      "id": "menu3_title",
+      "label": "Menu 3 Title",
+      "default": "Popular Now"
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "Newsletter promo line",
+      "default": "REACH OUT SAVE 10% ON EVERYTHING NEW"
+    }
+  ]
+}
+{% endschema %}

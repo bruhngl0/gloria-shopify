@@ -1,0 +1,84 @@
+{%- comment -%}
+  SBG Brand Mission section with grid line accents and infinite moving marquee banner
+{%- endcomment -%}
+
+<style type="text/css">
+  @keyframes sg-ticker-slide {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+  }
+  .sg-ticker-wrapper {
+    display: inline-flex;
+    animation: sg-ticker-slide 20s linear infinite;
+    width: max-content;
+  }
+  .sg-mission-grid-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-size: 60px 60px;
+    background-image: 
+      linear-gradient(to right, rgba(0, 0, 0, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.07) 1px, transparent 1px);
+    mask-image: linear-gradient(to bottom, black 30%, transparent 95%);
+    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 95%);
+  }
+</style>
+
+<section class="bg-sbg-white w-full pt-20 md:pt-32 border-t border-sbg-border flex flex-col justify-between relative overflow-hidden select-none">
+  <!-- Fading Background Grid Lines -->
+  <div class="sg-mission-grid-bg"></div>
+  
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center pb-16 md:pb-24 relative z-10">
+    <p class="animate-text-words font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light tracking-wide leading-snug text-sbg-black max-w-4xl mx-auto">
+      "{{ section.settings.mission_text | default: 'We believe clothing should work for your body — not the other way around.' }}"
+    </p>
+    <span class="mt-6 md:mt-8 block text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase text-sbg-grey">
+      {{ section.settings.sub_label | default: 'Our Foundational Promise' }}
+    </span>
+  </div>
+
+  <!-- Infinite Moving Marquee Banner (Thinner Height) -->
+  <div class="w-full bg-sbg-black py-1.5 overflow-hidden border-t border-sbg-black relative z-10">
+    <div class="sg-ticker-wrapper">
+      {%- assign marquee_text = section.settings.marquee_word | default: 'ONE FOR ALL' -%}
+      {%- for i in (1..24) -%}
+        <span class="inline-flex items-center mx-6 text-sbg-white text-[9px] md:text-[10px] font-bold tracking-[0.3em] font-body">
+          {{ marquee_text }} <span class="text-sbg-grey/50 ml-12">•</span>
+        </span>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SBG Mission",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "mission_text",
+      "label": "Mission Text",
+      "default": "We believe clothing should work for your body — not the other way around."
+    },
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label Text",
+      "default": "Our Foundational Promise"
+    },
+    {
+      "type": "text",
+      "id": "marquee_word",
+      "label": "Marquee Repeating Word",
+      "default": "ONE FOR ALL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Mission"
+    }
+  ]
+}
+{% endschema %}

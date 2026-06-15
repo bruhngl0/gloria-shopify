@@ -1,0 +1,228 @@
+{%- comment -%}
+  SBG Services Teaser with retro monitor element and structured offerings
+{%- endcomment -%}
+
+<section class="bg-sbg-white w-full py-20 md:py-28 border-t border-sbg-border select-none">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+    <!-- 1. Large Typographic Headline Flow with Inline Picture -->
+    <div class="mb-16 md:mb-24">
+      <h2 class="font-sans text-[2.2rem] sm:text-[3.2rem] md:text-[4.5rem] lg:text-[4.8rem] font-normal tracking-tighter uppercase leading-[0.95] text-sbg-black select-none reveal-on-scroll" style="font-family: Helvetica, Arial, sans-serif;">
+        {{ section.settings.headline_start | default: 'Fashion without silhouette is just another image' }}
+        <span class="inline-flex items-center">
+          {{ section.settings.headline_end | default: 'with noise!' }}
+          <span class="inline-block relative w-[48px] h-[48px] sm:w-[65px] sm:h-[65px] md:w-[95px] md:h-[95px] border-2 border-sbg-black overflow-hidden rounded bg-sbg-offwhite ml-3 sm:ml-4 md:ml-6 align-middle -translate-y-1 md:-translate-y-2 select-none shadow-[2px_2px_0px_rgba(10,10,10,1)]">
+            {%- if section.settings.inline_image != blank -%}
+              <img src="{{ section.settings.inline_image | image_url: width: 200 }}" alt="Signature cowl neck styling shot" class="w-full h-full object-cover">
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover bg-sbg-hover opacity-60' }}
+            {%- endif -%}
+          </span>
+        </span>
+      </h2>
+    </div>
+
+    <!-- 2. Split Columns Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+
+      <!-- Left Column: Vintage Atelier Monitor Console -->
+      <div class="lg:col-span-5 flex flex-col items-center lg:items-start justify-center reveal-on-scroll">
+        <div class="w-full">
+          <div class="relative w-full aspect-[4/3] max-w-md mx-auto lg:mx-0 bg-[#1A1A1A] border-[6px] md:border-8 border-sbg-black rounded-xl shadow-[8px_8px_0px_rgba(10,10,10,1)] overflow-hidden flex flex-col justify-between p-2.5 md:p-3 select-none">
+            <!-- Screen inner container -->
+            <div class="relative w-full h-[88%] bg-black rounded-lg overflow-hidden border border-black">
+              {%- if section.settings.monitor_image != blank -%}
+                <img src="{{ section.settings.monitor_image | image_url: width: 600 }}" class="object-cover w-full h-full grayscale contrast-125 opacity-85">
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover grayscale contrast-125 opacity-80' }}
+              {%- endif -%}
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)] pointer-events-none"></div>
+              <!-- Subtle scanline overlay for retro CRT monitor feel -->
+              <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[size:100%_4px] pointer-events-none opacity-30"></div>
+              <!-- Monitor branding tag -->
+              <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-[7px] text-white/50 tracking-[0.2em] uppercase font-mono bg-black/50 px-2 py-0.5 rounded-sm backdrop-blur-xs">
+                Atelier Monitor 01
+              </div>
+            </div>
+
+            <!-- Monitor Bottom panel controls -->
+            <div class="flex justify-between items-center h-[10%] px-1 pt-1">
+              <div class="flex space-x-1.5">
+                <div class="w-2 h-2 rounded-full bg-sbg-gold/90 animate-pulse"></div>
+                <div class="w-2 h-2 rounded-full bg-white/10"></div>
+              </div>
+              <!-- Speaker grill lines -->
+              <div class="flex space-x-0.5 h-2 w-14 items-center">
+                <div class="w-[1.5px] h-full bg-white/10"></div>
+                <div class="w-[1.5px] h-full bg-white/10"></div>
+                <div class="w-[1.5px] h-full bg-white/10"></div>
+                <div class="w-[1.5px] h-full bg-white/10"></div>
+                <div class="w-[1.5px] h-full bg-white/10"></div>
+              </div>
+              <!-- Dial knob -->
+              <div class="w-3.5 h-3.5 rounded-full border border-white/20 bg-[#252525] flex items-center justify-center">
+                <div class="w-0.5 h-1.5 bg-white/30 rounded-sm -translate-y-0.5 rotate-45"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Descriptions & Bullet List logs -->
+      <div class="lg:col-span-7 space-y-8 reveal-on-scroll">
+        <div>
+          <p class="text-xs md:text-sm tracking-wider leading-relaxed text-sbg-black font-medium">
+            {{ section.settings.intro_paragraph | default: 'We transform your styling experience into a powerful platform for self-expression and silhouette harmony. Our approach is to combine skeletal proportion mapping, textile calibrations, and custom styling rules to ensure your wardrobe aligns perfectly with your physical lines.' }}
+          </p>
+        </div>
+
+        <!-- Structured Bullet Offerings -->
+        <ul class="space-y-6 border-t border-sbg-black/15 pt-8">
+          <li class="flex items-start space-x-4">
+            <span class="text-sbg-gold font-bold text-xs mt-1">•</span>
+            <div>
+              <h4 class="text-[11px] font-bold uppercase tracking-widest text-sbg-black mb-1.5">
+                {{ section.settings.bullet1_title | default: 'Skeletal & Proportion Mapping' }}
+              </h4>
+              <p class="text-[9px] tracking-wider uppercase text-sbg-grey leading-relaxed">
+                {{ section.settings.bullet1_desc | default: 'A personalized analysis of your skeletal frame, vertical balance axis, and silhouette lines to find what shapes serve you best.' }}
+              </p>
+            </div>
+          </li>
+          <li class="flex items-start space-x-4">
+            <span class="text-sbg-gold font-bold text-xs mt-1">•</span>
+            <div>
+              <h4 class="text-[11px] font-bold uppercase tracking-widest text-sbg-black mb-1.5">
+                {{ section.settings.bullet2_title | default: 'Textile & Drape Calibration' }}
+              </h4>
+              <p class="text-[9px] tracking-wider uppercase text-sbg-grey leading-relaxed">
+                {{ section.settings.bullet2_desc | default: 'Identifying the exact fiber structures, GSM weights, and drape speed dynamics that contour your body naturally.' }}
+              </p>
+            </div>
+          </li>
+          <li class="flex items-start space-x-4">
+            <span class="text-sbg-gold font-bold text-xs mt-1">•</span>
+            <div>
+              <h4 class="text-[11px] font-bold uppercase tracking-widest text-sbg-black mb-1.5">
+                {{ section.settings.bullet3_title | default: 'Capsule Wardrobe Integration' }}
+              </h4>
+              <p class="text-[9px] tracking-wider uppercase text-sbg-grey leading-relaxed">
+                {{ section.settings.bullet3_desc | default: 'Curation of a functional, unified seasonal catalog that matches your silhouette guidelines and eliminates clutter.' }}
+              </p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- 3. CTA Buttons in One Row -->
+    <div class="mt-16 pt-10 border-t border-sbg-black/15 flex flex-col md:flex-row w-full items-center justify-center gap-6">
+      <a href="{{ section.settings.booking_url | default: '/pages/services' }}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-[#2B2B2B] text-[10px] font-bold uppercase tracking-widest bg-[#2B2B2B] text-[#F2F2F2] hover:bg-transparent hover:text-[#2B2B2B] transition-all duration-300 w-full md:w-72 shadow-[4px_4px_0px_rgba(10,10,10,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 text-center">
+        {{ section.settings.booking_label | default: 'Book a Consultation' }}
+      </a>
+
+      {%- if section.settings.whatsapp_number != blank -%}
+        {%- assign whatsapp_clean = section.settings.whatsapp_number | replace: ' ', '' | replace: '+', '' -%}
+        <a href="https://wa.me/{{ whatsapp_clean }}?text=Hello!%20I%20would%20like%20to%20inquire%20about%20bulk%20orders%20with%20Styled%20by%20Gloria." target="_blank" class="inline-flex items-center justify-center px-8 py-4 border-2 border-[#2B2B2B] text-[10px] font-bold uppercase tracking-widest bg-[#2B2B2B] text-[#F2F2F2] hover:bg-transparent hover:text-[#2B2B2B] transition-all duration-300 w-full md:w-72 shadow-[4px_4px_0px_rgba(10,10,10,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 text-center">
+          WhatsApp for Bulk Orders
+        </a>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SBG Services Teaser",
+  "settings": [
+    {
+      "type": "text",
+      "id": "headline_start",
+      "label": "Headline Start",
+      "default": "Fashion without silhouette is just another image"
+    },
+    {
+      "type": "text",
+      "id": "headline_end",
+      "label": "Headline End",
+      "default": "with noise!"
+    },
+    {
+      "type": "image_picker",
+      "id": "inline_image",
+      "label": "Inline Small Collage Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "monitor_image",
+      "label": "CRT Monitor Main Image"
+    },
+    {
+      "type": "textarea",
+      "id": "intro_paragraph",
+      "label": "Intro Paragraph Text",
+      "default": "We transform your styling experience into a powerful platform for self-expression and silhouette harmony. Our approach is to combine skeletal proportion mapping, textile calibrations, and custom styling rules to ensure your wardrobe aligns perfectly with your physical lines."
+    },
+    {
+      "type": "text",
+      "id": "bullet1_title",
+      "label": "Bullet 1 Title",
+      "default": "Skeletal & Proportion Mapping"
+    },
+    {
+      "type": "textarea",
+      "id": "bullet1_desc",
+      "label": "Bullet 1 Description",
+      "default": "A personalized analysis of your skeletal frame, vertical balance axis, and silhouette lines to find what shapes serve you best."
+    },
+    {
+      "type": "text",
+      "id": "bullet2_title",
+      "label": "Bullet 2 Title",
+      "default": "Textile & Drape Calibration"
+    },
+    {
+      "type": "textarea",
+      "id": "bullet2_desc",
+      "label": "Bullet 2 Description",
+      "default": "Identifying the exact fiber structures, GSM weights, and drape speed dynamics that contour your body naturally."
+    },
+    {
+      "type": "text",
+      "id": "bullet3_title",
+      "label": "Bullet 3 Title",
+      "default": "Capsule Wardrobe Integration"
+    },
+    {
+      "type": "textarea",
+      "id": "bullet3_desc",
+      "label": "Bullet 3 Description",
+      "default": "Curation of a functional, unified seasonal catalog that matches your silhouette guidelines and eliminates clutter."
+    },
+    {
+      "type": "url",
+      "id": "booking_url",
+      "label": "Consultation Booking Link"
+    },
+    {
+      "type": "text",
+      "id": "booking_label",
+      "label": "Consultation Button Label",
+      "default": "Book a Consultation"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp Contact Number",
+      "default": "+91 00000 00000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Services Teaser"
+    }
+  ]
+}
+{% endschema %}

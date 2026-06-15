@@ -1,0 +1,109 @@
+{%- comment -%}
+  SBG Featured product showcase layout with custom body type tags.
+{%- endcomment -%}
+
+{%- liquid
+  assign featured_product = all_products[section.settings.featured_product]
+  assign product_to_show = product | default: featured_product | default: collections.all.products.first
+  
+  assign use_mock = false
+  if product_to_show == blank
+    assign use_mock = true
+    assign product_title = "THE ONE FOR ALL DRESS"
+    assign product_image = 'point.png' | asset_url
+    assign product_desc = "A single dress engineered to honor a multitude of shapes. Made from our heavy stretch crepe, this piece features customizable ruching and a cowl neck that drapes to your exact proportions."
+    assign product_url = "/collections/all"
+  else
+    assign use_mock = false
+    assign product_title = product_to_show.title
+    assign product_image = product_to_show.featured_image | image_url: width: 1000
+    assign product_desc = section.settings.description | default: product_to_show.description | strip_html | truncatewords: 45
+    assign product_url = product_to_show.url
+  endif
+  assign body_types = product_to_show.metafields.sbg.body_types.value
+-%}
+
+<section class="bg-sbg-white w-full py-16 md:py-28 select-none">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <!-- Left Column: Image -->
+        <div class="lg:col-span-7 relative group reveal-on-scroll">
+          <div class="absolute inset-0 border border-sbg-border translate-x-4 translate-y-4 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2 pointer-events-none"></div>
+          <div class="relative w-full aspect-[3/4] border border-sbg-black overflow-hidden bg-sbg-offwhite z-10">
+            <img src="{{ product_image }}" alt="{{ product_title }}" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <!-- Right Column: Copy & Actions -->
+        <div class="lg:col-span-5 space-y-8 reveal-on-scroll">
+          <div class="space-y-4">
+            <span class="text-[10px] font-bold tracking-widest text-sbg-grey uppercase block">
+              Featured Piece — {% unless use_mock %}SBG-D001{% else %}SBG-D001{% endunless %}
+            </span>
+            <h2 class="font-display text-3xl md:text-4xl font-bold tracking-wide text-sbg-black uppercase">
+              {{ product_title }}
+            </h2>
+            <p class="text-xs tracking-wider leading-relaxed text-sbg-grey">
+              {{ product_desc }}
+            </p>
+          </div>
+
+          <!-- Body Type tags -->
+          <div class="border-t border-b border-sbg-border py-6">
+            <div class="space-y-3">
+              <span class="text-[9px] font-bold uppercase tracking-widest text-sbg-black block">
+                Works beautifully for:
+              </span>
+              <div class="flex flex-wrap gap-2">
+                {%- if body_types != blank and use_mock == false -%}
+                  {%- for type in body_types -%}
+                    <span class="px-2.5 py-1 bg-sbg-hover text-sbg-grey border border-sbg-border/60 text-[9px] font-semibold tracking-wider uppercase">
+                      {{ type }}
+                    </span>
+                  {%- endfor -%}
+                {%- else -%}
+                  <!-- Fallback placeholder body types -->
+                  {%- assign fallback_types = "All Body Types, Hourglass, Pear, Rectangle, Inverted Triangle, Apple" | split: "," -%}
+                  {%- for type in fallback_types -%}
+                    <span class="px-2.5 py-1 bg-sbg-hover text-sbg-grey border border-sbg-border/60 text-[9px] font-semibold tracking-wider uppercase">
+                      {{ type | strip }}
+                    </span>
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <a href="{{ product_url }}" class="inline-flex items-center justify-center px-8 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-black text-sbg-white hover:bg-transparent hover:text-sbg-black transition-all duration-300 w-full sm:w-auto text-center">
+              View The Piece
+            </a>
+          </div>
+        </div>
+      </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SBG Featured Product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Product to Feature"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Custom Description override (optional)",
+      "info": "Leave blank to pull from product description."
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Featured Product"
+    }
+  ]
+}
+{% endschema %}

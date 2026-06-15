@@ -1,0 +1,338 @@
+{%- comment -%}
+  SBG Fullscreen Loading Splash Screen & Scroll Reveal Animation Engine (Vanilla JS & CSS)
+{%- endcomment -%}
+
+<style type="text/css">
+  /* Splash Overlay Critical Styles (Synchronous parsing to block layout flashes) */
+  #SGB-SplashOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: opacity 0.7s ease-in-out;
+    opacity: 1;
+  }
+  #SGB-SplashOverlay.opacity-0 {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Critical Layout overrides before Tailwind CDN compile completes */
+  .sg-loader-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .sg-loader-wordmark {
+    text-align: center;
+  }
+  .sg-loader-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #0A0A0A;
+    display: block;
+    line-height: 1;
+  }
+  .sg-loader-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    color: #0A0A0A;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 8px;
+  }
+
+  /* Spinner and Thread Animations */
+  .sg-loader-monogram {
+    position: relative;
+    width: 90px;
+    height: 90px;
+  }
+  .sg-loader-circle-track {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 0.75px solid rgba(0, 0, 0, 0.12);
+  }
+  .sg-loader-circle-spin {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 0.75px solid transparent;
+    border-top-color: #888;
+    border-right-color: #888;
+    animation: sg-loader-spin 2.4s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  }
+  .sg-loader-thread-container {
+    position: relative;
+    width: 160px;
+    height: 1px;
+    overflow: visible;
+  }
+  .sg-loader-thread-base {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0.5px;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  .sg-loader-thread-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0.5px;
+    width: 0%;
+    background: #1a1a1a;
+    animation: sg-loader-thread 2.4s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  }
+  .sg-loader-needle {
+    position: absolute;
+    top: -4px;
+    left: 0%;
+    width: 18px;
+    height: 9px;
+    transform: translateX(-2px);
+    animation: sg-loader-needle-move 2.4s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+    opacity: 0;
+    animation-delay: 0.05s;
+  }
+  .sg-loader-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .sg-loader-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.25);
+    animation: sg-loader-dot-wave 1.8s ease-in-out infinite;
+  }
+  .sg-loader-dot:nth-child(2) { animation-delay: 0.2s; }
+  .sg-loader-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes sg-loader-spin {
+    0%   { transform: rotate(0deg);   opacity: 0.3; }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { transform: rotate(360deg); opacity: 0.3; }
+  }
+  @keyframes sg-loader-thread {
+    0%   { width: 0%;    }
+    60%  { width: 100%;  opacity: 1; }
+    80%  { width: 100%;  opacity: 1; }
+    100% { width: 100%;  opacity: 0; }
+  }
+  @keyframes sg-loader-needle-move {
+    0%   { left: 0%;                    opacity: 0; }
+    5%   { opacity: 1; }
+    60%  { left: calc(100% - 18px);     opacity: 1; }
+    70%  { left: calc(100% - 18px);     opacity: 0; }
+    100% { left: calc(100% - 18px);     opacity: 0; }
+  }
+  @keyframes sg-loader-dot-wave {
+    0%, 100% { background: rgba(0,0,0,0.2); transform: translateY(0);  }
+    50%       { background: rgba(0,0,0,0.5); transform: translateY(-3px); }
+  }
+
+  /* Scroll Reveal & Animation Classes */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+    will-change: opacity, transform;
+  }
+  .reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Word reveal styling */
+  .animated-word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.8s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-delay: var(--word-delay);
+    will-change: opacity, transform;
+  }
+  .is-visible .animated-word {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger Item reveal styling */
+  .stagger-item {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.8s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+    will-change: opacity, transform;
+  }
+  .stagger-item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<!-- Fullscreen Splash Overlay -->
+<div id="SGB-SplashOverlay">
+  <div class="sg-loader-root" role="status" aria-label="Loading Styles by Gloria">
+    <!-- Spinning monogram -->
+    <div class="sg-loader-monogram">
+      <div class="sg-loader-circle-track"></div>
+      <div class="sg-loader-circle-spin"></div>
+    </div>
+
+    <!-- Brand wordmark -->
+    <div class="sg-loader-wordmark">
+      <span class="sg-loader-brand font-display text-3xl font-semibold tracking-[0.12em] text-sbg-black block leading-none">Styled by Gloria</span>
+      <span class="sg-loader-sub font-body text-[9.5px] font-bold tracking-[0.35em] text-sbg-black block uppercase mt-2">Loading your experience</span>
+    </div>
+
+    <!-- Animated thread with needle -->
+    <div class="sg-loader-thread-container">
+      <div class="sg-loader-thread-base"></div>
+      <div class="sg-loader-thread-fill"></div>
+      <svg class="sg-loader-needle" viewBox="0 0 18 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="9" cy="4.5" rx="8.5" ry="3.5" fill="#f5f5f5" stroke="#999" stroke-width="0.5"/>
+        <ellipse cx="9" cy="4.5" rx="3" ry="1.5" fill="#ccc"/>
+        <line x1="17.5" y1="4.5" x2="14" y2="4.5" stroke="#1a1a1a" stroke-width="0.5"/>
+      </svg>
+    </div>
+
+    <!-- Dots -->
+    <div class="sg-loader-dots" aria-hidden="true">
+      <div class="sg-loader-dot"></div>
+      <div class="sg-loader-dot"></div>
+      <div class="sg-loader-dot"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // Detect Shopify Customizer (Design Mode)
+    const isDesignMode = window.Shopify && window.Shopify.designMode;
+
+    // Lock scroll on load (if not in design mode)
+    if (!isDesignMode) {
+      if (document.body) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.addEventListener('DOMContentLoaded', function() {
+          document.body.style.overflow = 'hidden';
+        });
+      }
+    }
+
+    // Set a helper on window
+    window.__sbg_loading_complete = false;
+
+    if (isDesignMode) {
+      // Instantly finish loading and configure editor reveals
+      window.__sbg_loading_complete = true;
+      document.addEventListener('DOMContentLoaded', function() {
+        const overlay = document.getElementById('SGB-SplashOverlay');
+        if (overlay) overlay.remove();
+        document.body.classList.add('sbg-loaded');
+        initScrollReveals();
+      });
+      return;
+    }
+
+    // Simulate load delay
+    setTimeout(function() {
+      const overlay = document.getElementById('SGB-SplashOverlay');
+      if (overlay) {
+        overlay.classList.add('opacity-0');
+        setTimeout(function() {
+          overlay.remove();
+          if (document.body) {
+            document.body.style.overflow = '';
+            document.body.classList.add('sbg-loaded');
+          }
+          window.__sbg_loading_complete = true;
+          window.dispatchEvent(new Event("sbg-loading-complete"));
+          
+          // Trigger animations on visible items right away
+          initScrollReveals();
+        }, 700);
+      }
+    }, 2500);
+
+    // Initialize Scroll Reveal and Text Animations using IntersectionObserver
+    function initScrollReveals() {
+      // 1. Text Word Split Animation
+      document.querySelectorAll('.animate-text-words').forEach(function(el) {
+        const text = el.innerText.trim();
+        const words = text.split(/\s+/);
+        el.innerHTML = ''; // Clear original text
+        
+        words.forEach(function(word, idx) {
+          const spanWrapper = document.createElement('span');
+          spanWrapper.className = 'inline-block whitespace-nowrap mr-[0.25em] overflow-hidden';
+          
+          const spanWord = document.createElement('span');
+          spanWord.className = 'animated-word';
+          spanWord.innerText = word;
+          spanWord.style.setProperty('--word-delay', (idx * 0.04) + 's');
+          
+          spanWrapper.appendChild(spanWord);
+          el.appendChild(spanWrapper);
+        });
+        
+        el.classList.add('reveal-on-scroll');
+      });
+
+      // 2. Setup Intersection Observer
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+      };
+
+      const observer = new IntersectionObserver(function(entries, self) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            
+            // Handle staggered children delay if defined
+            if (entry.target.hasAttribute('data-stagger-children')) {
+              const stagger = parseFloat(entry.target.getAttribute('data-stagger-children') || '0.1');
+              const children = entry.target.querySelectorAll('.stagger-item');
+              children.forEach(function(child, cIdx) {
+                child.style.transitionDelay = (cIdx * stagger) + 's';
+                child.classList.add('is-visible');
+              });
+            }
+            
+            self.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      // Observe reveal targets
+      document.querySelectorAll('.reveal-on-scroll').forEach(function(target) {
+        observer.observe(target);
+      });
+    }
+  })();
+</script>

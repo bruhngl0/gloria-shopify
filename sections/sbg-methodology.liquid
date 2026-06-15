@@ -1,0 +1,276 @@
+{%- comment -%}
+  SBG Methodology section (Steps to Silhouette Harmony) with spinning starburst and local video frame.
+{%- endcomment -%}
+
+<style type="text/css">
+  @keyframes sg-starburst-spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .animate-starburst {
+    animation: sg-starburst-spin 60s linear infinite;
+    transform-origin: center;
+    will-change: transform;
+  }
+</style>
+
+<section class="bg-sbg-white w-full py-20 md:py-28 border-b border-sbg-border relative overflow-hidden selection:bg-sbg-black selection:text-sbg-white">
+  <!-- Background editorial grids -->
+  <div class="absolute inset-0 bg-[linear-gradient(to_right,#F0F0F0_1px,transparent_1px),linear-gradient(to_bottom,#F0F0F0_1px,transparent_1px)] bg-[size:40px_40px] opacity-40 pointer-events-none"></div>
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+    
+    <!-- Header -->
+    <div class="text-center max-w-xl mx-auto mb-16 md:mb-20">
+      <span class="text-[8px] tracking-[0.3em] font-bold text-sbg-grey uppercase block mb-3">
+        {{ section.settings.sub_label | default: 'THE STYLING METHOD' }}
+      </span>
+      <h2 class="font-display text-2xl md:text-3xl font-bold tracking-wide text-sbg-black uppercase">
+        {{ section.settings.title | default: 'Steps to Silhouette Harmony' }}
+      </h2>
+      <div class="w-12 h-[1px] bg-sbg-black mx-auto mt-4"></div>
+    </div>
+
+    <!-- Outer Columns -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Left Column (3 Steps) -->
+      <div class="lg:col-span-4 order-2 lg:order-1">
+        <div class="space-y-8 reveal-on-scroll" data-stagger-children="0.12">
+          
+          <!-- Step 1 -->
+          <div class="bg-sbg-white border-2 border-sbg-black p-6 shadow-[4px_4px_0px_0px_rgba(10,10,10,1)] transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] stagger-item">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-display text-sm font-bold tracking-widest text-sbg-black uppercase">
+                {{ section.settings.step1_title | default: 'Proportion Mapping' }}
+              </h3>
+              <span class="font-mono text-xs font-bold px-2 py-0.5 bg-sbg-black text-sbg-white">01</span>
+            </div>
+            <p class="text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              {{ section.settings.step1_desc | default: 'We analyze your vertical lines, skeletal frame, and balance points to map your structural silhouette—completely bypassing standard sizing charts.' }}
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="bg-sbg-white border-2 border-sbg-black p-6 shadow-[4px_4px_0px_0px_rgba(10,10,10,1)] transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] stagger-item">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-display text-sm font-bold tracking-widest text-sbg-black uppercase">
+                {{ section.settings.step2_title | default: 'Textile Calibration' }}
+              </h3>
+              <span class="font-mono text-xs font-bold px-2 py-0.5 bg-sbg-black text-sbg-white">02</span>
+            </div>
+            <p class="text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              {{ section.settings.step2_desc | default: 'Identify the precise textile weights, drape speeds, and fabric stiffnesses that hold and contour your body lines without cling or resistance.' }}
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="bg-sbg-white border-2 border-sbg-black p-6 shadow-[4px_4px_0px_0px_rgba(10,10,10,1)] transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] stagger-item">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-display text-sm font-bold tracking-widest text-sbg-black uppercase">
+                {{ section.settings.step3_title | default: 'Symmetry Analysis' }}
+              </h3>
+              <span class="font-mono text-xs font-bold px-2 py-0.5 bg-sbg-black text-sbg-white">03</span>
+            </div>
+            <p class="text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              {{ section.settings.step3_desc | default: 'Evaluate natural body balance and vertical alignment axis points to establish visual equilibrium across all garment fittings.' }}
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Center Column (Starburst Graphic & Video) -->
+      <div class="lg:col-span-4 flex items-center justify-center relative min-h-[300px] md:min-h-[360px] order-1 lg:order-2">
+        <!-- Spinning Starburst Background -->
+        <div class="absolute w-[340px] h-[340px] md:w-[420px] md:h-[420px] pointer-events-none animate-starburst">
+          <svg viewBox="0 0 400 400" class="w-full h-full fill-[#2B2B2B] stroke-none">
+            <polygon points="200.00,0.00 228.70,130.71 341.42,58.58 269.29,171.30 400.00,200.00 269.29,228.70 341.42,341.42 228.70,269.29 200.00,400.00 171.30,269.29 58.58,341.42 130.71,228.70 0.00,200.00 130.71,171.30 58.58,58.58 171.30,130.71" />
+          </svg>
+        </div>
+
+        <!-- Central Grayscale Video Box -->
+        <div class="w-[180px] h-[180px] md:w-[240px] md:h-[240px] bg-sbg-white border-2 border-sbg-black relative z-10 overflow-hidden shadow-[8px_8px_0px_0px_rgba(10,10,10,1)] hover:scale-105 transition-transform duration-500">
+          <video
+            src="{{ 'shortdes.mp4' | asset_url }}"
+            autoplay
+            loop
+            muted
+            playsinline
+            class="object-cover w-full h-full grayscale contrast-125 brightness-95"
+          ></video>
+          <div class="absolute inset-0 border border-sbg-white/20 pointer-events-none"></div>
+        </div>
+      </div>
+
+      <!-- Right Column (3 Steps) -->
+      <div class="lg:col-span-4 order-3">
+        <div class="space-y-8 reveal-on-scroll" data-stagger-children="0.12">
+          
+          <!-- Step 4 -->
+          <div class="bg-sbg-white border-2 border-sbg-black p-6 shadow-[4px_4px_0px_0px_rgba(10,10,10,1)] transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] stagger-item">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-display text-sm font-bold tracking-widest text-sbg-black uppercase">
+                {{ section.settings.step4_title | default: 'Capsule Curation' }}
+              </h3>
+              <span class="font-mono text-xs font-bold px-2 py-0.5 bg-sbg-black text-sbg-white">04</span>
+            </div>
+            <p class="text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              {{ section.settings.step4_desc | default: 'Learn to assemble a minimal, cohesive wardrobe designed around structural symmetry, completely eliminating impulse fashion purchases.' }}
+            </p>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="bg-sbg-white border-2 border-sbg-black p-6 shadow-[4px_4px_0px_0px_rgba(10,10,10,1)] transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] stagger-item">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-display text-sm font-bold tracking-widest text-sbg-black uppercase">
+                {{ section.settings.step5_title | default: 'Fiber Calibration' }}
+              </h3>
+              <span class="font-mono text-xs font-bold px-2 py-0.5 bg-sbg-black text-sbg-white">05</span>
+            </div>
+            <p class="text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              {{ section.settings.step5_desc | default: 'Test fiber response and drape memory under active conditions to ensure a flawless daily wear fit across various temperatures.' }}
+            </p>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="bg-sbg-white border-2 border-sbg-black p-6 shadow-[4px_4px_0px_0px_rgba(10,10,10,1)] transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] stagger-item">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-display text-sm font-bold tracking-widest text-sbg-black uppercase">
+                {{ section.settings.step6_title | default: 'Atelier Integration' }}
+              </h3>
+              <span class="font-mono text-xs font-bold px-2 py-0.5 bg-sbg-black text-sbg-white">06</span>
+            </div>
+            <p class="text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              {{ section.settings.step6_desc | default: 'Refine fit and proportions through individual structural adjustments, ensuring high silhouette harmony with zero drag.' }}
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SBG Methodology",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label Text",
+      "default": "THE STYLING METHOD"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Header Title",
+      "default": "Steps to Silhouette Harmony"
+    },
+    {
+      "type": "header",
+      "content": "Step 1"
+    },
+    {
+      "type": "text",
+      "id": "step1_title",
+      "label": "Title",
+      "default": "Proportion Mapping"
+    },
+    {
+      "type": "textarea",
+      "id": "step1_desc",
+      "label": "Description",
+      "default": "We analyze your vertical lines, skeletal frame, and balance points to map your structural silhouette—completely bypassing standard sizing charts."
+    },
+    {
+      "type": "header",
+      "content": "Step 2"
+    },
+    {
+      "type": "text",
+      "id": "step2_title",
+      "label": "Title",
+      "default": "Textile Calibration"
+    },
+    {
+      "type": "textarea",
+      "id": "step2_desc",
+      "label": "Description",
+      "default": "Identify the precise textile weights, drape speeds, and fabric stiffnesses that hold and contour your body lines without cling or resistance."
+    },
+    {
+      "type": "header",
+      "content": "Step 3"
+    },
+    {
+      "type": "text",
+      "id": "step3_title",
+      "label": "Title",
+      "default": "Symmetry Analysis"
+    },
+    {
+      "type": "textarea",
+      "id": "step3_desc",
+      "label": "Description",
+      "default": "Evaluate natural body balance and vertical alignment axis points to establish visual equilibrium across all garment fittings."
+    },
+    {
+      "type": "header",
+      "content": "Step 4"
+    },
+    {
+      "type": "text",
+      "id": "step4_title",
+      "label": "Title",
+      "default": "Capsule Curation"
+    },
+    {
+      "type": "textarea",
+      "id": "step4_desc",
+      "label": "Description",
+      "default": "Learn to assemble a minimal, cohesive wardrobe designed around structural symmetry, completely eliminating impulse fashion purchases."
+    },
+    {
+      "type": "header",
+      "content": "Step 5"
+    },
+    {
+      "type": "text",
+      "id": "step5_title",
+      "label": "Title",
+      "default": "Fiber Calibration"
+    },
+    {
+      "type": "textarea",
+      "id": "step5_desc",
+      "label": "Description",
+      "default": "Test fiber response and drape memory under active conditions to ensure a flawless daily wear fit across various temperatures."
+    },
+    {
+      "type": "header",
+      "content": "Step 6"
+    },
+    {
+      "type": "text",
+      "id": "step6_title",
+      "label": "Title",
+      "default": "Atelier Integration"
+    },
+    {
+      "type": "textarea",
+      "id": "step6_desc",
+      "label": "Description",
+      "default": "Refine fit and proportions through individual structural adjustments, ensuring high silhouette harmony with zero drag."
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Methodology"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,198 @@
+{%- comment -%}
+  SBG Curated Instagram Lookbook section with 3D card tilts, overlay labels, and asset media fallback arrays.
+{%- endcomment -%}
+
+<style type="text/css">
+  /* 3D Perspective setup */
+  .sbg-insta-grid {
+    perspective: 1500px;
+  }
+  .sbg-insta-card {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+  .sbg-insta-card-inner {
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    will-change: transform, box-shadow;
+  }
+</style>
+
+<section class="relative w-full py-20 bg-gradient-to-b from-sbg-black to-sbg-white selection:bg-sbg-white selection:text-sbg-black text-sbg-white overflow-hidden">
+  
+  <!-- Header Container -->
+  <div class="max-w-7xl mx-auto px-6 mb-12 text-center">
+    <span class="text-[8px] tracking-[0.3em] font-bold text-sbg-white/50 uppercase block mb-3">
+      {{ section.settings.sub_label | default: 'STUDIO STORIES' }}
+    </span>
+    <h2 class="font-display text-2xl md:text-3xl font-normal tracking-wide text-sbg-white uppercase">
+      {{ section.settings.title | default: 'Curated Atelier Flow' }}
+    </h2>
+    <div class="w-12 h-[1px] bg-sbg-white/20 mx-auto mt-4"></div>
+  </div>
+
+  <!-- Grid Container (6 columns on desktop, 3 on tablet, 2 on mobile) -->
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 reveal-on-scroll" data-stagger-children="0.05">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full sbg-insta-grid">
+      
+      <!-- Loop through 12 static curated items -->
+      {%- liquid
+        assign items_media = "dress-black-model.jpg,shortdes.mp4,about-hero.jpg,dress-red-front.jpg,stylist-gloria.jpg,one.png,dress-blue-front.jpg,two.png,three.png,gloria.jpg,dress-black-detail.jpg,point.png" | split: ","
+        assign items_type = "image,video,image,image,image,image,image,image,image,image,image,image" | split: ","
+        assign items_thumbs = ",dress-black-detail.jpg,,,,, ,,,,,," | split: ","
+        assign items_captions = "Signature drape calibrations — Model Atelier Shot,Atelier motion studies. Adjusting drape speed and natural body flow.,Inside the design headquarters: research logs and pattern drawings.,French Crepe swatch study: Crimson Red signature silhouette.,Founder Gloria G. mapping structural silhouette lines.,Fabric density explorations. 280G stretch crepe memory testing.,французький blue swatch edition — limited run calibration.,Drape texture details. Double-backed cowl neckline contour.,Pattern drafting layouts for custom profile contours.,Refining the silhouette. Creative direction and shape mapping.,Atelier detail crop: cowl neck alignment and bias cut.,Creative direction log. Curation sequence for the storefront." | split: ","
+      -%}
+
+      {%- for i in (0..11) -%}
+        {%- assign media = items_media[i] -%}
+        {%- assign type = items_type[i] -%}
+        {%- assign thumb = items_thumbs[i] | strip -%}
+        {%- assign caption = items_captions[i] -%}
+        
+        <div class="sbg-insta-card relative w-full aspect-square cursor-pointer group {% if i >= 6 %}hidden md:block{% endif %}" data-index="{{ i }}" data-link="https://www.instagram.com/styledbygloria_g/">
+          <div class="sbg-insta-card-inner w-full h-full relative overflow-hidden bg-sbg-offwhite border border-sbg-white/5 rounded-sm transition-transform duration-300 ease-out">
+            
+            <!-- Media element layer -->
+            <div class="relative w-full h-full select-none" style="transform: translateZ(15px);">
+              {%- if type == 'video' -%}
+                {%- if thumb != blank -%}
+                  <img src="{{ thumb | asset_url }}" alt="{{ caption }}" class="sbg-insta-poster absolute inset-0 object-cover w-full h-full transition-transform duration-700 group-hover:scale-105">
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'absolute inset-0 w-full h-full object-cover bg-sbg-hover' }}
+                {%- endif -%}
+                <video src="{{ media | asset_url }}" loop muted playsinline class="sbg-insta-video absolute inset-0 object-cover w-full h-full z-10 opacity-0 transition-opacity duration-300"></video>
+              {%- else -%}
+                <img src="{{ media | asset_url }}" alt="{{ caption }}" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105">
+              {%- endif -%}
+            </div>
+
+            <!-- Hover Overlay -->
+            <div class="absolute inset-0 bg-sbg-black/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 z-20" style="transform: translateZ(35px);">
+              <div class="flex justify-between items-start">
+                {%- if type == 'video' -%}
+                  <span class="bg-sbg-white/10 text-sbg-white p-1 rounded-full backdrop-blur-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="h-3 w-3"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                  </span>
+                {%- else -%}
+                  <span></span>
+                {%- endif -%}
+                
+                <!-- Instagram Monogram SVG -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-sbg-white/85 group-hover:text-sbg-white transition-colors">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </div>
+
+              <div class="space-y-1.5 transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
+                <p class="text-[9px] text-sbg-white/95 uppercase tracking-[0.18em] leading-relaxed line-clamp-3">
+                  {{ caption }}
+                </p>
+                <span class="text-[7.5px] text-sbg-white/60 tracking-widest uppercase block pt-1 border-t border-sbg-white/10">
+                  VIEW POST &gt;
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      {%- endfor -%}
+
+    </div>
+  </div>
+
+  <!-- Bottom Link Handle -->
+  <div class="text-center mt-12">
+    <a
+      href="https://instagram.com/styledbygloria_g/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-block text-[10px] font-bold uppercase tracking-[0.25em] text-sbg-white hover:text-sbg-white/70 transition-colors pb-1 border-b border-sbg-white hover:border-sbg-white/70"
+    >
+      @styledbygloria_g
+    </a>
+  </div>
+
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 1. Premium 3D mouse-tilt hover effect
+    document.querySelectorAll('.sbg-insta-card').forEach(function(card) {
+      const inner = card.querySelector('.sbg-insta-card-inner');
+      const video = card.querySelector('.sbg-insta-video');
+      const poster = card.querySelector('.sbg-insta-poster');
+
+      card.addEventListener('mousemove', function(e) {
+        if (!inner) return;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const xc = rect.width / 2;
+        const yc = rect.height / 2;
+        const maxTilt = 12;
+        const rotateY = ((x - xc) / xc) * maxTilt;
+        const rotateX = -((y - yc) / yc) * maxTilt;
+
+        inner.style.transform = 'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.05, 1.05, 1.05)';
+        inner.style.boxShadow = '0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 25px 2px rgba(255, 255, 255, 0.08)';
+      });
+
+      card.addEventListener('mouseenter', function() {
+        // Play video if it exists
+        if (video) {
+          video.style.opacity = '1';
+          video.currentTime = 0;
+          video.play().catch(function(err){});
+          if (poster) poster.style.opacity = '0';
+        }
+      });
+
+      card.addEventListener('mouseleave', function() {
+        if (!inner) return;
+        inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        inner.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+
+        // Stop and hide video
+        if (video) {
+          video.style.opacity = '0';
+          video.pause();
+          if (poster) poster.style.opacity = '1';
+        }
+      });
+
+      card.addEventListener('click', function() {
+        const link = card.getAttribute('data-link');
+        if (link) {
+          window.open(link, '_blank', 'noopener,noreferrer');
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "SBG Instagram Feed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label Text",
+      "default": "STUDIO STORIES"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Header Title",
+      "default": "Curated Atelier Flow"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Instagram Feed"
+    }
+  ]
+}
+{% endschema %}

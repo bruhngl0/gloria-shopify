@@ -1,0 +1,10 @@
+{
+  "general": {
+    "cart": {
+      "title": "Cart",
+      "empty": "Your cart is empty",
+      "checkout": "Proceed to Checkout",
+      "continue_shopping": "Continue Shopping"
+    }
+  }
+}

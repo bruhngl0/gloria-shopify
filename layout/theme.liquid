@@ -1,0 +1,172 @@
+<!doctype html>
+<html class="no-js h-full antialiased" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#0A0A0A">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {% comment %} Dynamic Open Graph & Meta Tags {% endcomment %}
+    {%- render 'meta-tags' -%}
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              sbg: {
+                black: '#0A0A0A',
+                white: '#FFFFFF',
+                offwhite: '#FAFAFA',
+                grey: '#666666',
+                border: '#E0E0E0',
+                hover: '#F5F5F5',
+                gold: '#C5A880'
+              }
+            },
+            fontFamily: {
+              display: ['Cormorant Garamond', 'serif'],
+              body: ['DM Sans', 'sans-serif'],
+              script: ['Pinyon Script', 'cursive']
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Custom CSS styles -->
+    <style type="text/css">
+      body {
+        font-family: 'DM Sans', sans-serif;
+        background-color: #FFFFFF;
+        color: #0A0A0A;
+      }
+      .font-display {
+        font-family: 'Cormorant Garamond', serif;
+      }
+      .font-cursive {
+        font-family: 'Pinyon Script', cursive;
+      }
+      /* Custom scrollbars and transitions */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #FAFAFA;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #E0E0E0;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #666666;
+      }
+      /* Noise Overlay */
+      .noise-overlay {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        content: "";
+        opacity: 0.03;
+        z-index: 9999;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+    </style>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="min-h-full flex flex-col font-body bg-sbg-white text-sbg-black overflow-x-hidden">
+    {%- render 'splash-screen' -%}
+    <div class="noise-overlay"></div>
+
+    {%- section 'sbg-header' -%}
+
+    <main id="MainContent" class="flex-1 flex flex-col" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {%- section 'sbg-footer' -%}
+    {%- section 'cart-drawer' -%}
+
+    <!-- Global JS helpers for AJAX cart drawer -->
+    <script>
+      window.sbg = {
+        openCart: function() {
+          const drawer = document.getElementById('CartDrawer');
+          if (drawer) {
+            drawer.classList.remove('translate-x-full');
+            document.body.classList.add('overflow-hidden');
+            this.refreshCart();
+          }
+        },
+        closeCart: function() {
+          const drawer = document.getElementById('CartDrawer');
+          if (drawer) {
+            drawer.classList.add('translate-x-full');
+            document.body.classList.remove('overflow-hidden');
+          }
+        },
+        refreshCart: function() {
+          const drawerContent = document.getElementById('CartDrawerContent');
+          if (drawerContent) {
+            drawerContent.classList.add('opacity-50');
+            fetch(window.Shopify.routes.root + 'cart?view=drawer')
+              .then(res => res.text())
+              .then(html => {
+                drawerContent.innerHTML = html;
+                drawerContent.classList.remove('opacity-50');
+                this.updateCartCount();
+              })
+              .catch(err => console.error("Error refreshing cart drawer:", err));
+          }
+        },
+        updateCartCount: function() {
+          fetch(window.Shopify.routes.root + 'cart.js')
+            .then(res => res.json())
+            .then(cart => {
+              const badges = document.querySelectorAll('.cart-count-badge');
+              badges.forEach(badge => {
+                badge.textContent = cart.item_count;
+                if (cart.item_count > 0) {
+                  badge.classList.remove('hidden');
+                } else {
+                  badge.classList.add('hidden');
+                }
+              });
+            });
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', function() {
+        window.sbg.updateCartCount();
+      });
+    </script>
+  </body>
+</html>

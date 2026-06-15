@@ -1,0 +1,968 @@
+{%- comment -%}
+  SBG Immersive buy box section with dynamic variant selections and AJAX add to bag.
+  Works on both product pages natively and as a featured product section on the homepage.
+{%- endcomment -%}
+
+{%- liquid
+  assign featured_product = all_products[section.settings.featured_product]
+  assign product_to_show = product | default: featured_product | default: collections.all.products.first
+  assign current_variant = product_to_show.selected_or_first_available_variant
+  
+  assign use_mock = false
+  if product_to_show == blank or current_variant == blank
+    assign use_mock = true
+    assign product_title = "THE ONE FOR ALL DRESS"
+    assign product_price = 18500
+    assign product_description = "HEAVYWEIGHT 280G STRETCH CREPE DRESS DESIGNED AROUND SPECIFIC BODY SHAPES. FEATURES AN ADJUSTABLE DRAPED NECK AND SIDE RUCHING FOR CUSTOM PROFILE CONTOURING."
+  else
+    assign product_title = product_to_show.title
+    assign product_price = current_variant.price
+    assign product_description = product_to_show.description
+  endif
+-%}
+
+<style type="text/css">
+  /* Load & Scroll Animation overrides for PDP Hero */
+  .hero-vertical-title {
+    opacity: 0;
+    transform: translate3d(0, 15px, 0) rotate(-90deg);
+    transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-delay: 0.1s;
+    will-change: opacity, transform;
+  }
+  .sbg-loaded .hero-vertical-title {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(-90deg);
+  }
+
+  .hero-main-image-container {
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 1.4s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+    will-change: opacity, transform;
+  }
+  .sbg-loaded .hero-main-image-container {
+    opacity: 1;
+    transform: scale(1);
+  }
+</style>
+
+<section id="sbg-buy-box" class="relative w-full border-b border-sbg-border bg-sbg-white select-none selection:bg-sbg-black selection:text-sbg-white">
+  {%- comment -%} Unconditional rendering with mock fallback {%- endcomment -%}
+    <!-- 1. DESKTOP WORKSPACE LAYOUT (Saint Laurent Grid Structure) -->
+    <div class="hidden md:grid md:grid-cols-12 h-[calc(100vh-64px)] overflow-hidden w-full">
+      <!-- --- LEFT COLUMN: Brand Wordmark Track & Editorial Navigation --- -->
+      <div class="col-span-3 flex h-full border-r border-sbg-border bg-sbg-white">
+        <!-- Vertical brand title container -->
+        <div class="w-[60px] lg:w-[65px] h-full border-r border-sbg-border flex items-center justify-center relative py-8">
+          <span class="hero-vertical-title font-display text-[18px] lg:text-[20px] font-bold tracking-[0.25em] uppercase whitespace-nowrap text-sbg-black origin-center">
+            {{ section.settings.vertical_title | default: "ONE FOR ALL" }}
+          </span>
+        </div>
+
+        <!-- Navigation panel -->
+        <div class="flex-1 flex flex-col justify-between p-6">
+          <div class="space-y-6 mt-8 reveal-on-scroll" data-stagger-children="0.08">
+            <div class="stagger-item">
+              <a href="{{ section.settings.shop_link_url | default: '/collections/all' }}" class="font-bold tracking-[0.25em] text-[9px] uppercase text-sbg-black hover:text-sbg-grey transition-colors block">
+                {{ section.settings.shop_link_text | default: 'SHOP PIECES >' }}
+              </a>
+              <span class="text-[8px] tracking-widest text-sbg-grey uppercase block mt-0.5">
+                {{ section.settings.shop_link_subtext | default: 'Signature Collection' }}
+              </span>
+            </div>
+            <div class="space-y-3 pt-3 border-t border-sbg-border/60 stagger-item">
+              <a href="{{ section.settings.link_1_url | default: '/pages/services' }}" class="tracking-[0.2em] text-[9px] uppercase text-sbg-grey hover:text-sbg-black transition-colors block">
+                {{ section.settings.link_1_text | default: 'SERVICES' }}
+              </a>
+            </div>
+            <div class="stagger-item">
+              <a href="{{ section.settings.link_2_url | default: '/pages/about' }}" class="tracking-[0.2em] text-[9px] uppercase text-sbg-grey hover:text-sbg-black transition-colors block">
+                {{ section.settings.link_2_text | default: 'THE FOUNDER' }}
+              </a>
+            </div>
+            <div class="stagger-item">
+              <a href="{{ section.settings.link_3_url | default: '/pages/contact' }}" class="tracking-[0.2em] text-[9px] uppercase text-sbg-grey hover:text-sbg-black transition-colors block">
+                {{ section.settings.link_3_text | default: 'CONTACT OFFICE' }}
+              </a>
+            </div>
+          </div>
+
+          <!-- Bottom info panel -->
+          <div class="space-y-3.5 text-[8px] tracking-[0.18em] text-sbg-grey uppercase leading-relaxed mb-2 reveal-on-scroll" data-stagger-children="0.08">
+            <div class="stagger-item">
+              <span class="text-sbg-black block font-bold">SHIPPING TO</span>
+              <span>{{ cart.currency.iso_code }} / INTERNATIONAL</span>
+            </div>
+            <div class="stagger-item">
+              <span class="text-sbg-black block font-bold">LANGUAGE</span>
+              <span>ENGLISH</span>
+            </div>
+            <div class="pt-3 border-t border-sbg-border/60 text-[7.5px] tracking-widest text-sbg-grey/70 stagger-item">
+              SBG © {{ 'now' | date: '%Y' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- --- CENTER COLUMN: Full-Height Immersive Lookbook Cover --- -->
+      <div class="col-span-6 flex flex-col relative h-full bg-sbg-offwhite border-r border-sbg-border overflow-hidden group/center">
+        <!-- Main Visual Slider -->
+        <div class="absolute inset-0 w-full h-full">
+          <div id="hero-image-wrapper" class="hero-main-image-container relative w-full h-full transition-opacity duration-500">
+            {%- if use_mock -%}
+              <img id="hero-main-img" src="{{ 'rrhero.png' | asset_url }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
+            {%- elsif current_variant.image -%}
+              <img id="hero-main-img" src="{{ current_variant.image | image_url: width: 1200 }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
+            {%- else -%}
+              <img id="hero-main-img" src="{{ product_to_show.featured_image | image_url: width: 1200 }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
+            {%- endif -%}
+          </div>
+          <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-sbg-white/40 to-transparent pointer-events-none"></div>
+        </div>
+
+        <!-- Carousel Arrow Controls -->
+        <button onclick="navigateHeroImage(-1)" class="absolute left-6 top-1/2 -translate-y-1/2 z-25 w-11 h-11 border border-sbg-border/60 bg-sbg-white/85 text-sbg-black hover:bg-sbg-black hover:text-sbg-white hover:border-sbg-black transition-all flex items-center justify-center rounded-full cursor-pointer shadow-sm opacity-0 group-hover/center:opacity-100 focus:opacity-100" aria-label="Previous image">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+
+        <button onclick="navigateHeroImage(1)" class="absolute right-6 top-1/2 -translate-y-1/2 z-25 w-11 h-11 border border-sbg-border/60 bg-sbg-white/85 text-sbg-black hover:bg-sbg-black hover:text-sbg-white hover:border-sbg-black transition-all flex items-center justify-center rounded-full cursor-pointer shadow-sm opacity-0 group-hover/center:opacity-100 focus:opacity-100" aria-label="Next image">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+
+        <!-- Bottom Left: Slide Indicator -->
+        <div class="absolute bottom-8 left-8 z-20">
+          <div id="hero-dot-indicator" class="flex items-center space-x-3">
+            <!-- Populated via Javascript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- --- RIGHT COLUMN: Purchasing Drawer & Sizing configs --- -->
+      <div class="col-span-3 flex flex-col justify-between h-full p-6 bg-sbg-white overflow-y-auto">
+        <div class="flex justify-between items-center text-[9px] tracking-[0.2em] text-sbg-grey uppercase border-b border-sbg-border/60 pb-4">
+          <button onclick="window.sbg.openCart()" class="font-bold text-sbg-black hover:text-sbg-grey transition-colors flex items-center">
+            BAG (<span class="cart-count-badge">0</span>) &gt;
+          </button>
+          <span>STUDIO SPEC</span>
+        </div>
+
+        <div class="my-4 space-y-4 reveal-on-scroll" data-stagger-children="0.12">
+          <div class="stagger-item">
+            <span class="text-[8px] tracking-[0.25em] font-bold text-sbg-grey uppercase block mb-3">ATELIER SHOT</span>
+            <div class="relative aspect-[4/3] w-full bg-sbg-offwhite border border-sbg-border overflow-hidden shadow-sm">
+              <!-- Default detail image placeholder -->
+              {%- if use_mock -%}
+                <img id="hero-detail-img" src="{{ 'two.png' | asset_url }}" class="w-full h-full object-cover">
+              {%- else -%}
+                <img id="hero-detail-img" src="{{ product_to_show.images[1] | default: product_to_show.featured_image | image_url: width: 400 }}" class="w-full h-full object-cover">
+              {%- endif -%}
+            </div>
+          </div>
+
+          <div class="space-y-2.5 text-[8.5px] tracking-[0.2em] text-sbg-grey leading-relaxed uppercase stagger-item">
+            <p class="font-bold text-sbg-black">
+              {{ product_title }} &mdash; <span id="sbg-desktop-price">{{ product_price | money }}</span>
+            </p>
+            <div class="text-[8.5px] tracking-wider text-sbg-grey normal-case leading-relaxed">
+              {{ product_description | strip_html | truncatewords: 25 }}
+            </div>
+          </div>
+        </div>
+
+        {%- if use_mock -%}
+          <form class="space-y-6 pt-4 border-t border-sbg-border/60 reveal-on-scroll" data-stagger-children="0.1" onsubmit="event.preventDefault(); window.sbg.openCart();">
+            <!-- Mock Color Option -->
+            <div class="space-y-2 variant-option-group stagger-item" data-option-index="0">
+              <div class="flex justify-between items-center">
+                <span class="text-[8px] tracking-[0.2em] font-bold text-sbg-black uppercase">
+                  COLORWAY
+                </span>
+                <span id="mock-desktop-color-label" class="text-[8px] tracking-[0.2em] text-sbg-grey uppercase">
+                  Onyx Black
+                </span>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="selectMockOption(0, 'Black', this)" class="sbg-swatch w-5.5 h-5.5 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none ring-1 ring-offset-2 ring-sbg-black border-sbg-black" style="background-color: #0A0A0A;" title="Black" data-value="Black"></button>
+                <button type="button" onclick="selectMockOption(0, 'Red', this)" class="sbg-swatch w-5.5 h-5.5 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none hover:scale-110" style="background-color: #A62626;" title="Red" data-value="Red"></button>
+                <button type="button" onclick="selectMockOption(0, 'Baby Blue', this)" class="sbg-swatch w-5.5 h-5.5 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none hover:scale-110" style="background-color: #5F85A6;" title="Baby Blue" data-value="Baby Blue"></button>
+              </div>
+            </div>
+
+            <!-- Mock Size Option -->
+            <div class="space-y-2 variant-option-group stagger-item" data-option-index="1">
+              <div class="flex justify-between items-center">
+                <span class="text-[8px] tracking-[0.2em] font-bold text-sbg-black uppercase">
+                  SELECT SIZE
+                </span>
+                <button type="button" onclick="openSizingChart()" class="text-[8px] tracking-[0.2em] text-sbg-grey hover:text-sbg-black underline uppercase">
+                  SIZING CHART
+                </button>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="selectMockOption(1, 'XS', this)" class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black" data-value="XS">XS</button>
+                <button type="button" onclick="selectMockOption(1, 'S', this)" class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-black bg-sbg-black text-sbg-white font-bold" data-value="S">S</button>
+                <button type="button" onclick="selectMockOption(1, 'M', this)" class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black" data-value="M">M</button>
+                <button type="button" onclick="selectMockOption(1, 'L', this)" class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black" data-value="L">L</button>
+                <button type="button" onclick="selectMockOption(1, 'XL', this)" class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black" data-value="XL">XL</button>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center stagger-item">
+              <span id="sbg-desktop-button-text">ADD TO BAG &mdash; {{ product_price | money }}</span>
+            </button>
+          </form>
+        {%- else -%}
+          <!-- Buy Form -->
+          <form method="post" action="/cart/add" id="sbg-product-form-desktop" class="space-y-6 pt-4 border-t border-sbg-border/60 reveal-on-scroll" data-stagger-children="0.1" enctype="multipart/form-data">
+            <input type="hidden" name="form_type" value="product">
+            <input type="hidden" name="utf8" value="✓">
+            <!-- Hidden real variant selector -->
+            <input type="hidden" name="id" id="sbg-desktop-variant-input" value="{{ current_variant.id }}">
+
+            <!-- Size / Color swatches custom rendering -->
+            {%- for option in product_to_show.options_with_values -%}
+              {%- assign option_name_down = option.name | downcase -%}
+              
+              <div class="space-y-2 variant-option-group stagger-item" data-option-index="{{ forloop.index0 }}">
+                <div class="flex justify-between items-center">
+                  <span class="text-[8px] tracking-[0.2em] font-bold text-sbg-black uppercase">
+                    {{ option.name }}
+                  </span>
+                  {%- if option_name_down contains 'size' -%}
+                    <button type="button" onclick="openSizingChart()" class="text-[8px] tracking-[0.2em] text-sbg-grey hover:text-sbg-black underline uppercase">
+                      SIZING CHART
+                    </button>
+                  {%- endif -%}
+                </div>
+
+                <div class="flex flex-wrap gap-1.5">
+                  {%- for value in option.values -%}
+                    {%- if option_name_down contains 'color' -%}
+                      {%- liquid
+                        assign bg_color = '#FFFFFF'
+                        assign val_down = value | downcase
+                        if val_down contains 'black'
+                          assign bg_color = '#0A0A0A'
+                        elsif val_down contains 'red'
+                          assign bg_color = '#A62626'
+                        elsif val_down contains 'blue'
+                          assign bg_color = '#5F85A6'
+                        endif
+                      -%}
+                      <button type="button" 
+                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)" 
+                        class="sbg-swatch w-5.5 h-5.5 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none {% if option.selected_value == value %}ring-1 ring-offset-2 ring-sbg-black border-sbg-black{% else %}hover:scale-110{% endif %}" 
+                        style="background-color: {{ bg_color }};" 
+                        title="{{ value | escape }}"
+                        data-value="{{ value | escape }}">
+                      </button>
+                    {%- else -%}
+                      <button type="button" 
+                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)" 
+                        class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black{% endif %}"
+                        data-value="{{ value | escape }}">
+                        {{ value }}
+                      </button>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+
+            <!-- Submit Button -->
+            <button type="submit" id="sbg-desktop-add-to-bag" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center stagger-item">
+              <span id="sbg-desktop-button-text">ADD TO BAG &mdash; {{ current_variant.price | money }}</span>
+            </button>
+          </form>
+        {%- endif -%}
+
+        <!-- Product Details Accordion -->
+        <div class="sbg-accordion border-t border-sbg-border mt-8 w-full reveal-on-scroll" data-stagger-children="0.1">
+          <!-- Item 1 -->
+          <div class="border-b border-sbg-border stagger-item">
+            <button type="button" onclick="toggleAccordion('sbg-acc-fabric')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
+              <span>Fabric & Care</span>
+              <svg id="sbg-acc-fabric-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="sbg-acc-fabric" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              Heavyweight stretch crepe (280 g/m²). Composition: 58% spandex, 42% rayon. Offers high recovery and smoothing compression. Machine wash cold on gentle cycle, lay flat to dry. Do not bleach. Cool iron if needed.
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="border-b border-sbg-border stagger-item">
+            <button type="button" onclick="toggleAccordion('sbg-acc-shipping')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
+              <span>Shipping & Returns</span>
+              <svg id="sbg-acc-shipping-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="sbg-acc-shipping" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              Complimentary express shipping on orders over $250. Orders are processed within 1-2 business days. Returns are accepted within 14 days of delivery for store credit or exchange. Items must be unworn and in original packaging.
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="border-b border-sbg-border stagger-item">
+            <button type="button" onclick="toggleAccordion('sbg-acc-fit')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
+              <span>Fit & Construction Advice</span>
+              <svg id="sbg-acc-fit-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="sbg-acc-fit" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              Features a double-lined bodice for maximum smoothing and drape. The side ruching is highly adjustable: pull it tight to raise the hem and create dynamic draping, or loosen it for a longer, sleek columnar silhouette. Fits true to size; if you are in between sizes, choose your size based on your hip measurement.
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Coordinates -->
+        <div class="flex justify-between items-center text-[7.5px] tracking-[0.2em] text-sbg-grey uppercase pt-4 border-t border-sbg-border/60 mt-4 select-none">
+          <span class="hover:text-sbg-black cursor-pointer">INSTAGRAM</span>
+          <span>SCROLL TO EXPLORE &darr;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. RESPONSIVE MOBILE VIEWPORT (Editorial Stacked layout) -->
+    <div class="block md:hidden bg-sbg-white w-full">
+      <!-- Mobile Lookbook Carousel Image Hero -->
+      <section class="relative w-full aspect-[3/4] bg-sbg-offwhite overflow-hidden">
+        {%- if use_mock -%}
+          <img id="hero-mobile-img" src="{{ 'rrhero.png' | asset_url }}" alt="{{ product_title }}" class="object-cover w-full h-full">
+        {%- elsif current_variant.image -%}
+          <img id="hero-mobile-img" src="{{ current_variant.image | image_url: width: 800 }}" alt="{{ product_title }}" class="object-cover w-full h-full">
+        {%- else -%}
+          <img id="hero-mobile-img" src="{{ product_to_show.featured_image | image_url: width: 800 }}" alt="{{ product_title }}" class="object-cover w-full h-full">
+        {%- endif -%}
+
+        <!-- Mobile Carousel Indicator overlay -->
+        <div class="absolute bottom-6 left-6 z-10 flex items-center space-x-3" id="hero-mobile-dot-indicator">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- Mobile purchasing form stack -->
+      <section class="px-6 py-6 space-y-6">
+        <div class="space-y-2">
+          <span class="text-[8px] tracking-[0.25em] font-bold text-sbg-grey uppercase block">THE SIGNATURE SKU</span>
+          <div class="flex justify-between items-baseline">
+            <h2 class="font-display text-xl font-bold uppercase tracking-wide">
+              {{ product_title }}
+            </h2>
+            <span id="sbg-mobile-price" class="text-xs font-bold tracking-wider text-sbg-grey">
+              {{ product_price | money }}
+            </span>
+          </div>
+          <div class="text-[9px] tracking-[0.2em] text-sbg-grey uppercase leading-relaxed">
+            {{ product_description | strip_html | truncatewords: 25 }}
+          </div>
+        </div>
+
+        {%- if use_mock -%}
+          <form class="space-y-6" onsubmit="event.preventDefault(); window.sbg.openCart();">
+            <!-- Mock Color Option -->
+            <div class="space-y-2 variant-option-group" data-option-index="0">
+              <div class="flex justify-between items-center text-[8px] tracking-[0.2em]">
+                <span class="font-bold text-sbg-black uppercase">COLORWAY</span>
+                <span id="mock-mobile-color-label" class="text-sbg-grey uppercase">Onyx Black</span>
+              </div>
+              <div class="flex items-center space-x-2.5">
+                <button type="button" onclick="selectMockOption(0, 'Black', this)" class="sbg-swatch w-6 h-6 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none ring-1 ring-offset-2 ring-sbg-black border-sbg-black" style="background-color: #0A0A0A;" data-value="Black"></button>
+                <button type="button" onclick="selectMockOption(0, 'Red', this)" class="sbg-swatch w-6 h-6 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none" style="background-color: #A62626;" data-value="Red"></button>
+                <button type="button" onclick="selectMockOption(0, 'Baby Blue', this)" class="sbg-swatch w-6 h-6 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none" style="background-color: #5F85A6;" data-value="Baby Blue"></button>
+              </div>
+            </div>
+
+            <!-- Mock Size Option -->
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-[8px] tracking-[0.2em]">
+                <span class="font-bold text-sbg-black uppercase">SELECT SIZE</span>
+                <button type="button" onclick="openSizingChart()" class="text-sbg-grey underline uppercase">SIZING CHART</button>
+              </div>
+              <div class="flex gap-1.5">
+                <button type="button" onclick="selectMockOption(1, 'XS', this)" class="sbg-button-option h-8 flex-1 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black" data-value="XS">XS</button>
+                <button type="button" onclick="selectMockOption(1, 'S', this)" class="sbg-button-option h-8 flex-1 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-black bg-sbg-black text-sbg-white font-bold" data-value="S">S</button>
+                <button type="button" onclick="selectMockOption(1, 'M', this)" class="sbg-button-option h-8 flex-1 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black" data-value="M">M</button>
+                <button type="button" onclick="selectMockOption(1, 'L', this)" class="sbg-button-option h-8 flex-1 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black" data-value="L">L</button>
+                <button type="button" onclick="selectMockOption(1, 'XL', this)" class="sbg-button-option h-8 flex-1 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black" data-value="XL">XL</button>
+              </div>
+            </div>
+
+            <!-- Submit button -->
+            <div class="pt-2">
+              <button type="submit" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white flex items-center justify-center">
+                <span>ADD TO BAG &mdash; {{ product_price | money }}</span>
+              </button>
+            </div>
+          </form>
+        {%- else -%}
+          <form method="post" action="/cart/add" id="sbg-product-form-mobile" class="space-y-6" enctype="multipart/form-data">
+            <input type="hidden" name="form_type" value="product">
+            <input type="hidden" name="utf8" value="✓">
+            <input type="hidden" name="id" id="sbg-mobile-variant-input" value="{{ current_variant.id }}">
+
+            <!-- Size / Color swatches mobile custom rendering -->
+            {%- for option in product_to_show.options_with_values -%}
+              {%- assign option_name_down = option.name | downcase -%}
+              
+              <div class="space-y-2 variant-option-group" data-option-index="{{ forloop.index0 }}">
+                <div class="flex justify-between items-center text-[8px] tracking-[0.2em]">
+                  <span class="font-bold text-sbg-black uppercase">{{ option.name }}</span>
+                  {%- if option_name_down contains 'size' -%}
+                    <button type="button" onclick="openSizingChart()" class="text-sbg-grey underline uppercase">SIZING CHART</button>
+                  {%- endif -%}
+                </div>
+
+                <div class="flex gap-1.5">
+                  {%- for value in option.values -%}
+                    {%- if option_name_down contains 'color' -%}
+                      {%- liquid
+                        assign bg_color = '#FFFFFF'
+                        assign val_down = value | downcase
+                        if val_down contains 'black'
+                          assign bg_color = '#0A0A0A'
+                        elsif val_down contains 'red'
+                          assign bg_color = '#A62626'
+                        elsif val_down contains 'blue'
+                          assign bg_color = '#5F85A6'
+                        endif
+                      -%}
+                      <button type="button" 
+                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)" 
+                        class="sbg-swatch w-6 h-6 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none {% if option.selected_value == value %}ring-1 ring-offset-2 ring-sbg-black border-sbg-black{% endif %}" 
+                        style="background-color: {{ bg_color }};"
+                        data-value="{{ value | escape }}">
+                      </button>
+                    {%- else -%}
+                      <button type="button" 
+                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)" 
+                        class="sbg-button-option h-8 flex-1 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center min-w-[32px] {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black{% endif %}"
+                        data-value="{{ value | escape }}">
+                        {{ value }}
+                      </button>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+
+            <div class="pt-2">
+              <button type="submit" id="sbg-mobile-add-to-bag" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white flex items-center justify-center">
+                <span id="sbg-mobile-button-text">ADD TO BAG &mdash; {{ current_variant.price | money }}</span>
+              </button>
+            </div>
+          </form>
+        {%- endif -%}
+
+        <!-- Mobile Product Details Accordion -->
+        <div class="sbg-accordion border-t border-sbg-border mt-8 w-full">
+          <!-- Item 1 -->
+          <div class="border-b border-sbg-border">
+            <button type="button" onclick="toggleAccordion('sbg-m-acc-fabric')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
+              <span>Fabric & Care</span>
+              <svg id="sbg-m-acc-fabric-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="sbg-m-acc-fabric" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              Heavyweight stretch crepe (280 g/m²). Composition: 58% spandex, 42% rayon. Offers high recovery and smoothing compression. Machine wash cold on gentle cycle, lay flat to dry. Do not bleach. Cool iron if needed.
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="border-b border-sbg-border">
+            <button type="button" onclick="toggleAccordion('sbg-m-acc-shipping')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
+              <span>Shipping & Returns</span>
+              <svg id="sbg-m-acc-shipping-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="sbg-m-acc-shipping" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              Complimentary express shipping on orders over $250. Orders are processed within 1-2 business days. Returns are accepted within 14 days of delivery for store credit or exchange. Items must be unworn and in original packaging.
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="border-b border-sbg-border">
+            <button type="button" onclick="toggleAccordion('sbg-m-acc-fit')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
+              <span>Fit & Construction Advice</span>
+              <svg id="sbg-m-acc-fit-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="sbg-m-acc-fit" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
+              Features a double-lined bodice for maximum smoothing and drape. The side ruching is highly adjustable: pull it tight to raise the hem and create dynamic draping, or loosen it for a longer, sleek columnar silhouette. Fits true to size; if you are in between sizes, choose your size based on your hip measurement.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  {%- comment -%} End empty state check {%- endcomment -%}
+</section>
+
+<!-- Simple HTML Size Guide modal -->
+<div id="SizingModal" class="fixed inset-0 z-50 bg-sbg-black/30 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+  <div class="bg-sbg-white border border-sbg-border max-w-lg w-full p-8 relative flex flex-col justify-between shadow-2xl">
+    <button onclick="closeSizingChart()" class="absolute top-4 right-4 p-2 text-sbg-black hover:text-sbg-grey" aria-label="Close modal">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+
+    <div>
+      <h3 class="font-display text-xl font-bold tracking-widest uppercase text-sbg-black mb-6">Size Guide</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-[10px] uppercase tracking-wider text-sbg-grey">
+          <thead>
+            <tr class="border-b border-sbg-border">
+              <th class="py-2.5 font-bold text-sbg-black">Size</th>
+              <th class="py-2.5 font-bold text-sbg-black">Bust (in)</th>
+              <th class="py-2.5 font-bold text-sbg-black">Waist (in)</th>
+              <th class="py-2.5 font-bold text-sbg-black">Hips (in)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-sbg-border/60">
+              <td class="py-3 font-semibold text-sbg-black">XS</td>
+              <td class="py-3">31 - 32.5</td>
+              <td class="py-3">24 - 25.5</td>
+              <td class="py-3">34 - 35.5</td>
+            </tr>
+            <tr class="border-b border-sbg-border/60">
+              <td class="py-3 font-semibold text-sbg-black">S</td>
+              <td class="py-3">33 - 34.5</td>
+              <td class="py-3">26 - 27.5</td>
+              <td class="py-3">36 - 37.5</td>
+            </tr>
+            <tr class="border-b border-sbg-border/60">
+              <td class="py-3 font-semibold text-sbg-black">M</td>
+              <td class="py-3">35 - 36.5</td>
+              <td class="py-3">28 - 29.5</td>
+              <td class="py-3">38 - 39.5</td>
+            </tr>
+            <tr class="border-b border-sbg-border/60">
+              <td class="py-3 font-semibold text-sbg-black">L</td>
+              <td class="py-3">37 - 38.5</td>
+              <td class="py-3">30 - 31.5</td>
+              <td class="py-3">40 - 41.5</td>
+            </tr>
+            <tr class="border-b border-sbg-border/60">
+              <td class="py-3 font-semibold text-sbg-black">XL</td>
+              <td class="py-3">39 - 41</td>
+              <td class="py-3">32 - 34</td>
+              <td class="py-3">42 - 44</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Dynamic Sizing chart triggers
+  function openSizingChart() {
+    const modal = document.getElementById('SizingModal');
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    modal.classList.add('opacity-100', 'pointer-events-auto');
+  }
+  function closeSizingChart() {
+    const modal = document.getElementById('SizingModal');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    modal.classList.remove('opacity-100', 'pointer-events-auto');
+  }
+
+  // Toggle Accordion Panels
+  function toggleAccordion(id) {
+    const el = document.getElementById(id);
+    const chevron = document.getElementById(id + '-chevron');
+    if (el) {
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        el.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+      }
+    }
+  }
+
+  // Variant Option Selection & AJAX Cart Additions
+  {%- if use_mock -%}
+    // Mock image arrays
+    const mockImages = {
+      'Black': {
+        'main': '{{ "rrhero.png" | asset_url }}',
+        'detail': '{{ "two.png" | asset_url }}'
+      },
+      'Red': {
+        'main': '{{ "two.png" | asset_url }}',
+        'detail': '{{ "three.png" | asset_url }}'
+      },
+      'Baby Blue': {
+        'main': '{{ "three.png" | asset_url }}',
+        'detail': '{{ "one.png" | asset_url }}'
+      }
+    };
+    const mockColorLabels = {
+      'Black': 'Onyx Black',
+      'Red': 'Crimson Red',
+      'Baby Blue': 'French Blue'
+    };
+    const mockColors = ['Black', 'Red', 'Baby Blue'];
+    let mockActiveColor = 'Black';
+    let mockIsDetail = false;
+
+    window.selectMockOption = function(optionIdx, value, btn) {
+      if (optionIdx === 0) { // Colorway
+        mockActiveColor = value;
+        mockIsDetail = false;
+        
+        // Update Swatches highlight
+        const container = btn.closest('.variant-option-group');
+        if (container) {
+          container.querySelectorAll('.sbg-swatch').forEach(sw => {
+            sw.classList.remove('ring-1', 'ring-offset-2', 'ring-sbg-black', 'border-sbg-black');
+            sw.classList.add('hover:scale-110');
+          });
+        }
+        btn.classList.add('ring-1', 'ring-offset-2', 'ring-sbg-black', 'border-sbg-black');
+        btn.classList.remove('hover:scale-110');
+
+        // Update Labels
+        const label = document.getElementById('mock-desktop-color-label');
+        if (label) label.textContent = mockColorLabels[value];
+        const mLabel = document.getElementById('mock-mobile-color-label');
+        if (mLabel) mLabel.textContent = mockColorLabels[value];
+
+        // Update Images
+        updateMockImages();
+
+        // Update slider pagination dots highlight
+        updateMockPagination();
+      } else { // Size
+        // Update Buttons highlight
+        const container = btn.closest('.variant-option-group');
+        if (container) {
+          container.querySelectorAll('.sbg-button-option').forEach(bo => {
+            bo.className = "sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black";
+          });
+        }
+        btn.className = "sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-black bg-sbg-black text-sbg-white font-bold";
+      }
+    };
+
+    window.navigateHeroImage = function(dir) {
+      mockIsDetail = !mockIsDetail;
+      updateMockImages();
+    };
+
+    function updateMockImages() {
+      const mainImg = document.getElementById('hero-main-img');
+      const mobileImg = document.getElementById('hero-mobile-img');
+      if (mainImg) {
+        mainImg.src = mockIsDetail ? mockImages[mockActiveColor].detail : mockImages[mockActiveColor].main;
+      }
+      if (mobileImg) {
+        mobileImg.src = mockIsDetail ? mockImages[mockActiveColor].detail : mockImages[mockActiveColor].main;
+      }
+    }
+
+    function updateMockPagination() {
+      const idx = mockColors.indexOf(mockActiveColor);
+      const desktopDots = document.getElementById('hero-dot-indicator');
+      const mobileDots = document.getElementById('hero-mobile-dot-indicator');
+      [desktopDots, mobileDots].forEach(container => {
+        if (!container) return;
+        container.innerHTML = '';
+        mockColors.forEach((_, bIdx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.onclick = () => {
+            selectMockOption(0, mockColors[bIdx], btn);
+          };
+          btn.className = bIdx === idx ? 'h-1.5 w-1.5 rounded-full bg-sbg-black scale-125 transition-all duration-300' : 'h-1.5 w-1.5 rounded-full bg-sbg-grey/40 hover:bg-sbg-grey transition-all duration-300';
+          container.appendChild(btn);
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateMockPagination();
+    });
+  {%- else -%}
+    const productVariants = {{ product_to_show.variants | json }};
+    const productImages = [
+      {%- for image in product_to_show.images -%}
+        "{{ image | image_url: width: 1200 }}"{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ];
+
+    let currentOptionValues = [
+      {%- for option in product_to_show.options_with_values -%}
+        "{{ option.selected_value | escape }}"{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ];
+
+    let currentImageIndex = 0;
+
+    function selectOption(optionIndex, value, buttonEl) {
+      currentOptionValues[optionIndex] = value;
+
+      // Update UI active buttons inside option group
+      const optionGroup = buttonEl.closest('.variant-option-group');
+      optionGroup.querySelectorAll('.sbg-swatch, .sbg-button-option').forEach(el => {
+        el.classList.remove('ring-1', 'ring-offset-2', 'ring-sbg-black', 'border-sbg-black', 'bg-sbg-black', 'text-sbg-white', 'font-bold');
+        if (el.classList.contains('sbg-button-option')) {
+          el.classList.add('border-sbg-border', 'bg-sbg-white', 'text-sbg-black');
+        }
+      });
+
+      if (buttonEl.classList.contains('sbg-swatch')) {
+        buttonEl.classList.add('ring-1', 'ring-offset-2', 'ring-sbg-black', 'border-sbg-black');
+      } else {
+        buttonEl.classList.add('border-sbg-black', 'bg-sbg-black', 'text-sbg-white', 'font-bold');
+        buttonEl.classList.remove('border-sbg-border', 'bg-sbg-white', 'text-sbg-black');
+      }
+
+      // Sync choice between desktop & mobile forms
+      syncOptionUI(optionIndex, value);
+
+      // Resolve variant based on options
+      const matchingVariant = productVariants.find(variant => {
+        return variant.options.every((optValue, idx) => {
+          return optValue === currentOptionValues[idx];
+        });
+      });
+
+      if (matchingVariant) {
+        // Update hidden input fields
+        document.getElementById('sbg-desktop-variant-input').value = matchingVariant.id;
+        document.getElementById('sbg-mobile-variant-input').value = matchingVariant.id;
+
+        // Update Prices
+        const formattedPrice = window.Shopify.formatMoney ? window.Shopify.formatMoney(matchingVariant.price) : `$${(matchingVariant.price / 100).toFixed(2)}`;
+        document.getElementById('sbg-desktop-price').innerText = formattedPrice;
+        document.getElementById('sbg-mobile-price').innerText = formattedPrice;
+
+        // Update Add to bag texts
+        const desktopBtnText = document.getElementById('sbg-desktop-button-text');
+        const mobileBtnText = document.getElementById('sbg-mobile-button-text');
+        const desktopBtn = document.getElementById('sbg-desktop-add-to-bag');
+        const mobileBtn = document.getElementById('sbg-mobile-add-to-bag');
+
+        if (matchingVariant.available) {
+          desktopBtnText.innerText = `ADD TO BAG — ${formattedPrice}`;
+          mobileBtnText.innerText = `ADD TO BAG — ${formattedPrice}`;
+          desktopBtn.disabled = false;
+          mobileBtn.disabled = false;
+          desktopBtn.classList.remove('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
+          desktopBtn.classList.add('bg-sbg-black', 'text-sbg-white');
+          mobileBtn.classList.remove('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
+          mobileBtn.classList.add('bg-sbg-black', 'text-sbg-white');
+        } else {
+          desktopBtnText.innerText = 'OUT OF STOCK';
+          mobileBtnText.innerText = 'OUT OF STOCK';
+          desktopBtn.disabled = true;
+          mobileBtn.disabled = true;
+          desktopBtn.classList.add('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
+          desktopBtn.classList.remove('bg-sbg-black', 'text-sbg-white');
+          mobileBtn.classList.add('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
+          mobileBtn.classList.remove('bg-sbg-black', 'text-sbg-white');
+        }
+
+        // Swap main hero image if variant image exists
+        if (matchingVariant.featured_image) {
+          const newImgUrl = matchingVariant.featured_image.src;
+          const desktopImg = document.getElementById('hero-main-img');
+          const mobileImg = document.getElementById('hero-mobile-img');
+          if (desktopImg) desktopImg.src = newImgUrl;
+          if (mobileImg) mobileImg.src = newImgUrl;
+
+          // Sync current index in image slider
+          const imgIndex = productImages.findIndex(src => src.includes(matchingVariant.featured_image.src.split('?')[0]));
+          if (imgIndex !== -1) {
+            currentImageIndex = imgIndex;
+            updateHeroPagination(imgIndex);
+          }
+        }
+      }
+    }
+
+    function syncOptionUI(optionIndex, value) {
+      document.querySelectorAll(`.variant-option-group[data-option-index="${optionIndex}"]`).forEach(group => {
+        group.querySelectorAll('.sbg-swatch, .sbg-button-option').forEach(el => {
+          if (el.getAttribute('data-value') === value) {
+            el.classList.add('ring-1', 'ring-offset-2', 'ring-sbg-black', 'border-sbg-black');
+            if (el.classList.contains('sbg-button-option')) {
+              el.classList.add('bg-sbg-black', 'text-sbg-white', 'font-bold');
+              el.classList.remove('border-sbg-border', 'bg-sbg-white', 'text-sbg-black');
+            }
+          } else {
+            el.classList.remove('ring-1', 'ring-offset-2', 'ring-sbg-black', 'border-sbg-black', 'bg-sbg-black', 'text-sbg-white', 'font-bold');
+            if (el.classList.contains('sbg-button-option')) {
+              el.classList.add('border-sbg-border', 'bg-sbg-white', 'text-sbg-black');
+            }
+          }
+        });
+      });
+    }
+
+    function updateHeroPagination(activeIdx) {
+      const desktopDots = document.getElementById('hero-dot-indicator');
+      const mobileDots = document.getElementById('hero-mobile-dot-indicator');
+
+      [desktopDots, mobileDots].forEach(container => {
+        if (!container) return;
+        container.querySelectorAll('button').forEach((dot, idx) => {
+          if (idx === activeIdx) {
+            dot.className = 'h-1.5 w-1.5 rounded-full bg-sbg-black scale-125 transition-all duration-300';
+          } else {
+            dot.className = 'h-1.5 w-1.5 rounded-full bg-sbg-grey/40 hover:bg-sbg-grey transition-all duration-300';
+          }
+        });
+      });
+    }
+
+    window.navigateHeroImage = function(direction) {
+      currentImageIndex = (currentImageIndex + direction + productImages.length) % productImages.length;
+      const desktopImg = document.getElementById('hero-main-img');
+      const mobileImg = document.getElementById('hero-mobile-img');
+      if (desktopImg) desktopImg.src = productImages[currentImageIndex];
+      if (mobileImg) mobileImg.src = productImages[currentImageIndex];
+      updateHeroPagination(currentImageIndex);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Build slide dots indicator
+      const desktopDots = document.getElementById('hero-dot-indicator');
+      const mobileDots = document.getElementById('hero-mobile-dot-indicator');
+
+      [desktopDots, mobileDots].forEach(container => {
+        if (!container) return;
+        container.innerHTML = '';
+        productImages.forEach((_, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.onclick = () => {
+            currentImageIndex = idx;
+            const desktopImg = document.getElementById('hero-main-img');
+            const mobileImg = document.getElementById('hero-mobile-img');
+            if (desktopImg) desktopImg.src = productImages[idx];
+            if (mobileImg) mobileImg.src = productImages[idx];
+            updateHeroPagination(idx);
+          };
+          btn.className = idx === 0 ? 'h-1.5 w-1.5 rounded-full bg-sbg-black scale-125' : 'h-1.5 w-1.5 rounded-full bg-sbg-grey/40';
+          container.appendChild(btn);
+        });
+      });
+
+      // Handle Form AJAX Submissions
+      const handleFormSubmit = function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const submitBtnText = form.querySelector('[id$="button-text"]');
+        const originalText = submitBtnText.innerHTML;
+
+        submitBtnText.innerHTML = 'PREPARING ATELIER...';
+
+        const variantId = form.querySelector('input[name="id"]').value;
+
+        fetch(window.Shopify.routes.root + 'cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
+        })
+        .then(res => res.json())
+        .then(item => {
+          submitBtnText.innerHTML = 'ADDED TO PROFILE ✓';
+          window.sbg.openCart();
+          setTimeout(() => {
+            submitBtnText.innerHTML = originalText;
+          }, 1500);
+        })
+        .catch(err => {
+          console.error("Cart addition error:", err);
+          submitBtnText.innerHTML = 'ERROR ADDING';
+          setTimeout(() => {
+            submitBtnText.innerHTML = originalText;
+          }, 1500);
+        });
+      };
+
+      const desktopForm = document.getElementById('sbg-product-form-desktop');
+      const mobileForm = document.getElementById('sbg-product-form-mobile');
+      if (desktopForm) desktopForm.addEventListener('submit', handleFormSubmit);
+      if (mobileForm) mobileForm.addEventListener('submit', handleFormSubmit);
+    });
+  {%- endif -%}
+</script>
+
+{% schema %}
+{
+  "name": "SBG Buying Hero",
+  "settings": [
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Featured Product"
+    },
+    {
+      "type": "text",
+      "id": "vertical_title",
+      "label": "Vertical Wordmark",
+      "default": "ONE FOR ALL"
+    },
+    {
+      "type": "header",
+      "content": "Left Editorial Links"
+    },
+    {
+      "type": "text",
+      "id": "shop_link_text",
+      "label": "Shop Link Text",
+      "default": "SHOP PIECES >"
+    },
+    {
+      "type": "text",
+      "id": "shop_link_subtext",
+      "label": "Shop Link Subtext",
+      "default": "Signature Collection"
+    },
+    {
+      "type": "url",
+      "id": "shop_link_url",
+      "label": "Shop Link URL"
+    },
+    {
+      "type": "text",
+      "id": "link_1_text",
+      "label": "Link 1 Text (Services)",
+      "default": "SERVICES"
+    },
+    {
+      "type": "url",
+      "id": "link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "link_2_text",
+      "label": "Link 2 Text (Founder)",
+      "default": "THE FOUNDER"
+    },
+    {
+      "type": "url",
+      "id": "link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "link_3_text",
+      "label": "Link 3 Text (Contact Office)",
+      "default": "CONTACT OFFICE"
+    },
+    {
+      "type": "url",
+      "id": "link_3_url",
+      "label": "Link 3 URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Buying Hero"
+    }
+  ]
+}
+{% endschema %}
