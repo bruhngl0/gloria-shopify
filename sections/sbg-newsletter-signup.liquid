@@ -1,0 +1,119 @@
+{%- comment -%}
+  SBG Newsletter email capture section
+  Utilizes Shopify's native customer form to collect subscriber emails.
+{%- endcomment -%}
+
+<div class="bg-sbg-white w-full py-20 border-b border-sbg-border/60 select-none">
+  <div class="mx-auto max-w-xl px-4 sm:px-6 text-center reveal-on-scroll">
+    
+    <!-- Header -->
+    <div class="space-y-4 mb-8">
+      <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block">
+        {{ section.settings.sub_label | default: "Newsletter" }}
+      </span>
+      <h2 class="font-display text-3xl font-bold tracking-[0.2em] text-sbg-black uppercase">
+        {{ section.settings.title | default: "Atelier Dispatch" }}
+      </h2>
+      <div class="h-[1px] w-12 bg-sbg-black mx-auto mt-4"></div>
+      <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-sm mx-auto pt-2">
+        {{ section.settings.description | default: "Subscribe to receive structural styling guidelines, lookbook launches, and private boutique previews." }}
+      </p>
+    </div>
+
+    <!-- Form wrapper -->
+    <div class="max-w-md mx-auto">
+      {%- form 'customer', id: 'ContactNewsletter' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        <!-- Success Message -->
+        {%- if form.posted_successfully? -%}
+          <div class="flex flex-col items-center justify-center space-y-3 py-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <p class="text-xs font-semibold tracking-wider text-green-800 uppercase">
+              {{ section.settings.success_message | default: "Thank you for subscribing to the dispatch." }}
+            </p>
+          </div>
+        {%- else -%}
+
+          <div class="space-y-4">
+            <!-- Form Errors -->
+            {%- if form.errors -%}
+              <div class="p-4 bg-red-50 border border-red-200 text-red-800 text-xs tracking-wider text-left">
+                {{ form.errors | default_errors }}
+              </div>
+            {%- endif -%}
+
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input
+                type="email"
+                name="contact[email]"
+                id="NewsletterForm-Email"
+                value="{{ form.email }}"
+                placeholder="{{ section.settings.placeholder | default: 'jane@example.com' }}"
+                required
+                class="flex-1 px-4 py-3.5 border border-sbg-border text-xs tracking-wider transition-colors focus:outline-none focus:border-sbg-black bg-sbg-white text-sbg-black placeholder-sbg-grey/55"
+              >
+              <button
+                type="submit"
+                class="px-8 py-3.5 border border-sbg-black bg-sbg-black text-sbg-white text-[10px] font-bold uppercase tracking-widest hover:bg-sbg-white hover:text-sbg-black transition-colors focus:outline-none"
+              >
+                {{ section.settings.button_text | default: "Subscribe" }}
+              </button>
+            </div>
+          </div>
+
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SBG Newsletter Dispatch",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label",
+      "default": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "Atelier Dispatch"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Subscribe to receive structural styling guidelines, lookbook launches, and private boutique previews."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Input Placeholder",
+      "default": "jane@example.com"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success Message",
+      "default": "Thank you for subscribing to the dispatch."
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Newsletter Dispatch"
+    }
+  ]
+}
+{% endschema %}

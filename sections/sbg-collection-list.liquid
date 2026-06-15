@@ -1,0 +1,168 @@
+{%- comment -%}
+  SBG Collection List grid section
+  Renders a curated grid of Shopify collections with editorial transitions.
+{%- endcomment -%}
+
+<style type="text/css">
+  .collection-card-img {
+    transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  .collection-card:hover .collection-card-img {
+    transform: scale(1.04);
+  }
+</style>
+
+<div class="bg-sbg-white w-full py-20 border-b border-sbg-border/60 select-none">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-16 reveal-on-scroll" data-stagger-children="0.1">
+      <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-2 stagger-item">
+        {{ section.settings.sub_label | default: "Curated Range" }}
+      </span>
+      <h2 class="font-display text-3xl md:text-4xl font-bold tracking-[0.2em] text-sbg-black uppercase stagger-item">
+        {{ section.settings.title | default: "Atelier Collections" }}
+      </h2>
+      <div class="h-[1px] w-16 bg-sbg-black mx-auto mt-4 stagger-item"></div>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ section.settings.columns | default: 3 }} gap-8 reveal-on-scroll" data-stagger-children="0.15">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign col = collections[block.settings.collection]
+            assign col_title = block.settings.custom_title | default: col.title | default: "Collection Title"
+            assign col_image = block.settings.custom_image | default: col.featured_image | default: col.products.first.featured_image
+            assign col_link = col.url | default: "#"
+            assign count = col.all_products_count
+          -%}
+          <a href="{{ col_link }}" class="collection-card group block relative border border-sbg-border/60 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item" {{ block.shopify_attributes }}>
+            <div class="relative overflow-hidden bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% else %}aspect-[3/4]{% endif %}">
+              {%- if col_image != blank -%}
+                <img src="{{ col_image | image_url: width: 800 }}" alt="{{ col_title }}" class="collection-card-img object-cover w-full h-full">
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover opacity-80' }}
+              {%- endif -%}
+              <div class="absolute inset-0 bg-sbg-black/5 group-hover:bg-sbg-black/15 transition-colors duration-500"></div>
+            </div>
+            
+            <div class="p-6 flex justify-between items-baseline bg-sbg-white border-t border-sbg-border/40">
+              <div class="space-y-1 text-left">
+                <h3 class="font-display text-lg font-bold tracking-wide uppercase text-sbg-black group-hover:text-sbg-gold transition-colors duration-300">
+                  {{ col_title }}
+                </h3>
+                <span class="text-[8px] tracking-[0.2em] uppercase text-sbg-grey block">
+                  {{ count | default: 0 }} {{ count | pluralize: 'piece', 'pieces' }}
+                </span>
+              </div>
+              <span class="text-xs font-bold text-sbg-black group-hover:text-sbg-gold transition-colors">&gt;</span>
+            </div>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Fallback List using all collections in store -->
+        {%- for col in collections -%}
+          {%- unless col.handle == 'frontpage' -%}
+            {%- liquid
+              assign col_title = col.title
+              assign col_image = col.featured_image | default: col.products.first.featured_image
+              assign col_link = col.url
+              assign count = col.all_products_count
+            -%}
+            <a href="{{ col_link }}" class="collection-card group block relative border border-sbg-border/60 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item">
+              <div class="relative overflow-hidden bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% else %}aspect-[3/4]{% endif %}">
+                {%- if col_image != blank -%}
+                  <img src="{{ col_image | image_url: width: 800 }}" alt="{{ col_title }}" class="collection-card-img object-cover w-full h-full">
+                {%- else -%}
+                  {{ 'collection-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover opacity-80' }}
+                {%- endif -%}
+                <div class="absolute inset-0 bg-sbg-black/5 group-hover:bg-sbg-black/15 transition-colors duration-500"></div>
+              </div>
+              
+              <div class="p-6 flex justify-between items-baseline bg-sbg-white border-t border-sbg-border/40">
+                <div class="space-y-1 text-left">
+                  <h3 class="font-display text-lg font-bold tracking-wide uppercase text-sbg-black group-hover:text-sbg-gold transition-colors duration-300">
+                    {{ col_title }}
+                  </h3>
+                  <span class="text-[8px] tracking-[0.2em] uppercase text-sbg-grey block">
+                    {{ count | default: 0 }} {{ count | pluralize: 'piece', 'pieces' }}
+                  </span>
+                </div>
+                <span class="text-xs font-bold text-sbg-black group-hover:text-sbg-gold transition-colors">&gt;</span>
+              </div>
+            </a>
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SBG Collection List",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label",
+      "default": "Curated Range"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "Atelier Collections"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on Desktop",
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Card Aspect Ratio",
+      "options": [
+        { "value": "square", "label": "Square (1:1)" },
+        { "value": "portrait", "label": "Portrait (3:4)" }
+      ],
+      "default": "portrait"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection Card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom Title (Optional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Collection List"
+    }
+  ]
+}
+{% endschema %}

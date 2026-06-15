@@ -1,0 +1,126 @@
+{%- comment -%}
+  SBG Product Recommendations section
+  Utilizes Shopify's native recommendations engine to dynamically load recommended products.
+{%- endcomment -%}
+
+<style type="text/css">
+  .product-grid-card-img {
+    transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  .product-grid-card:hover .product-grid-card-img {
+    transform: scale(1.04);
+  }
+</style>
+
+<div
+  class="product-recommendations-wrapper w-full bg-sbg-white py-20 border-b border-sbg-border/60 select-none"
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit | default: 4 }}"
+>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      
+      <!-- Header -->
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-2">
+          {{ section.settings.sub_label | default: "Complementary Pieces" }}
+        </span>
+        <h2 class="font-display text-3xl font-bold tracking-[0.2em] text-sbg-black uppercase">
+          {{ section.settings.title | default: "You May Also Like" }}
+        </h2>
+        <div class="h-[1px] w-16 bg-sbg-black mx-auto mt-4"></div>
+      </div>
+
+      <!-- Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        {%- for product in recommendations.products -%}
+          <a href="{{ product.url }}" class="product-grid-card group block relative border border-sbg-border/50 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500">
+            <div class="relative overflow-hidden bg-sbg-offwhite aspect-[3/4]">
+              <!-- Primary Image -->
+              {%- if product.featured_image != blank -%}
+                <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" class="product-grid-card-img object-cover w-full h-full">
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
+              {%- endif -%}
+            </div>
+            
+            <!-- Details -->
+            <div class="p-4 bg-sbg-white border-t border-sbg-border/40 text-left space-y-1">
+              <h3 class="text-[10px] tracking-[0.18em] uppercase text-sbg-grey/90 truncate font-semibold">
+                {{ product.vendor | default: "Styled by Gloria" }}
+              </h3>
+              <p class="font-display text-sm font-bold tracking-wide uppercase text-sbg-black truncate group-hover:text-sbg-gold transition-colors duration-300">
+                {{ product.title }}
+              </p>
+              <p class="text-xs font-semibold tracking-wider text-sbg-black/80">
+                {{ product.price | money }}
+              </p>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+  (function() {
+    const sectionWrapper = document.querySelector('.product-recommendations-wrapper');
+    if (!sectionWrapper) return;
+
+    const handleIntersection = (entries, observer) => {
+      if (!entries[0].isIntersecting) return;
+      observer.unobserve(sectionWrapper);
+
+      const url = sectionWrapper.getAttribute('data-url');
+      fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const temp = document.createElement('div');
+          temp.innerHTML = html;
+          const content = temp.querySelector('.product-recommendations-wrapper');
+          if (content && content.innerHTML.trim().length > 0) {
+            sectionWrapper.innerHTML = content.innerHTML;
+          }
+        })
+        .catch(err => console.error("Error loading recommendations:", err));
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, { rootMargin: '0px 0px 200px 0px' });
+    observer.observe(sectionWrapper);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "SBG Recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label",
+      "default": "Complementary Pieces"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "min": 4,
+      "max": 8,
+      "step": 4,
+      "label": "Number of Recommendations",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Recommendations"
+    }
+  ]
+}
+{% endschema %}

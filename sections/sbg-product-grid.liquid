@@ -1,0 +1,173 @@
+{%- comment -%}
+  SBG Product Grid section
+  Renders a curated grid of products from a selected collection with premium animations.
+{%- endcomment -%}
+
+<style type="text/css">
+  .product-grid-card-img {
+    transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  .product-grid-card:hover .product-grid-card-img {
+    transform: scale(1.04);
+  }
+</style>
+
+<div class="bg-sbg-white w-full py-20 border-b border-sbg-border/60 select-none">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-16 reveal-on-scroll" data-stagger-children="0.1">
+      <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-2 stagger-item">
+        {{ section.settings.sub_label | default: "Signature Pieces" }}
+      </span>
+      <h2 class="font-display text-3xl md:text-4xl font-bold tracking-[0.2em] text-sbg-black uppercase stagger-item">
+        {{ section.settings.title | default: "Atelier Catalogue" }}
+      </h2>
+      <div class="h-[1px] w-16 bg-sbg-black mx-auto mt-4 stagger-item"></div>
+    </div>
+
+    {%- liquid
+      assign col = collections[section.settings.collection] | default: collections.all
+      assign limit = section.settings.limit | default: 8
+    -%}
+
+    <!-- Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-{{ section.settings.columns | default: 4 }} gap-6 md:gap-8 reveal-on-scroll" data-stagger-children="0.12">
+      {%- if col.products.size > 0 -%}
+        {%- for product in col.products limit: limit -%}
+          {%- liquid
+            assign current_variant = product.selected_or_first_available_variant
+            assign price = current_variant.price
+          -%}
+          <a href="{{ product.url }}" class="product-grid-card group block relative border border-sbg-border/50 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item">
+            <div class="relative overflow-hidden bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% else %}aspect-[3/4]{% endif %}">
+              <!-- Primary Image -->
+              {%- if product.featured_image != blank -%}
+                <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" class="product-grid-card-img object-cover w-full h-full">
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
+              {%- endif -%}
+              
+              <!-- Secondary Image on Hover -->
+              {%- if section.settings.show_second_image and product.images[1] != blank -%}
+                <img src="{{ product.images[1] | image_url: width: 800 }}" alt="{{ product.title }}" class="absolute inset-0 object-cover w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+              {%- endif -%}
+              
+              <!-- Badges -->
+              {%- if current_variant.available == false -%}
+                <span class="absolute top-3 right-3 bg-sbg-black text-sbg-white text-[8px] font-bold tracking-widest uppercase px-2 py-1 select-none">
+                  OUT OF STOCK
+                </span>
+              {%- elsif product.compare_at_price > product.price -%}
+                <span class="absolute top-3 right-3 bg-sbg-gold text-sbg-white text-[8px] font-bold tracking-widest uppercase px-2 py-1 select-none">
+                  SALE
+                </span>
+              {%- endif -%}
+            </div>
+            
+            <!-- Details -->
+            <div class="p-4 bg-sbg-white border-t border-sbg-border/40 text-left space-y-1">
+              <h3 class="text-[10px] tracking-[0.18em] uppercase text-sbg-grey/90 truncate font-semibold">
+                {{ product.vendor | default: "Styled by Gloria" }}
+              </h3>
+              <p class="font-display text-sm font-bold tracking-wide uppercase text-sbg-black truncate group-hover:text-sbg-gold transition-colors duration-300">
+                {{ product.title }}
+              </p>
+              <p class="text-xs font-semibold tracking-wider text-sbg-black/80">
+                {%- if product.price_varies -%}
+                  From {{ product.price_min | money }}
+                {%- else -%}
+                  {{ product.price | money }}
+                {%- endif -%}
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="text-sbg-grey line-through pl-1.5 font-normal text-[10px]">{{ product.compare_at_price | money }}</span>
+                {%- endif -%}
+              </p>
+            </div>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Fallback Cards if empty store catalog -->
+        {%- for i in (1..4) -%}
+          <div class="product-grid-card group block relative border border-sbg-border/50 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item">
+            <div class="relative overflow-hidden bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% else %}aspect-[3/4]{% endif %}">
+              {{ 'product-' | append: i | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
+            </div>
+            <div class="p-4 bg-sbg-white border-t border-sbg-border/40 text-left space-y-1">
+              <h3 class="text-[10px] tracking-[0.18em] uppercase text-sbg-grey/90 font-semibold">STYLED BY GLORIA</h3>
+              <p class="font-display text-sm font-bold tracking-wide uppercase text-sbg-black group-hover:text-sbg-gold transition-colors duration-300">
+                THE ATELIER PIECE {{ i }}
+              </p>
+              <p class="text-xs font-semibold tracking-wider text-sbg-black/80">$185.00 CAD</p>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SBG Product Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Sub-label",
+      "default": "Signature Pieces"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "Atelier Catalogue"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "label": "Products Limit",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on Desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Card Aspect Ratio",
+      "options": [
+        { "value": "square", "label": "Square (1:1)" },
+        { "value": "portrait", "label": "Portrait (3:4)" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_second_image",
+      "label": "Show Second Image on Hover",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Product Grid"
+    }
+  ]
+}
+{% endschema %}
