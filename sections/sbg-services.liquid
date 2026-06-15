@@ -1,0 +1,507 @@
+{%- comment -%}
+  SBG Styling Services Page Section
+  Translates the Next.js services layout into a highly customizable Shopify 2.0 section.
+{%- endcomment -%}
+
+<style type="text/css">
+  /* Spotlight hover card effect */
+  .sbg-services-spotlight {
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.5s ease, box-shadow 0.5s ease;
+  }
+  .sbg-services-spotlight:hover {
+    border-color: rgba(197, 168, 128, 0.45);
+    box-shadow: 0 25px 50px -12px rgba(197, 168, 128, 0.08);
+  }
+
+  /* Case study hover translations */
+  .sbg-case-card:hover .sbg-case-border {
+    transform: translate(4px, 4px);
+  }
+
+  /* FAQ Accordion Transitions */
+  .sbg-faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.215, 0.61, 0.355, 1), opacity 0.4s ease;
+    opacity: 0;
+  }
+  .sbg-faq-answer.open {
+    max-height: 500px;
+    opacity: 1;
+  }
+</style>
+
+<div class="bg-sbg-white min-h-screen py-16 md:py-24 select-none">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    
+    <!-- SECTION 1: Page Header -->
+    <div class="text-center max-w-2xl mx-auto mb-16 reveal-on-scroll" data-stagger-children="0.1">
+      <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-2 stagger-item">
+        {{ section.settings.header_sub | default: "Elevate Your Style" }}
+      </span>
+      <h1 class="font-display text-3xl md:text-5xl font-bold tracking-[0.2em] text-sbg-black uppercase stagger-item">
+        {{ section.settings.header_title | default: "Styling Services" }}
+      </h1>
+      <div class="h-[1px] w-16 bg-sbg-black mx-auto mt-4 mb-6 stagger-item"></div>
+      <p class="text-xs tracking-wider leading-relaxed text-sbg-grey stagger-item">
+        {{ section.settings.header_description | default: "Every service is designed with a body-first philosophy. We focus on how garments serve your lines, teaching you how to dress with lasting confidence." }}
+      </p>
+    </div>
+
+    <!-- SECTION 2: Consultation CTA Box (Calendly Integration) -->
+    <div id="SGB-ConsultationBox" class="sbg-services-spotlight max-w-3xl mx-auto border border-sbg-black p-8 md:p-12 mb-20 text-center reveal-on-scroll">
+      <!-- Spotlight cursor follow gradient element -->
+      <div id="sbg-spotlight-overlay" class="absolute inset-0 pointer-events-none transition-opacity duration-300" style="background: radial-gradient(500px circle at center, rgba(197, 168, 128, 0.02), transparent 80%);"></div>
+      
+      <!-- Double border accent -->
+      <div class="absolute inset-2 md:inset-3 border border-sbg-border/40 pointer-events-none group-hover:border-sbg-gold/20 transition-colors duration-500"></div>
+
+      <div class="relative z-10 space-y-6">
+        <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block">
+          {{ section.settings.consult_badge | default: "Start Here" }}
+        </span>
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-sbg-black uppercase tracking-wider">
+          {{ section.settings.consult_title | default: "30-Minute Initial Consultation" }}
+        </h2>
+        <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-xl mx-auto">
+          {{ section.settings.consult_description | default: "New to SBG? Every full styling experience begins here. In this virtual meet-up, we'll discuss your styling goals, identify your shape profile, and match you with the perfect program." }}
+        </p>
+        <p class="text-sm font-semibold tracking-wider text-sbg-black">
+          {{ section.settings.consult_price | default: "$25.00 CAD" }}
+        </p>
+        <div class="pt-2">
+          <a
+            href="{{ section.settings.consult_link | default: 'https://calendly.com/styledbygloria/30min' }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-8 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-black text-sbg-white hover:bg-sbg-white hover:text-sbg-black transition-all duration-300 w-full sm:w-auto"
+          >
+            Book Your Consultation
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: Styling Programs Cards -->
+    <div class="mb-24">
+      <div class="text-center mb-12">
+        <h2 class="font-display text-xl md:text-2xl font-bold text-sbg-black uppercase tracking-widest">
+          Our Styling Programs
+        </h2>
+        <p class="text-[10px] tracking-widest text-sbg-grey uppercase mt-1">
+          Custom-tailored to your style journey
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 reveal-on-scroll" data-stagger-children="0.15">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'service_card' -%}
+              <div class="border border-sbg-border p-8 md:p-10 flex flex-col justify-between space-y-8 bg-sbg-white hover:border-sbg-gold/40 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-300 group stagger-item">
+                <div class="space-y-6">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="bg-sbg-hover text-sbg-grey text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 border border-sbg-border/30 group-hover:bg-sbg-gold/10 transition-colors duration-300">
+                      {{ block.settings.badge }}
+                    </span>
+                    <span class="text-[9px] font-bold tracking-wider uppercase text-sbg-grey/85">
+                      {{ block.settings.duration }}
+                    </span>
+                  </div>
+                  <h3 class="font-display text-lg md:text-xl font-bold tracking-wide text-sbg-black uppercase group-hover:text-sbg-gold transition-colors duration-300">
+                    {{ block.settings.title }}
+                  </h3>
+                  <div class="text-xs tracking-wider text-sbg-grey leading-relaxed">
+                    {{ block.settings.content }}
+                  </div>
+                </div>
+                <div class="pt-4 border-t border-sbg-border/60">
+                  <a
+                    href="{{ routes.root_url }}pages/contact?subject=Styling%20Services&service={{ block.settings.title | escape }}"
+                    class="inline-flex items-center justify-center px-6 py-3.5 border border-sbg-black text-[10px] font-bold uppercase tracking-widest bg-sbg-white text-sbg-black hover:bg-sbg-black hover:text-sbg-white transition-all duration-300 w-full"
+                  >
+                    Enquire About This Service
+                  </a>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          <!-- Default Service Cards if none configured -->
+          <div class="border border-sbg-border p-8 md:p-10 flex flex-col justify-between space-y-8 bg-sbg-white hover:border-sbg-gold/40 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-300 group stagger-item">
+            <div class="space-y-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="bg-sbg-hover text-sbg-grey text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 border border-sbg-border/30 group-hover:bg-sbg-gold/10 transition-colors duration-300">Virtual</span>
+                <span class="text-[9px] font-bold tracking-wider uppercase text-sbg-grey/85">45 Minutes</span>
+              </div>
+              <h3 class="font-display text-lg md:text-xl font-bold tracking-wide text-sbg-black uppercase group-hover:text-sbg-gold transition-colors duration-300">
+                Body Type Education Session
+              </h3>
+              <ul class="space-y-3 text-xs tracking-wider text-sbg-grey list-disc pl-4 leading-relaxed">
+                <li>Personalized body line analysis</li>
+                <li>Understanding drape, fabric weight, and proportions for your silhouette</li>
+                <li>Custom styling guidelines sheet to reference forever</li>
+                <li>No pressure to buy — purely educational focus</li>
+              </ul>
+            </div>
+            <div class="pt-4 border-t border-sbg-border/60">
+              <a href="{{ routes.root_url }}pages/contact?subject=Styling%20Services&service=Body%20Type%20Education%20Session" class="inline-flex items-center justify-center px-6 py-3.5 border border-sbg-black text-[10px] font-bold uppercase tracking-widest bg-sbg-white text-sbg-black hover:bg-sbg-black hover:text-sbg-white transition-all duration-300 w-full">
+                Enquire About This Service
+              </a>
+            </div>
+          </div>
+
+          <div class="border border-sbg-border p-8 md:p-10 flex flex-col justify-between space-y-8 bg-sbg-white hover:border-sbg-gold/40 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-300 group stagger-item">
+            <div class="space-y-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="bg-sbg-hover text-sbg-grey text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 border border-sbg-border/30 group-hover:bg-sbg-gold/10 transition-colors duration-300">Virtual or In-Person</span>
+                <span class="text-[9px] font-bold tracking-wider uppercase text-sbg-grey/85">Hourly Program</span>
+              </div>
+              <h3 class="font-display text-lg md:text-xl font-bold tracking-wide text-sbg-black uppercase group-hover:text-sbg-gold transition-colors duration-300">
+                Closet Audit
+              </h3>
+              <ul class="space-y-3 text-xs tracking-wider text-sbg-grey list-disc pl-4 leading-relaxed">
+                <li>In-depth review of your current wardrobe lineup</li>
+                <li>Identify and keep pieces that honor your shape</li>
+                <li>Identify fit gaps and create a strategic shopping list</li>
+                <li>Organization tips tailored to ease your daily selection</li>
+              </ul>
+            </div>
+            <div class="pt-4 border-t border-sbg-border/60">
+              <a href="{{ routes.root_url }}pages/contact?subject=Styling%20Services&service=Closet%20Audit" class="inline-flex items-center justify-center px-6 py-3.5 border border-sbg-black text-[10px] font-bold uppercase tracking-widest bg-sbg-white text-sbg-black hover:bg-sbg-black hover:text-sbg-white transition-all duration-300 w-full">
+                Enquire About This Service
+              </a>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- SECTION 4: Case Studies Transformations -->
+    <section class="bg-sbg-offwhite w-full py-20 border-t border-b border-sbg-border/60 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-xl mx-auto mb-16">
+          <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-gold block mb-3">
+            Case Archive
+          </span>
+          <h2 class="font-display text-3xl md:text-4xl font-bold tracking-wide text-sbg-black uppercase">
+            Client Transformations
+          </h2>
+          <div class="h-[1.5px] bg-sbg-gold w-12 mx-auto mt-4"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 reveal-on-scroll" data-stagger-children="0.15">
+          <!-- Case 1 -->
+          <div class="space-y-6 group sbg-case-card stagger-item">
+            <div class="relative">
+              <div class="sbg-case-border absolute inset-0 border border-sbg-border translate-x-3 translate-y-3 transition-transform duration-500 pointer-events-none"></div>
+              <div class="relative z-10 border border-sbg-black bg-sbg-white">
+                <div class="relative aspect-[3/4] w-full flex items-center justify-center overflow-hidden bg-[#E5E5E5] text-[10px] uppercase font-bold tracking-widest text-[#999]">
+                  <img src="{{ 'one.png' | asset_url }}" alt="Case Study 01" class="object-cover w-full h-full">
+                </div>
+              </div>
+            </div>
+            <div class="space-y-2 pt-2 text-left">
+              <span class="text-[10px] font-bold tracking-widest text-sbg-gold uppercase block">
+                Case Study 01: Capsule Curation
+              </span>
+              <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">
+                Client Profile: Pear Shape Profile
+              </h3>
+              <p class="text-xs leading-relaxed text-sbg-grey">
+                <strong class="text-sbg-black font-semibold uppercase text-[10px] tracking-wider block mt-2">Challenge:</strong>
+                Executive role. Flooded with fast-fashion items that stretch out, drape incorrectly, and look unprofessional.
+              </p>
+              <p class="text-xs leading-relaxed text-sbg-grey">
+                <strong class="text-sbg-black font-semibold uppercase text-[10px] tracking-wider block mt-2">Solution:</strong>
+                Conducted virtual body line mapping and closet audit. Replaced high-shrink synthetic blends with Italian Viscose crepe tailoring. Selected pieces designed for high waist contours and vertical balance.
+              </p>
+            </div>
+          </div>
+
+          <!-- Case 2 -->
+          <div class="space-y-6 group sbg-case-card stagger-item">
+            <div class="relative">
+              <div class="sbg-case-border absolute inset-0 border border-sbg-border translate-x-3 translate-y-3 transition-transform duration-500 pointer-events-none"></div>
+              <div class="relative z-10 border border-sbg-black bg-sbg-white">
+                <div class="relative aspect-[3/4] w-full flex items-center justify-center overflow-hidden bg-[#E5E5E5] text-[10px] uppercase font-bold tracking-widest text-[#999]">
+                  <img src="{{ 'three.png' | asset_url }}" alt="Case Study 02" class="object-cover w-full h-full">
+                </div>
+              </div>
+            </div>
+            <div class="space-y-2 pt-2 text-left">
+              <span class="text-[10px] font-bold tracking-widest text-sbg-gold uppercase block">
+                Case Study 02: Silhouette Proportions
+              </span>
+              <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">
+                Client Profile: Inverted Triangle Profile
+              </h3>
+              <p class="text-xs leading-relaxed text-sbg-grey">
+                <strong class="text-sbg-black font-semibold uppercase text-[10px] tracking-wider block mt-2">Challenge:</strong>
+                Shoulder lines dwarfed by bulky un-tailored structured jackets, resulting in boxy fitting that hides her natural curves.
+              </p>
+              <p class="text-xs leading-relaxed text-sbg-grey">
+                <strong class="text-sbg-black font-semibold uppercase text-[10px] tracking-wider block mt-2">Solution:</strong>
+                Assessed balance points to guide length selections. Recommended customizable wrap cuts and customizable cowl draping to soften shoulders. Curated tailored adjustments for sleeve offsets.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Meet Your Stylist Bio -->
+    <div class="pt-20 mb-20">
+      <div class="text-center max-w-xl mx-auto mb-12">
+        <h2 class="font-display text-xl md:text-2xl font-bold text-sbg-black uppercase tracking-widest">
+          Meet Your Stylist
+        </h2>
+        <p class="text-[10px] tracking-widest text-sbg-grey uppercase mt-1">
+          Guiding you to dress for your lines
+        </p>
+      </div>
+
+      <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center reveal-on-scroll">
+        <!-- Stylist Image -->
+        <div class="md:col-span-5 relative aspect-square w-full border border-sbg-border overflow-hidden bg-sbg-offwhite rounded-full max-w-[240px] mx-auto md:max-w-none">
+          <img src="{{ 'gloria.jpg' | asset_url }}" alt="Gloria G. - Lead Stylist" class="object-cover w-full h-full">
+        </div>
+
+        <!-- Bio Content -->
+        <div class="md:col-span-7 space-y-4 text-center md:text-left">
+          <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">
+            Gloria G.
+          </h3>
+          <p class="text-xs font-semibold tracking-widest text-sbg-grey uppercase">
+            Founder & Lead Stylist
+          </p>
+          <p class="text-xs tracking-wider leading-relaxed text-sbg-grey">
+            After a decade working in commercial fashion, I founded Styled by Gloria to change how we relate to our wardrobes. I believe that style is a form of self-respect. Our goal is to shift the conversation away from standard sizes toward structural proportions, drape, and confidence.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: Styling FAQs -->
+    <section class="max-w-4xl mx-auto py-20 border-t border-sbg-border/60">
+      <div class="text-center mb-16">
+        <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-gold block mb-3">
+          Inquiries
+        </span>
+        <h2 class="font-display text-2xl md:text-3xl font-bold tracking-wide text-sbg-black uppercase">
+          Frequently Asked Questions
+        </h2>
+        <div class="h-[1.5px] w-12 bg-sbg-gold mx-auto mt-4"></div>
+      </div>
+
+      <!-- FAQ List -->
+      <div class="divide-y divide-sbg-border/60 border-t border-b border-sbg-border/60 text-left">
+        {%- assign faq_q1 = "How do I know which styling package is right for me?" -%}
+        {%- assign faq_a1 = "Every styling client starts with our 30-Minute Initial Consultation. In this session, we map out your wardrobe pain points, identify your structural goals, and help you select between individual programs or the complete Styling Bundle." -%}
+
+        {%- assign faq_q2 = "Do you travel for in-person closet audits?" -%}
+        {%- assign faq_a2 = "Yes. While virtual consultations are standard and highly effective, in-person closet audits and personal shopping sessions are available for clients based in the greater metropolitan area. Custom travel rates apply." -%}
+
+        {%- assign faq_q3 = "What exactly is 'body-type intentionality'?" -%}
+        {%- assign faq_a3 = "Traditional sizing assumes a body should mold to standard grade specs. We reverse this. We look at skeletal proportions, balance points, and vertical lines to determine how clothing must drape, select fabric weight to hold shape, and place customizable adjusters to serve your natural lines." -%}
+
+        {%- assign faq_q4 = "How does the digital Lookbook work?" -%}
+        {%- assign faq_a4 = "Following a shopping or styling session, we compile a digital archive containing 15+ fully styled outfit combinations mapped to your shape profile. Each outfit comes with tailoring instructions, accessorizing tips, and direct links to build your collection." -%}
+
+        {%- for idx in (1..4) -%}
+          {%- liquid
+            if idx == 1
+              assign q = faq_q1
+              assign a = faq_a1
+            elsif idx == 2
+              assign q = faq_q2
+              assign a = faq_a2
+            elsif idx == 3
+              assign q = faq_q3
+              assign a = faq_a3
+            elsif idx == 4
+              assign q = faq_q4
+              assign a = faq_a4
+            endif
+          -%}
+          <div class="py-5">
+            <button
+              type="button"
+              onclick="toggleFaq({{ idx }})"
+              class="flex w-full items-center justify-between text-left group focus:outline-none"
+            >
+              <span class="font-display text-base md:text-lg font-bold tracking-wide text-sbg-black group-hover:text-sbg-gold transition-colors duration-300">
+                {{ q }}
+              </span>
+              <span id="faq-sign-{{ idx }}" class="ml-4 font-light text-2xl text-sbg-grey group-hover:text-sbg-gold transition-colors">
+                +
+              </span>
+            </button>
+            <div id="faq-ans-{{ idx }}" class="sbg-faq-answer">
+              <p class="text-xs leading-relaxed text-sbg-grey tracking-wider pt-4 max-w-3xl pr-4">
+                {{ a }}
+              </p>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </section>
+
+    <!-- SECTION 7: Footer Note -->
+    <div class="text-center py-6 border-t border-sbg-border/60">
+      <p class="text-xs tracking-wider italic text-sbg-grey">
+        Don't see what you're looking for?
+        <a
+          href="{{ routes.root_url }}pages/contact"
+          class="text-sbg-black font-semibold underline underline-offset-4 hover:opacity-80 transition-opacity"
+        >
+          Ask me about it.
+        </a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Spotlight follow mouse movement inside consultation box
+  (function() {
+    const box = document.getElementById('SGB-ConsultationBox');
+    const overlay = document.getElementById('sbg-spotlight-overlay');
+
+    if (box && overlay) {
+      box.addEventListener('mousemove', function(e) {
+        const rect = box.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        overlay.style.background = 'radial-gradient(500px circle at ' + x + 'px ' + y + 'px, rgba(197, 168, 128, 0.08), transparent 80%)';
+      });
+
+      box.addEventListener('mouseleave', function() {
+        overlay.style.background = 'radial-gradient(500px circle at center, rgba(197, 168, 128, 0.02), transparent 80%)';
+      });
+    }
+  })();
+
+  // Accordion faq collapsibles
+  function toggleFaq(idx) {
+    const ans = document.getElementById('faq-ans-' + idx);
+    const sign = document.getElementById('faq-sign-' + idx);
+
+    if (ans && sign) {
+      if (ans.classList.contains('open')) {
+        ans.classList.remove('open');
+        sign.textContent = '+';
+      } else {
+        // Close all other FAQs first
+        document.querySelectorAll('.sbg-faq-answer').forEach(function(el) {
+          el.classList.remove('open');
+        });
+        document.querySelectorAll('[id^="faq-sign-"]').forEach(function(el) {
+          el.textContent = '+';
+        });
+
+        ans.classList.add('open');
+        sign.textContent = '−';
+      }
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "SBG Styling Services",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header_sub",
+      "label": "Header Subtext",
+      "default": "Elevate Your Style"
+    },
+    {
+      "type": "text",
+      "id": "header_title",
+      "label": "Header Title",
+      "default": "Styling Services"
+    },
+    {
+      "type": "textarea",
+      "id": "header_description",
+      "label": "Header Description",
+      "default": "Every service is designed with a body-first philosophy. We focus on how garments serve your lines, teaching you how to dress with lasting confidence."
+    },
+    {
+      "type": "header",
+      "content": "Consultation Booking"
+    },
+    {
+      "type": "text",
+      "id": "consult_badge",
+      "label": "Badge Text",
+      "default": "Start Here"
+    },
+    {
+      "type": "text",
+      "id": "consult_title",
+      "label": "Consultation Title",
+      "default": "30-Minute Initial Consultation"
+    },
+    {
+      "type": "textarea",
+      "id": "consult_description",
+      "label": "Consultation Description",
+      "default": "New to SBG? Every full styling experience begins here. In this virtual meet-up, we'll discuss your styling goals, identify your shape profile, and match you with the perfect program."
+    },
+    {
+      "type": "text",
+      "id": "consult_price",
+      "label": "Price Label",
+      "default": "$25.00 CAD"
+    },
+    {
+      "type": "text",
+      "id": "consult_link",
+      "label": "Booking Link URL",
+      "default": "https://calendly.com/styledbygloria/30min"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "service_card",
+      "name": "Service Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge (e.g. Virtual)",
+          "default": "Virtual"
+        },
+        {
+          "type": "text",
+          "id": "duration",
+          "label": "Duration (e.g. 45 Minutes)",
+          "default": "45 Minutes"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Service Title",
+          "default": "Custom Program"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Bullets & Content",
+          "default": "<p>Program details...</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Styling Services"
+    }
+  ]
+}
+{% endschema %}
