@@ -104,9 +104,16 @@
 
       <div id="footer-menu1" class="footer-accordion-content md:block">
         <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
-          {%- for link in section.settings.menu1.links -%}
-            <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
-          {%- endfor -%}
+          {%- if section.settings.menu1 != blank -%}
+            {%- for link in section.settings.menu1.links -%}
+              <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
+            {%- endfor -%}
+          {%- else -%}
+            <li><a href="/pages/about" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Styled by Gloria</a></li>
+            <li><a href="/pages/contact" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Contact</a></li>
+            <li><a href="/pages/services" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Services</a></li>
+            <li><a href="/pages/brand" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">The Brand</a></li>
+          {%- endif -%}
         </ul>
       </div>
     </div>
@@ -126,9 +133,17 @@
 
       <div id="footer-menu2" class="footer-accordion-content md:block">
         <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
-          {%- for link in section.settings.menu2.links -%}
-            <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
-          {%- endfor -%}
+          {%- if section.settings.menu2 != blank -%}
+            {%- for link in section.settings.menu2.links -%}
+              <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
+            {%- endfor -%}
+          {%- else -%}
+            <li><a href="/collections/bespoke" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Bespoke</a></li>
+            <li><a href="/pages/shipping-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Shipping Policy</a></li>
+            <li><a href="/pages/return-exchange" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Return & Exchange</a></li>
+            <li><a href="/pages/privacy-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Privacy Policy</a></li>
+            <li><a href="/pages/care-instructions" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Care Instructions</a></li>
+          {%- endif -%}
         </ul>
       </div>
     </div>
@@ -148,9 +163,16 @@
 
       <div id="footer-menu3" class="footer-accordion-content md:block">
         <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
-          {%- for link in section.settings.menu3.links -%}
-            <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
-          {%- endfor -%}
+          {%- if section.settings.menu3 != blank -%}
+            {%- for link in section.settings.menu3.links -%}
+              <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
+            {%- endfor -%}
+          {%- else -%}
+            <li><a href="/products/the-cowl-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">The Cowl Dress</a></li>
+            <li><a href="/products/onyx-black-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Onyx Black Dress</a></li>
+            <li><a href="/products/crimson-red-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Crimson Red Dress</a></li>
+            <li><a href="/products/french-blue-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">French Blue Dress</a></li>
+          {%- endif -%}
         </ul>
       </div>
     </div>
