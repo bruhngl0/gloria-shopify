@@ -232,22 +232,11 @@
     // Detect Shopify Customizer (Design Mode)
     const isDesignMode = window.Shopify && window.Shopify.designMode;
 
-    // Lock scroll on load (if not in design mode)
-    if (!isDesignMode) {
-      if (document.body) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.addEventListener('DOMContentLoaded', function() {
-          document.body.style.overflow = 'hidden';
-        });
-      }
-    }
+    // Check if the user has already loaded the site in this session
+    const hasLoadedThisSession = sessionStorage.getItem('sbg-initial-loaded') === 'true';
 
     // Set a helper on window
     window.__sbg_loading_complete = false;
-
-    // Check if the user has already loaded the site in this session
-    const hasLoadedThisSession = sessionStorage.getItem('sbg-initial-loaded') === 'true';
 
     if (hasLoadedThisSession || isDesignMode) {
       // Instantly finish loading and configure editor reveals
@@ -255,11 +244,23 @@
       document.addEventListener('DOMContentLoaded', function() {
         const overlay = document.getElementById('SGB-SplashOverlay');
         if (overlay) overlay.remove();
+        // Ensure scroll is unlocked
+        document.body.style.overflow = '';
         document.body.classList.add('sbg-loaded');
         initScrollReveals();
       });
       return;
     }
+
+    // Lock scroll on load ONLY when displaying the initial splash animation
+    if (document.body) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
 
     // First time in session: run the splash loader simulation
     setTimeout(function() {
