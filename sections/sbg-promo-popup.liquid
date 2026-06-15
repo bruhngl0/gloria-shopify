@@ -84,6 +84,12 @@
       const popup = document.getElementById('SBG-PromoPopup');
       if (!popup) return;
 
+      const exitIntent = {{ section.settings.trigger_exit_intent | json }};
+      const delaySetting = parseInt({{ section.settings.trigger_delay | default: 0 }});
+
+      // If both triggers are disabled/off, do not run anything
+      if (!exitIntent && delaySetting === 0) return;
+
       // Check dismissed status
       if (sessionStorage.getItem('sbg-popup-dismissed') === 'true') return;
 
@@ -108,18 +114,21 @@
       });
 
       // Trigger exit intent
-      if ({{ section.settings.trigger_exit_intent | json }}) {
+      if (exitIntent) {
         document.addEventListener('mouseleave', function(e) {
-          if (e.clientY < 20) {
+          if (e.clientY < 20 && sessionStorage.getItem('sbg-popup-dismissed') !== 'true') {
             showPopup();
           }
         });
       }
 
       // Trigger delay
-      const delay = parseInt({{ section.settings.trigger_delay | default: 5 }}) * 1000;
-      if (delay > 0) {
-        setTimeout(showPopup, delay);
+      if (delaySetting > 0) {
+        setTimeout(function() {
+          if (sessionStorage.getItem('sbg-popup-dismissed') !== 'true') {
+            showPopup();
+          }
+        }, delaySetting * 1000);
       }
     })();
   </script>
@@ -133,13 +142,13 @@
       "type": "checkbox",
       "id": "enable_popup",
       "label": "Enable Promo Popup",
-      "default": true
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "trigger_exit_intent",
       "label": "Trigger on Exit Intent",
-      "default": true
+      "default": false
     },
     {
       "type": "range",
@@ -149,7 +158,7 @@
       "step": 1,
       "unit": "s",
       "label": "Trigger Delay (Seconds)",
-      "default": 5
+      "default": 0
     },
     {
       "type": "text",

@@ -246,7 +246,10 @@
     // Set a helper on window
     window.__sbg_loading_complete = false;
 
-    if (isDesignMode) {
+    // Check if the user has already loaded the site in this session
+    const hasLoadedThisSession = sessionStorage.getItem('sbg-initial-loaded') === 'true';
+
+    if (hasLoadedThisSession || isDesignMode) {
       // Instantly finish loading and configure editor reveals
       window.__sbg_loading_complete = true;
       document.addEventListener('DOMContentLoaded', function() {
@@ -258,7 +261,7 @@
       return;
     }
 
-    // Simulate load delay
+    // First time in session: run the splash loader simulation
     setTimeout(function() {
       const overlay = document.getElementById('SGB-SplashOverlay');
       if (overlay) {
@@ -270,6 +273,8 @@
             document.body.classList.add('sbg-loaded');
           }
           window.__sbg_loading_complete = true;
+          // Remember that the session loading occurred
+          sessionStorage.setItem('sbg-initial-loaded', 'true');
           window.dispatchEvent(new Event("sbg-loading-complete"));
           
           // Trigger animations on visible items right away
