@@ -46,14 +46,14 @@
     observer.observe(drawer, { attributes: true });
 
     // Handle AJAX Quantity changes and Removals
-    window.sbg.updateQuantityAJAX = function(line, qty) {
+    window.sbg.updateQuantityAJAX = function(id, qty) {
       const drawerContent = document.getElementById('CartDrawerContent');
       drawerContent.classList.add('opacity-50');
 
       fetch(window.Shopify.routes.root + 'cart/change.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ line: line, quantity: qty })
+        body: JSON.stringify({ id: id, quantity: qty })
       })
       .then(res => res.json())
       .then(cart => {

@@ -34,7 +34,11 @@
     <script>
       window.Shopify = window.Shopify || {};
       window.Shopify.routes = window.Shopify.routes || {};
-      window.Shopify.routes.root = '{{ routes.root_url }}';
+      let root = '{{ routes.root_url }}';
+      if (!root.endsWith('/')) {
+        root += '/';
+      }
+      window.Shopify.routes.root = root;
     </script>
 
     <!-- Tailwind Play CDN -->
