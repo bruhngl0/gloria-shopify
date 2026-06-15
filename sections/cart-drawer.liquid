@@ -45,25 +45,33 @@
 
     observer.observe(drawer, { attributes: true });
 
-    // Handle AJAX Quantity changes and Removals
-    window.sbg.updateQuantityAJAX = function(id, qty) {
-      const drawerContent = document.getElementById('CartDrawerContent');
-      drawerContent.classList.add('opacity-50');
+      // Handle AJAX Quantity changes and Removals with added debugging
+      window.sbg.updateQuantityAJAX = function(id, qty) {
+        console.log('Updating cart item', {id: id, qty: qty});
+        const drawerContent = document.getElementById('CartDrawerContent');
+        drawerContent.classList.add('opacity-50');
 
-      fetch(window.Shopify.routes.root + 'cart/change.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: id, quantity: qty })
-      })
-      .then(res => res.json())
-      .then(cart => {
-        window.sbg.refreshCart();
-      })
-      .catch(err => {
-        console.error("Error updating cart item:", err);
-        drawerContent.classList.remove('opacity-50');
-      });
-    };
+        fetch(window.Shopify.routes.root + 'cart/change.js', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: id, quantity: qty })
+        })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then(cart => {
+          console.log('Cart updated', cart);
+          window.sbg.refreshCart();
+        })
+        .catch(err => {
+          console.error('Error updating cart item:', err);
+          drawerContent.classList.remove('opacity-50');
+        });
+      };
   })();
 </script>
 
