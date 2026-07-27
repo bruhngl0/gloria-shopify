@@ -30,7 +30,7 @@
   }
 </style>
 
-<section class="relative isolate w-full min-h-screen overflow-hidden bg-sbg-black select-none border-b border-sbg-border">
+<section class="relative isolate w-full min-h-screen overflow-hidden bg-sbg-white select-none border-b border-sbg-border">
   <!-- Full-bleed hero image -->
   <div class="absolute inset-0">
     <div class="hero-animate-center absolute inset-0">
@@ -42,42 +42,40 @@
         >
       {%- else -%}
         <img
-          src="{{ 'rrhero.png' | asset_url }}"
+          src="{{ 'hero-white.png' | asset_url }}"
           alt="{{ section.settings.hero_title }}"
           class="w-full h-full object-cover"
         >
       {%- endif -%}
     </div>
-    <div class="absolute inset-0 bg-black/35"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/25"></div>
   </div>
 
   <!-- Overlay copy -->
-  <div class="hero-animate-copy relative z-10 flex min-h-screen items-center justify-center px-6 text-center text-sbg-white">
+  <div class="hero-animate-copy relative z-10 flex min-h-screen items-center justify-center px-6 text-center text-sbg-black">
     <div class="max-w-3xl">
-      <p class="mb-5 text-[10px] md:text-xs font-semibold tracking-[0.35em] uppercase text-white/80">
+      <p class="mb-5 text-[10px] md:text-xs font-semibold tracking-[0.35em] uppercase text-sbg-black/70">
         {{ section.settings.top_label | default: 'BODY-TYPE INTENTIONAL FASHION' }}
       </p>
-      <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-medium leading-[0.9] tracking-[0.08em] uppercase">
+      <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-medium leading-[0.9] tracking-[0.08em] uppercase text-sbg-black">
         {{ section.settings.hero_title | default: 'ONE FOR ALL' }}
       </h1>
       {%- if section.settings.hero_subtitle != blank -%}
-        <p class="mx-auto mt-6 max-w-xl text-xs md:text-sm leading-relaxed tracking-[0.16em] uppercase text-white/85">
+        <p class="mx-auto mt-6 max-w-xl text-xs md:text-sm leading-relaxed tracking-[0.16em] uppercase text-sbg-black/75">
           {{ section.settings.hero_subtitle }}
         </p>
       {%- endif -%}
-      <a href="{{ section.settings.button_url | default: '/collections/all' }}" class="mt-9 inline-flex border border-white px-7 py-3 text-[10px] font-bold tracking-[0.25em] uppercase text-white transition-colors duration-300 hover:bg-white hover:text-sbg-black">
+      <a href="{{ section.settings.button_url | default: '/collections/all' }}" class="mt-9 inline-flex border border-sbg-black px-7 py-3 text-[10px] font-bold tracking-[0.25em] uppercase text-sbg-black transition-colors duration-300 hover:bg-sbg-black hover:text-sbg-white">
         {{ section.settings.button_text | default: 'SHOP THE COLLECTION' }}
       </a>
     </div>
   </div>
 
   <!-- Scroll indicator -->
-  <div onclick="document.getElementById('sbg-buy-box')?.scrollIntoView({ behavior: 'smooth' })" class="hero-animate-scroll absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 cursor-pointer flex-col items-center space-y-2 text-center text-white">
-    <span class="text-[8.5px] tracking-[0.2em] uppercase text-white/75">
+  <div onclick="document.getElementById('sbg-buy-box')?.scrollIntoView({ behavior: 'smooth' })" class="hero-animate-scroll absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 cursor-pointer flex-col items-center space-y-2 text-center text-sbg-black">
+    <span class="text-[8.5px] tracking-[0.2em] uppercase text-sbg-black/65">
       {{ 'sections.cover_hero.explore_collection' | t }}
     </span>
-    <div class="h-8 w-px bg-white/70"></div>
+    <div class="h-8 w-px bg-sbg-black/60"></div>
   </div>
 </section>
 
