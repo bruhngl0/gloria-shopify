@@ -73,9 +73,9 @@
             {%- if use_mock -%}
               <img id="hero-main-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
             {%- elsif current_variant.image -%}
-              <img id="hero-main-img" src="{{ current_variant.image | image_url: width: 1200 }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
+              <img id="hero-main-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
             {%- else -%}
-              <img id="hero-main-img" src="{{ product_to_show.featured_image | image_url: width: 1200 }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
+              <img id="hero-main-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
             {%- endif -%}
           </div>
           <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-sbg-white/40 to-transparent pointer-events-none"></div>
@@ -289,9 +289,9 @@
         {%- if use_mock -%}
           <img id="hero-mobile-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover w-full h-full">
         {%- elsif current_variant.image -%}
-          <img id="hero-mobile-img" src="{{ current_variant.image | image_url: width: 800 }}" alt="{{ product_title }}" class="object-cover w-full h-full">
+          <img id="hero-mobile-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover w-full h-full">
         {%- else -%}
-          <img id="hero-mobile-img" src="{{ product_to_show.featured_image | image_url: width: 800 }}" alt="{{ product_title }}" class="object-cover w-full h-full">
+          <img id="hero-mobile-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover w-full h-full">
         {%- endif -%}
 
         <!-- Mobile Carousel Indicator overlay -->
