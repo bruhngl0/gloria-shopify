@@ -51,7 +51,7 @@
   </div>
 
   <!-- Overlay copy -->
-  <div class="hero-animate-copy relative z-10 flex min-h-screen items-center justify-center px-6 text-center text-sbg-black">
+  <div class="hero-animate-copy relative z-10 flex min-h-screen items-end justify-start px-6 pb-28 text-left text-sbg-black md:px-12 md:pb-32 lg:px-20">
     <div class="max-w-3xl">
       <p class="mb-5 text-[10px] md:text-xs font-semibold tracking-[0.35em] uppercase text-sbg-black/70">
         {{ section.settings.top_label | default: 'BODY-TYPE INTENTIONAL FASHION' }}
@@ -60,7 +60,7 @@
         {{ section.settings.hero_title | default: 'ONE FOR ALL' }}
       </h1>
       {%- if section.settings.hero_subtitle != blank -%}
-        <p class="mx-auto mt-6 max-w-xl text-xs md:text-sm leading-relaxed tracking-[0.16em] uppercase text-sbg-black/75">
+        <p class="mt-6 max-w-xl text-xs md:text-sm leading-relaxed tracking-[0.16em] uppercase text-sbg-black/75">
           {{ section.settings.hero_subtitle }}
         </p>
       {%- endif -%}
