@@ -49,19 +49,11 @@
   <!-- Full-bleed hero image -->
   <div class="absolute inset-0">
     <div class="hero-animate-center absolute inset-0">
-      {%- if section.settings.image_center != blank -%}
-        <img
-          src="{{ section.settings.image_center | image_url: width: 2400 }}"
-          alt="{{ section.settings.image_center.alt | default: section.settings.hero_title }}"
-          class="w-full h-full object-cover"
-        >
-      {%- else -%}
-        <img
-          src="{{ 'hero-white.png' | asset_url }}"
-          alt="{{ section.settings.hero_title }}"
-          class="w-full h-full object-cover"
-        >
-      {%- endif -%}
+      <img
+        src="{{ 'buybox-white-motion.jpg' | asset_url }}"
+        alt="{{ section.settings.hero_title }}"
+        class="w-full h-full object-cover"
+      >
     </div>
   </div>
 
