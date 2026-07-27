@@ -1,20 +1,8 @@
 {%- comment -%}
-  SBG Home page Cover Collage Hero with dynamic text ticker and scroll down indicator
+  SBG Home page Cover Collage Hero with scroll down indicator
 {%- endcomment -%}
 
 <style type="text/css">
-  @keyframes ticker-slide {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  .ticker-content {
-    display: flex;
-    white-space: nowrap;
-    width: max-content;
-    animation: ticker-slide 32s linear infinite;
-    will-change: transform;
-  }
-
   /* Fade & slide animations synced with Splash Screen Loader */
   .hero-animate-left {
     opacity: 0;
@@ -50,16 +38,6 @@
   .sbg-loaded .hero-animate-right {
     opacity: 0.85;
     transform: translate3d(0, 0, 0);
-  }
-
-  .hero-animate-ticker {
-    opacity: 0;
-    transition: opacity 1.5s ease-out;
-    transition-delay: 0.7s;
-    will-change: opacity;
-  }
-  .sbg-loaded .hero-animate-ticker {
-    opacity: 1;
   }
 
   .hero-animate-scroll {
@@ -111,24 +89,6 @@
     </div>
   </div>
 
-  <!-- Horizontal Scrolling Ticker -->
-  <div class="hero-animate-ticker absolute bottom-28 left-0 w-full z-10 pointer-events-none select-none border-t border-b border-sbg-black/15 py-4 bg-sbg-white/30 backdrop-blur-sm overflow-hidden">
-    <div class="ticker-content">
-      {%- liquid
-        assign words_raw = section.settings.ticker_words | default: 'Silhouette, Symmetry, Drape, Line, Balance, Harmony, Intentional, Proportions'
-        assign words = words_raw | split: ','
-      -%}
-      {%- for i in (1..4) -%}
-        {%- for word in words -%}
-          <span class="font-display text-xl sm:text-3xl text-sbg-black/70 uppercase tracking-[0.3em] mx-10 inline-flex items-center gap-6">
-            {{ word | strip }}
-            <span class="text-sbg-gold/70 font-body text-xs font-bold">•</span>
-          </span>
-        {%- endfor -%}
-      {%- endfor -%}
-    </div>
-  </div>
-
   <!-- Bottom Title & Scroll Indicator -->
   <div onclick="document.getElementById('sbg-buy-box')?.scrollIntoView({ behavior: 'smooth' })" class="hero-animate-scroll absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 cursor-pointer z-20 text-center w-full px-4">
     <p class="text-[10px] md:text-xs tracking-[0.25em] font-semibold text-sbg-black uppercase select-none">
@@ -175,12 +135,6 @@
       "type": "image_picker",
       "id": "image_right",
       "label": "Right Collage Image"
-    },
-    {
-      "type": "text",
-      "id": "ticker_words",
-      "label": "Ticker Words (Comma separated)",
-      "default": "Silhouette, Symmetry, Drape, Line, Balance, Harmony, Intentional, Proportions"
     },
     {
       "type": "text",
