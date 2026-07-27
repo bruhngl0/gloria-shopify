@@ -32,18 +32,6 @@
     "methodology": {
       "type": "sbg-methodology",
       "settings": {}
-    },
-    "instagram": {
-      "type": "sbg-instagram",
-      "settings": {}
-    },
-    "difference": {
-      "type": "sbg-difference",
-      "settings": {}
-    },
-    "services-teaser": {
-      "type": "sbg-services-teaser",
-      "settings": {}
     }
   },
   "order": [
@@ -52,9 +40,6 @@
     "mission",
     "fabric",
     "featured-product",
-    "methodology",
-    "instagram",
-    "difference",
-    "services-teaser"
+    "methodology"
   ]
 }
