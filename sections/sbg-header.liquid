@@ -39,9 +39,20 @@
     <div class="col-span-6 flex items-center justify-center h-full">
       <nav class="flex space-x-8">
         {%- for link in section.settings.menu.links -%}
-          <a href="{{ link.url }}" class="header-text-color text-sm tracking-wider uppercase transition-colors nav-link-fancy pb-1 text-sbg-black hover:text-sbg-grey {% if link.active %}font-semibold active{% else %}font-normal{% endif %}">
-            {{ link.title }}
-          </a>
+          {%- assign link_title_downcase = link.title | downcase -%}
+          {%- unless link_title_downcase == 'catalog' -%}
+            {%- assign display_title = link.title -%}
+            {%- assign display_url = link.url -%}
+            {%- if link_title_downcase == 'home' -%}
+              {%- assign display_title = 'SHOP' -%}
+              {%- assign display_url = routes.all_products_collection_url -%}
+            {%- elsif link_title_downcase == 'services' -%}
+              {%- assign display_title = 'STYLING SERVICES' -%}
+            {%- endif -%}
+            <a href="{{ display_url }}" class="header-text-color text-sm tracking-wider uppercase transition-colors nav-link-fancy pb-1 text-sbg-black hover:text-sbg-grey {% if link.active %}font-semibold active{% else %}font-normal{% endif %}">
+              {{ display_title }}
+            </a>
+          {%- endunless -%}
         {%- endfor -%}
       </nav>
     </div>
@@ -87,9 +98,20 @@
   <!-- Navigation -->
   <nav class="flex flex-col space-y-6 px-8 py-12 justify-center flex-1">
     {%- for link in section.settings.menu.links -%}
-      <a href="{{ link.url }}" class="font-display text-3xl font-light tracking-[0.1em] uppercase text-sbg-black hover:text-sbg-grey transition-colors {% if link.active %}font-medium{% endif %}">
-        {{ link.title }}
-      </a>
+      {%- assign link_title_downcase = link.title | downcase -%}
+      {%- unless link_title_downcase == 'catalog' -%}
+        {%- assign display_title = link.title -%}
+        {%- assign display_url = link.url -%}
+        {%- if link_title_downcase == 'home' -%}
+          {%- assign display_title = 'SHOP' -%}
+          {%- assign display_url = routes.all_products_collection_url -%}
+        {%- elsif link_title_downcase == 'services' -%}
+          {%- assign display_title = 'STYLING SERVICES' -%}
+        {%- endif -%}
+        <a href="{{ display_url }}" class="font-display text-3xl font-light tracking-[0.1em] uppercase text-sbg-black hover:text-sbg-grey transition-colors {% if link.active %}font-medium{% endif %}">
+          {{ display_title }}
+        </a>
+      {%- endunless -%}
     {%- endfor -%}
   </nav>
 

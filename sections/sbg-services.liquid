@@ -178,80 +178,7 @@
       </div>
     </div>
 
-    <!-- SECTION 4: Case Studies Transformations -->
-    <section class="bg-sbg-offwhite w-full py-20 border-t border-b border-sbg-border/60 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto">
-        <div class="text-center max-w-xl mx-auto mb-16">
-          <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-gold block mb-3">
-            Case Archive
-          </span>
-          <h2 class="font-display text-3xl md:text-4xl font-bold tracking-wide text-sbg-black uppercase">
-            Client Transformations
-          </h2>
-          <div class="h-[1.5px] bg-sbg-gold w-12 mx-auto mt-4"></div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 reveal-on-scroll" data-stagger-children="0.15">
-          <!-- Case 1 -->
-          <div class="space-y-6 group sbg-case-card stagger-item">
-            <div class="relative">
-              <div class="sbg-case-border absolute inset-0 border border-sbg-border translate-x-3 translate-y-3 transition-transform duration-500 pointer-events-none"></div>
-              <div class="relative z-10 border border-sbg-black bg-sbg-white">
-                <div class="relative aspect-[3/4] w-full flex items-center justify-center overflow-hidden bg-[#E5E5E5] text-[10px] uppercase font-bold tracking-widest text-[#999]">
-                  <img src="{{ 'one.png' | asset_url }}" alt="Case Study 01" class="object-cover w-full h-full">
-                </div>
-              </div>
-            </div>
-            <div class="space-y-2 pt-2 text-left">
-              <span class="text-[10px] font-bold tracking-widest text-sbg-gold uppercase block">
-                Case Study 01: Capsule Curation
-              </span>
-              <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">
-                Client Profile: Pear Shape Profile
-              </h3>
-              <p class="text-xs leading-relaxed text-sbg-grey">
-                <strong class="text-sbg-black font-semibold uppercase text-[10px] tracking-wider block mt-2">Challenge:</strong>
-                Executive role. Flooded with fast-fashion items that stretch out, drape incorrectly, and look unprofessional.
-              </p>
-              <p class="text-xs leading-relaxed text-sbg-grey">
-                <strong class="text-sbg-black font-semibold uppercase text-[10px] tracking-wider block mt-2">Solution:</strong>
-                Conducted virtual body line mapping and closet audit. Replaced high-shrink synthetic blends with Italian Viscose crepe tailoring. Selected pieces designed for high waist contours and vertical balance.
-              </p>
-            </div>
-          </div>
-
-          <!-- Case 2 -->
-          <div class="space-y-6 group sbg-case-card stagger-item">
-            <div class="relative">
-              <div class="sbg-case-border absolute inset-0 border border-sbg-border translate-x-3 translate-y-3 transition-transform duration-500 pointer-events-none"></div>
-              <div class="relative z-10 border border-sbg-black bg-sbg-white">
-                <div class="relative aspect-[3/4] w-full flex items-center justify-center overflow-hidden bg-[#E5E5E5] text-[10px] uppercase font-bold tracking-widest text-[#999]">
-                  <img src="{{ 'three.png' | asset_url }}" alt="Case Study 02" class="object-cover w-full h-full">
-                </div>
-              </div>
-            </div>
-            <div class="space-y-2 pt-2 text-left">
-              <span class="text-[10px] font-bold tracking-widest text-sbg-gold uppercase block">
-                Case Study 02: Silhouette Proportions
-              </span>
-              <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">
-                Client Profile: Inverted Triangle Profile
-              </h3>
-              <p class="text-xs leading-relaxed text-sbg-grey">
-                <strong class="text-sbg-black font-semibold uppercase text-[10px] tracking-wider block mt-2">Challenge:</strong>
-                Shoulder lines dwarfed by bulky un-tailored structured jackets, resulting in boxy fitting that hides her natural curves.
-              </p>
-              <p class="text-xs leading-relaxed text-sbg-grey">
-                <strong class="text-sbg-black font-semibold uppercase text-[10px] tracking-wider block mt-2">Solution:</strong>
-                Assessed balance points to guide length selections. Recommended customizable wrap cuts and customizable cowl draping to soften shoulders. Curated tailored adjustments for sleeve offsets.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 5: Meet Your Stylist Bio -->
+    <!-- SECTION 4: Meet Your Stylist Bio -->
     <div class="pt-20 mb-20">
       <div class="text-center max-w-xl mx-auto mb-12">
         <h2 class="font-display text-xl md:text-2xl font-bold text-sbg-black uppercase tracking-widest">
@@ -282,6 +209,53 @@
         </div>
       </div>
     </div>
+
+    <!-- CONTACT FORM -->
+    <section class="max-w-4xl mx-auto py-16 border-t border-sbg-border/60">
+      <div class="max-w-2xl mx-auto border border-sbg-border bg-sbg-white p-6 md:p-10">
+        {%- form 'contact', id: 'StylingServicesContactForm' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="text-center space-y-3 py-8">
+              <h2 class="font-display text-xl font-bold tracking-wider uppercase text-sbg-black">Message Sent</h2>
+              <p class="text-xs tracking-wider leading-relaxed text-sbg-grey">Thank you for reaching out. Our styling team will be in touch shortly.</p>
+            </div>
+          {%- else -%}
+            <div class="space-y-5">
+              <div class="text-center space-y-2 mb-8">
+                <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-gold">Get In Touch</span>
+                <h2 class="font-display text-2xl font-bold tracking-wide uppercase text-sbg-black">CONTACT US</h2>
+              </div>
+              {%- if form.errors -%}
+                <div class="p-3 border border-red-200 bg-red-50 text-xs text-red-800">{{ form.errors | default_errors }}</div>
+              {%- endif -%}
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="space-y-2">
+                  <label for="StylingContact-Name" class="text-[10px] font-bold uppercase tracking-widest text-sbg-black">Your Name *</label>
+                  <input id="StylingContact-Name" type="text" name="contact[name]" required class="w-full px-4 py-3 border border-sbg-border text-xs tracking-wider focus:outline-none focus:border-sbg-black" placeholder="E.g., Jane Smith">
+                </div>
+                <div class="space-y-2">
+                  <label for="StylingContact-Email" class="text-[10px] font-bold uppercase tracking-widest text-sbg-black">Email Address *</label>
+                  <input id="StylingContact-Email" type="email" name="contact[email]" required class="w-full px-4 py-3 border border-sbg-border text-xs tracking-wider focus:outline-none focus:border-sbg-black" placeholder="E.g., jane@example.com">
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label for="StylingContact-Subject" class="text-[10px] font-bold uppercase tracking-widest text-sbg-black">Subject</label>
+                <select id="StylingContact-Subject" name="contact[subject]" class="w-full px-4 py-3 border border-sbg-border bg-sbg-white text-xs tracking-wider focus:outline-none focus:border-sbg-black">
+                  <option>Styling Services Inquiry</option>
+                  <option>General Inquiry</option>
+                  <option>Order Question</option>
+                </select>
+              </div>
+              <div class="space-y-2">
+                <label for="StylingContact-Message" class="text-[10px] font-bold uppercase tracking-widest text-sbg-black">Message *</label>
+                <textarea id="StylingContact-Message" name="contact[body]" rows="5" required class="w-full px-4 py-3 border border-sbg-border text-xs tracking-wider focus:outline-none focus:border-sbg-black resize-y" placeholder="Write your message here..."></textarea>
+              </div>
+              <button type="submit" class="w-full py-4 text-xs font-bold uppercase tracking-widest border border-sbg-black bg-sbg-black text-sbg-white hover:bg-sbg-white hover:text-sbg-black transition-colors">SEND MESSAGE</button>
+            </div>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </section>
 
     <!-- SECTION 6: Styling FAQs -->
     <section class="max-w-4xl mx-auto py-20 border-t border-sbg-border/60">
@@ -356,7 +330,7 @@
           href="{{ routes.root_url }}pages/contact"
           class="text-sbg-black font-semibold underline underline-offset-4 hover:opacity-80 transition-opacity"
         >
-          Ask me about it.
+          Ask us about it.
         </a>
       </p>
     </div>

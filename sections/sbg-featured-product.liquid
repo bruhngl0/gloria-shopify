@@ -10,13 +10,13 @@
   if product_to_show == blank
     assign use_mock = true
     assign product_title = "THE ONE FOR ALL DRESS"
-    assign product_image = 'point.png' | asset_url
+    assign product_image = 'buybox-white-front.jpg' | asset_url
     assign product_desc = "A single dress engineered to honor a multitude of shapes. Made from our heavy stretch crepe, this piece features customizable ruching and a cowl neck that drapes to your exact proportions."
     assign product_url = "/collections/all"
   else
     assign use_mock = false
     assign product_title = product_to_show.title
-    assign product_image = product_to_show.featured_image | image_url: width: 1000
+    assign product_image = 'buybox-white-front.jpg' | asset_url
     assign product_desc = section.settings.description | default: product_to_show.description | strip_html | truncatewords: 45
     assign product_url = product_to_show.url
   endif

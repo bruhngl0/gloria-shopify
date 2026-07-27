@@ -1,163 +1,228 @@
 {%- comment -%}
-  SBG Premium Collection Grid Template
-  Renders active collection pages with sorting, description, and high-fidelity layout.
+  SBG Shop page with screenshot-matched filters and featured product detail.
 {%- endcomment -%}
 
 <style type="text/css">
-  .col-card-img {
-    transition: transform 0.9s cubic-bezier(0.215, 0.61, 0.355, 1);
+  .shop-filter-button.active {
+    border-color: #0A0A0A;
+    background-color: #0A0A0A;
+    color: #FFFFFF;
+    outline: 2px solid #1473E6;
+    outline-offset: -1px;
   }
-  .col-card:hover .col-card-img {
-    transform: scale(1.04);
+  .shop-filter-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    overflow: visible;
+  }
+  .shop-filter-row > div {
+    flex: 0 0 auto;
+  }
+  .shop-image-placeholders {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .shop-filter-button {
+    font-size: 8px !important;
+    line-height: 1.1;
+    padding: 0.7rem 0.85rem !important;
+    white-space: nowrap;
+  }
+  @media (max-width: 767px) {
+    .shop-filter-row {
+      flex-direction: column !important;
+      align-items: stretch;
+      gap: 1.25rem;
+    }
+    .shop-filter-row > div {
+      width: 100%;
+    }
+    .shop-filter-row .flex {
+      gap: 0.4rem;
+    }
+    .shop-filter-button {
+      padding: 0.65rem 0.75rem !important;
+    }
   }
 </style>
 
+{%- liquid
+  assign shop_product = collection.products.first
+  assign shop_variant = shop_product.selected_or_first_available_variant
+  assign shop_title = shop_product.title | default: 'THE ONE FOR ALL DRESS'
+  assign shop_price = shop_product.price | default: 18500
+  assign shop_description = shop_product.description | default: 'A signature silhouette designed around your proportions. Heavyweight stretch crepe with an adjustable draped neck and side ruching for a custom profile.'
+-%}
+
 <section class="bg-sbg-white w-full py-16 md:py-24 border-b border-sbg-border/60 select-none">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    
-    <!-- Collection Title & Description Header -->
-    <div class="text-center max-w-2xl mx-auto mb-16 reveal-on-scroll" data-stagger-children="0.1">
-      <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey block mb-2 stagger-item">
-        {{ 'sections.collection.atelier_range' | t }}
-      </span>
-      <h1 class="font-display text-4xl md:text-5xl font-bold tracking-[0.2em] text-sbg-black uppercase stagger-item">
-        {{ collection.title }}
-      </h1>
-      <div class="h-[1px] w-16 bg-sbg-black mx-auto mt-4 mb-6 stagger-item"></div>
-      
-      {%- if collection.description != blank -%}
-        <div class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-xl mx-auto stagger-item">
-          {{ collection.description }}
+    <!-- Screenshot-matched filter row -->
+    <div class="shop-filter-row border-t border-b border-sbg-border/60 py-6 mb-16 text-[9px] tracking-widest text-sbg-grey uppercase">
+      <div class="space-y-3">
+        <span class="font-bold block">SHOP BY BODY TYPE</span>
+        <div class="flex flex-wrap gap-2">
+          {%- assign body_filters = 'ALL BODY TYPES|HOURGLASS|PEAR|RECTANGLE|INVERTED TRIANGLE|APPLE' | split: '|' -%}
+          {%- for filter in body_filters -%}
+            <button type="button" class="shop-filter-button border border-sbg-border/60 px-6 py-5 font-semibold hover:border-sbg-black transition-colors {% if forloop.last %}active{% endif %}">{{ filter }}</button>
+          {%- endfor -%}
         </div>
-      {%- endif -%}
+      </div>
+
+      <div class="space-y-3">
+        <span class="font-bold block">SHOP BY SIZE</span>
+        <select class="shop-filter-select border border-sbg-border/60 bg-sbg-white px-4 py-3 text-[8px] font-semibold tracking-widest text-sbg-grey uppercase focus:outline-none focus:border-sbg-black">
+          <option value="">SELECT SIZE</option>
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m">M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+        </select>
+      </div>
+
+      <div class="space-y-3">
+        <span class="font-bold block">SHOP BY COLOR</span>
+        <select class="shop-filter-select border border-sbg-border/60 bg-sbg-white px-4 py-3 text-[8px] font-semibold tracking-widest text-sbg-grey uppercase focus:outline-none focus:border-sbg-black">
+          <option value="">SELECT COLOR</option>
+          <option value="black">BLACK</option>
+          <option value="red">RED</option>
+          <option value="baby-blue">BABY BLUE</option>
+        </select>
+      </div>
     </div>
 
-    {%- liquid
-      assign products_per_page = section.settings.products_per_page | default: 12
-    -%}
-
-    {%- paginate collection.products by products_per_page -%}
-      
-      <!-- Sorting / Count Header -->
-      <div class="flex flex-col sm:flex-row items-center justify-between border-b border-sbg-border/60 pb-4 mb-8 text-[10px] tracking-widest text-sbg-grey uppercase stagger-item">
-        <div class="mb-2 sm:mb-0">
-          {{ 'sections.collection.showing_pieces' | t: count: collection.products.size }}
+    <!-- Product image and detail panel -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start reveal-on-scroll">
+      <div class="lg:col-span-5 relative group">
+        <div class="relative aspect-[3/4] overflow-hidden bg-sbg-offwhite border border-sbg-border">
+          <img id="shop-main-image" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ shop_title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]">
+          <span class="absolute top-4 left-4 bg-sbg-black text-sbg-white text-[9px] font-bold tracking-widest uppercase px-3 py-2">NEW</span>
         </div>
-        <div class="flex items-center space-y-0 space-x-2">
-          <label for="SortBy" class="font-semibold text-sbg-black">{{ 'sections.collection.sort_by' | t }}</label>
-          <select id="SortBy" class="bg-transparent border border-sbg-border/60 text-sbg-black p-1 text-[9px] uppercase tracking-wider focus:outline-none focus:border-sbg-black" onchange="location.href = this.value;">
-            {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
-            {%- for option in collection.sort_options -%}
-              <option value="?sort_by={{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
-                {{ option.name }}
-              </option>
+        <div class="shop-image-placeholders grid grid-cols-4 gap-3 mt-4" aria-label="Product image placeholders">
+          <img src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ shop_title }} front view" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-black cursor-pointer">
+          <img src="{{ 'buybox-white-motion.jpg' | asset_url }}" alt="{{ shop_title }} motion view" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
+          <img src="{{ 'dress-red-front.jpg' | asset_url }}" alt="{{ shop_title }} red view" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
+          <img src="{{ 'dress-blue-front.jpg' | asset_url }}" alt="{{ shop_title }} blue view" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
+        </div>
+        <div class="pt-8 px-1 space-y-1">
+          <h2 class="font-display text-sm font-bold tracking-wide uppercase text-sbg-black">{{ shop_title }}</h2>
+          <p class="text-xs font-semibold tracking-wider text-sbg-black/80">{{ shop_price | money }}</p>
+        </div>
+      </div>
+
+      <div class="shop-detail-panel lg:col-span-5 lg:col-start-7 self-center space-y-8 pt-4 lg:pt-10">
+        <div class="space-y-8">
+          <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey">STYLE CODE: SBG-D001</span>
+          <h2 class="font-display text-3xl md:text-5xl font-medium leading-[0.95] tracking-wide uppercase text-sbg-black">{{ shop_title }}</h2>
+          <p class="text-xl font-bold tracking-wider text-sbg-black">{{ shop_price | money }}</p>
+        </div>
+
+        <div class="space-y-4">
+          <span class="text-xs font-bold tracking-[0.18em] uppercase text-sbg-black">WORKS BEAUTIFULLY FOR</span>
+          <div class="flex flex-wrap gap-2">
+            {%- assign detail_body_types = 'ALL BODY TYPES|HOURGLASS|PEAR|RECTANGLE|INVERTED TRIANGLE|APPLE' | split: '|' -%}
+            {%- for type in detail_body_types -%}
+              <button type="button" class="border border-sbg-border/60 px-4 py-2.5 text-[11px] tracking-wider text-sbg-grey uppercase hover:border-sbg-black transition-colors">{{ type }}</button>
             {%- endfor -%}
-          </select>
+          </div>
         </div>
-      </div>
 
-      <!-- Catalog Grid -->
-      <div class="grid grid-cols-2 lg:grid-cols-{{ section.settings.columns | default: 3 }} gap-6 md:gap-8 reveal-on-scroll" data-stagger-children="0.08">
-        {%- if collection.products.size > 0 -%}
-          {%- for product in collection.products -%}
-            {%- liquid
-              assign current_variant = product.selected_or_first_available_variant
-            -%}
-            <a href="{{ product.url }}" class="col-card group block relative border border-sbg-border/50 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item">
-              <div class="relative overflow-hidden bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% else %}aspect-[3/4]{% endif %}">
-                <!-- Main image -->
-                {%- if product.featured_image != blank -%}
-                  <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" class="col-card-img object-cover w-full h-full">
-                {%- else -%}
-                  {{ 'product-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
-                {%- endif -%}
-                
-                <!-- Hover image swap -->
-                {%- if section.settings.show_second_image and product.images[1] != blank -%}
-                  <img src="{{ product.images[1] | image_url: width: 800 }}" alt="{{ product.title }}" class="absolute inset-0 object-cover w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                {%- endif -%}
-                
-                <!-- Availability / Sale badge -->
-                {%- if current_variant.available == false -%}
-                  <span class="absolute top-3 right-3 bg-sbg-black text-sbg-white text-[8px] font-bold tracking-widest uppercase px-2 py-1">
-                    {{ 'sections.hero.out_of_stock' | t }}
-                  </span>
-                {%- elsif product.compare_at_price > product.price -%}
-                  <span class="absolute top-3 right-3 bg-sbg-gold text-sbg-white text-[8px] font-bold tracking-widest uppercase px-2 py-1">
-                    {{ 'sections.collection.sale' | t }}
-                  </span>
-                {%- endif -%}
-              </div>
-              
-              <!-- Info -->
-              <div class="p-4 bg-sbg-white border-t border-sbg-border/40 text-left space-y-1">
-                <h3 class="text-[9px] tracking-[0.18em] uppercase text-sbg-grey/90 truncate font-semibold">
-                  {{ product.vendor | default: "Styled by Gloria" }}
-                </h3>
-                <p class="font-display text-sm font-bold tracking-wide uppercase text-sbg-black truncate group-hover:text-sbg-gold transition-colors duration-300">
-                  {{ product.title }}
-                </p>
-                <p class="text-xs font-semibold tracking-wider text-sbg-black/80">
-                  {%- if product.price_varies -%}
-                    From {{ product.price_min | money }}
-                  {%- else -%}
-                    {{ product.price | money }}
-                  {%- endif -%}
-                  {%- if product.compare_at_price > product.price -%}
-                    <span class="text-sbg-grey line-through pl-1.5 font-normal text-[10px]">{{ product.compare_at_price | money }}</span>
-                  {%- endif -%}
-                </p>
-              </div>
-            </a>
-          {%- endfor -%}
+        {%- if shop_variant != blank -%}
+          <form method="post" action="/cart/add" id="shop-add-to-cart-form" class="pt-4">
+            <input type="hidden" name="id" value="{{ shop_variant.id }}">
+            <button type="submit" class="w-full border border-sbg-black bg-sbg-black text-sbg-white px-6 py-4 text-xs font-bold tracking-[0.25em] uppercase hover:bg-sbg-white hover:text-sbg-black transition-colors">ADD TO CART</button>
+          </form>
         {%- else -%}
-          <!-- Empty/Fallback Catalog state -->
-          {%- for i in (1..6) -%}
-            <div class="col-card group block relative border border-sbg-border/50 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item">
-              <div class="relative overflow-hidden bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% else %}aspect-[3/4]{% endif %}">
-                {{ 'product-' | append: i | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
-              </div>
-              <div class="p-4 bg-sbg-white border-t border-sbg-border/40 text-left space-y-1">
-                <h3 class="text-[9px] tracking-[0.18em] uppercase text-sbg-grey/90 font-semibold">STYLED BY GLORIA</h3>
-                <p class="font-display text-sm font-bold tracking-wide uppercase text-sbg-black group-hover:text-sbg-gold transition-colors duration-300">
-                  FALLBACK CATALOGUE PIECE {{ i }}
-                </p>
-                <p class="text-xs font-semibold tracking-wider text-sbg-black/80">$220.00 CAD</p>
-              </div>
-            </div>
-          {%- endfor -%}
+          <button type="button" onclick="window.sbg.openCart()" class="w-full border border-sbg-black bg-sbg-black text-sbg-white px-6 py-4 text-xs font-bold tracking-[0.25em] uppercase">ADD TO CART</button>
         {%- endif -%}
-      </div>
 
-      <!-- Pagination Footer -->
-      {%- if paginate.pages > 1 -%}
-        <div class="flex items-center justify-center space-x-6 pt-12 border-t border-sbg-border/40 mt-12 text-[10px] tracking-widest text-sbg-grey uppercase font-semibold">
-          {%- if paginate.previous -%}
-            <a href="{{ paginate.previous.url }}" class="hover:text-sbg-black flex items-center space-x-1">
-              <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-              <span>{{ 'general.pagination.previous' | t }}</span>
-            </a>
-          {%- endif -%}
-
-          <span>{{ 'general.pagination.page_of' | t: current_page: paginate.current_page, pages: paginate.pages }}</span>
-
-          {%- if paginate.next -%}
-            <a href="{{ paginate.next.url }}" class="hover:text-sbg-black flex items-center space-x-1">
-              <span>{{ 'general.pagination.next' | t }}</span>
-              <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-            </a>
-          {%- endif -%}
+        <div class="border-t border-sbg-border/60 pt-8 space-y-6 text-xs tracking-wider leading-relaxed text-sbg-grey">
+          <p>{{ shop_description | strip_html }}</p>
+          <p>Featuring a flexible cowl-inspired neckline that adapts to varying bust sizes and custom side-ruching that allows you to adjust the length and drape to match your proportions.</p>
         </div>
-      {%- endif -%}
 
-    {%- endpaginate -%}
-
+        <div class="border-t border-sbg-border/60 text-xs font-bold tracking-wider uppercase text-sbg-black">
+          <details class="border-b border-sbg-border/60 py-5"><summary class="cursor-pointer">FABRIC &amp; CARE</summary><p class="pt-4 text-xs font-normal normal-case leading-relaxed text-sbg-grey">Heavyweight stretch crepe. Machine wash cold on gentle cycle and lay flat to dry.</p></details>
+          <details class="border-b border-sbg-border/60 py-5"><summary class="cursor-pointer">SHIPPING &amp; RETURNS</summary><p class="pt-4 text-xs font-normal normal-case leading-relaxed text-sbg-grey">Complimentary express shipping on orders over $250. Returns accepted within 14 days.</p></details>
+          <details class="border-b border-sbg-border/60 py-5"><summary class="cursor-pointer">FIT &amp; CONSTRUCTION ADVICE</summary><p class="pt-4 text-xs font-normal normal-case leading-relaxed text-sbg-grey">Fits true to size. Adjustable ruching allows the silhouette to be tailored to your proportions.</p></details>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
+<script>
+  const shopCartForm = document.getElementById('shop-add-to-cart-form');
+  if (shopCartForm) {
+    shopCartForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const submitButton = shopCartForm.querySelector('button[type="submit"]');
+      const originalLabel = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = 'ADDING...';
+
+      fetch(window.Shopify.routes.root + 'cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [{
+            id: shopCartForm.querySelector('input[name="id"]').value,
+            quantity: 1
+          }]
+        })
+      })
+        .then(function(response) {
+          if (!response.ok) throw new Error('Unable to add item to cart');
+          return response.json();
+        })
+        .then(function() {
+          submitButton.textContent = 'ADDED TO CART';
+          window.sbg.openCart();
+        })
+        .catch(function(error) {
+          console.error(error);
+          submitButton.textContent = 'TRY AGAIN';
+        })
+        .finally(function() {
+          setTimeout(function() {
+            submitButton.disabled = false;
+            submitButton.textContent = originalLabel;
+          }, 1600);
+        });
+    });
+  }
+
+  const shopMainImage = document.getElementById('shop-main-image');
+  document.querySelectorAll('.shop-thumbnail').forEach(function(thumbnail) {
+    thumbnail.addEventListener('click', function() {
+      if (!shopMainImage) return;
+      shopMainImage.src = this.src;
+      shopMainImage.alt = this.alt;
+      document.querySelectorAll('.shop-thumbnail').forEach(function(item) {
+        item.classList.remove('border-sbg-black');
+        item.classList.add('border-sbg-border/60');
+      });
+      this.classList.remove('border-sbg-border/60');
+      this.classList.add('border-sbg-black');
+    });
+  });
+
+  document.querySelectorAll('.shop-filter-button').forEach(function(button) {
+    button.addEventListener('click', function() {
+      this.parentElement.querySelectorAll('.shop-filter-button').forEach(function(item) {
+        item.classList.remove('active');
+      });
+      this.classList.add('active');
+    });
+  });
+</script>
+
 {% schema %}
 {
-  "name": "SBG Collection Page",
+  "name": "SBG Shop Page",
   "settings": [
     {
       "type": "range",
@@ -192,6 +257,11 @@
       "id": "show_second_image",
       "label": "Show Second Image on Hover",
       "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "SBG Shop Page"
     }
   ]
 }

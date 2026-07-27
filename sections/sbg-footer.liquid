@@ -19,6 +19,13 @@
   .footer-chevron.open {
     transform: rotate(180deg);
   }
+  @media (min-width: 768px) {
+    .footer-accordion-content {
+      max-height: 500px;
+      opacity: 1;
+      overflow: visible;
+    }
+  }
 </style>
 
 <footer class="bg-sbg-black border-t border-white/10 w-full overflow-hidden select-none font-body">
@@ -37,7 +44,7 @@
 
       <!-- Desktop Static Header -->
       <div class="hidden md:block">
-        <h2 class="font-display text-xl md:text-2xl font-bold tracking-[0.2em] uppercase text-sbg-white mb-4">
+        <h2 class="font-display text-xl md:text-3xl font-bold tracking-[0.2em] uppercase text-sbg-white mb-4">
           {{ section.settings.brand_title | default: shop.name }}
         </h2>
         <p class="font-body text-[10px] tracking-[0.15em] leading-relaxed uppercase text-sbg-white/80">
@@ -104,16 +111,10 @@
 
       <div id="footer-menu1" class="footer-accordion-content md:block">
         <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
-          {%- if section.settings.menu1 != blank -%}
-            {%- for link in section.settings.menu1.links -%}
-              <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
-            {%- endfor -%}
-          {%- else -%}
-            <li><a href="/pages/about" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Styled by Gloria</a></li>
-            <li><a href="/pages/contact" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Contact</a></li>
-            <li><a href="/pages/services" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Services</a></li>
-            <li><a href="/pages/brand" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">The Brand</a></li>
-          {%- endif -%}
+          <li><a href="/pages/about" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Styled by Gloria</a></li>
+          <li><a href="/pages/contact" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Contact</a></li>
+          <li><a href="/pages/services" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Services</a></li>
+          <li><a href="/pages/brand" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">The Brand</a></li>
         </ul>
       </div>
     </div>
@@ -133,17 +134,11 @@
 
       <div id="footer-menu2" class="footer-accordion-content md:block">
         <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
-          {%- if section.settings.menu2 != blank -%}
-            {%- for link in section.settings.menu2.links -%}
-              <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
-            {%- endfor -%}
-          {%- else -%}
-            <li><a href="/collections/bespoke" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Bespoke</a></li>
-            <li><a href="/pages/shipping-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Shipping Policy</a></li>
-            <li><a href="/pages/return-exchange" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Return & Exchange</a></li>
-            <li><a href="/pages/privacy-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Privacy Policy</a></li>
-            <li><a href="/pages/care-instructions" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Care Instructions</a></li>
-          {%- endif -%}
+          <li><a href="/collections/bespoke" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Bespoke</a></li>
+          <li><a href="/pages/shipping-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Shipping Policy</a></li>
+          <li><a href="/pages/return-exchange" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Return & Exchange</a></li>
+          <li><a href="/pages/privacy-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Privacy Policy</a></li>
+          <li><a href="/pages/care-instructions" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Care Instructions</a></li>
         </ul>
       </div>
     </div>
@@ -163,16 +158,10 @@
 
       <div id="footer-menu3" class="footer-accordion-content md:block">
         <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
-          {%- if section.settings.menu3 != blank -%}
-            {%- for link in section.settings.menu3.links -%}
-              <li><a href="{{ link.url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">{{ link.title }}</a></li>
-            {%- endfor -%}
-          {%- else -%}
-            <li><a href="/products/the-cowl-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">The Cowl Dress</a></li>
-            <li><a href="/products/onyx-black-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Onyx Black Dress</a></li>
-            <li><a href="/products/crimson-red-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Crimson Red Dress</a></li>
-            <li><a href="/products/french-blue-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">French Blue Dress</a></li>
-          {%- endif -%}
+          <li><a href="/products/the-cowl-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">The Cowl Dress</a></li>
+          <li><a href="/products/onyx-black-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Onyx Black Dress</a></li>
+          <li><a href="/products/crimson-red-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Crimson Red Dress</a></li>
+          <li><a href="/products/french-blue-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">French Blue Dress</a></li>
         </ul>
       </div>
     </div>
@@ -181,14 +170,14 @@
     <div class="col-span-1 md:col-span-3 p-6 md:p-8 flex flex-col space-y-6">
       <button onclick="toggleFooterAccordion('footer-newsletter', 'chevron-newsletter')" class="w-full flex items-center justify-between text-left md:hidden">
         <h3 class="font-display text-lg font-bold tracking-[0.15em] uppercase text-sbg-white leading-tight">
-          {{ section.settings.promo_text | default: 'REACH OUT TO SAVE 10% ON NEW PIECES' }}
+          REACH OUT
         </h3>
         <svg id="chevron-newsletter" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer-chevron h-4 w-4 text-sbg-white/70"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
 
       <div class="hidden md:block">
         <h3 class="font-display text-base md:text-lg font-bold tracking-[0.15em] uppercase text-sbg-white leading-tight">
-          {{ section.settings.promo_text | default: 'REACH OUT TO SAVE 10% ON NEW PIECES' }}
+          REACH OUT
         </h3>
       </div>
 
@@ -298,7 +287,7 @@
       "type": "text",
       "id": "promo_text",
       "label": "Newsletter promo line",
-      "default": "REACH OUT SAVE 10% ON EVERYTHING NEW"
+      "default": "REACH OUT"
     }
   ]
 }

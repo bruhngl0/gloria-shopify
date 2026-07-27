@@ -51,11 +51,7 @@
         <div class="absolute inset-0 border border-sbg-border translate-x-4 -translate-y-4 transition-transform duration-500 group-hover:translate-x-2 group-hover:-translate-y-2 pointer-events-none"></div>
         <div class="relative w-full aspect-[4/3] border border-sbg-black overflow-hidden bg-sbg-offwhite z-10">
           <div class="w-full h-full scale-x-[-1]">
-            {%- if section.settings.fabric_image != blank -%}
-              <img src="{{ section.settings.fabric_image | image_url: width: 1000 }}" alt="Fabric detail zoom" class="w-full h-full object-cover">
-            {%- else -%}
-              {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover bg-sbg-hover opacity-70' }}
-            {%- endif -%}
+            <img src="{{ 'buybox-white-motion.jpg' | asset_url }}" alt="Atelier motion shot" class="w-full h-full object-cover">
           </div>
         </div>
       </div>

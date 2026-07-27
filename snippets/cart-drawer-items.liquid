@@ -16,10 +16,13 @@
     <!-- Items list -->
     <div class="divide-y divide-sbg-border flex-1 overflow-y-auto">
       {%- for item in cart.items -%}
+        {%- assign item_title_downcase = item.product.title | downcase -%}
         <div class="flex py-6 first:pt-0">
           <!-- Image -->
           <div class="relative h-28 w-20 flex-shrink-0 border border-sbg-border overflow-hidden bg-sbg-offwhite aspect-[3/4]">
-            {%- if item.image -%}
+            {%- if item_title_downcase contains 'one for all' -%}
+              <img src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ item.product.title }}" class="w-full h-full object-cover">
+            {%- elsif item.image -%}
               <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.image.alt | default: item.product.title }}" class="w-full h-full object-cover">
             {%- else -%}
               <div class="w-full h-full bg-sbg-hover flex items-center justify-center text-[10px] text-sbg-grey">

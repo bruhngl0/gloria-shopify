@@ -6,7 +6,7 @@
 <style type="text/css">
   /* Warped border styling for Stylist image */
   .sbg-warped-portrait {
-    border-radius: 30% 70% 70% 30% / 50% 30% 70% 50%;
+    border-radius: 0;
   }
 
   /* Mission block spotlight follow */
@@ -33,25 +33,6 @@
 
 <div class="bg-sbg-white min-h-screen pb-16 md:pb-24">
   
-  <!-- SECTION 1: Editorial Header Banner -->
-  <div class="relative h-[40vh] md:h-[55vh] w-full bg-sbg-black overflow-hidden border-b border-sbg-border">
-    {%- if section.settings.hero_image != blank -%}
-      <img
-        src="{{ section.settings.hero_image | image_url: width: 2000 }}"
-        alt="{{ section.settings.hero_image.alt | default: 'Styled by Gloria Design Studio' }}"
-        class="object-cover w-full h-full opacity-85 select-none"
-      >
-    {%- else -%}
-      <img
-        src="{{ 'about-hero.jpg' | asset_url }}"
-        alt="Styled by Gloria Design Studio"
-        class="object-cover w-full h-full opacity-85 select-none"
-      >
-    {%- endif -%}
-    <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/45 via-black/10 to-transparent z-20 pointer-events-none"></div>
-    <div class="absolute inset-0 bg-sbg-black/10 z-10"></div>
-  </div>
-
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
     
     <!-- SECTION 2: Page Title -->
@@ -119,19 +100,11 @@
 
           <!-- Warped Portrait Container -->
           <div class="sbg-warped-portrait w-full h-full border-2 border-sbg-black overflow-hidden bg-sbg-offwhite shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] transition-transform hover:-translate-y-1 hover:scale-[1.01] duration-500">
-            {%- if section.settings.portrait_image != blank -%}
-              <img
-                src="{{ section.settings.portrait_image | image_url: width: 800 }}"
-                alt="Gloria"
-                class="sbg-warped-portrait object-cover w-full h-full"
-              >
-            {%- else -%}
-              <img
-                src="{{ 'gloria.jpg' | asset_url }}"
-                alt="Gloria"
-                class="sbg-warped-portrait object-cover w-full h-full"
-              >
-            {%- endif -%}
+            <img
+              src="{{ 'founder-portrait.jpg' | asset_url }}"
+              alt="Gloria"
+              class="sbg-warped-portrait object-cover w-full h-full"
+            >
           </div>
         </div>
       </div>
@@ -212,90 +185,7 @@
       </div>
     </div>
 
-    <!-- SECTION 6: History Timeline Atelier -->
-    <section class="bg-sbg-offwhite w-full py-20 md:py-32 border-t border-b border-sbg-border/60 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 text-left">
-      <div class="max-w-5xl mx-auto">
-        <div class="text-center max-w-xl mx-auto mb-16 md:mb-24">
-          <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-gold block mb-3">
-            Atelier Timeline
-          </span>
-          <h2 class="font-display text-3xl md:text-4xl font-bold tracking-wide text-sbg-black uppercase">
-            The Journey of SBG
-          </h2>
-          <div class="h-[1.5px] bg-sbg-gold mx-auto mt-4 w-12"></div>
-        </div>
-
-        <div class="relative border-l border-sbg-border/60 pl-8 ml-4 space-y-12 reveal-on-scroll" data-stagger-children="0.1">
-          {%- if section.blocks.size > 0 -%}
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'timeline_milestone' -%}
-                <div class="relative group stagger-item" {{ block.shopify_attributes }}>
-                  <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
-                  <div class="space-y-2">
-                    <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">
-                      {{ block.settings.year }}
-                    </span>
-                    <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">
-                      {{ block.settings.title }}
-                    </h3>
-                    <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
-                      {{ block.settings.description }}
-                    </p>
-                  </div>
-                </div>
-              {%- endif -%}
-            {%- endfor -%}
-          {%- else -%}
-            <!-- Fallback Milestones -->
-            <div class="relative group stagger-item">
-              <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
-              <div class="space-y-2">
-                <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">2020</span>
-                <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">The Blueprint</h3>
-                <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
-                  Founder Gloria G. departs traditional commercial fashion design to map vertical proportions and skeletal silhouettes, seeking to reverse sizing bias.
-                </p>
-              </div>
-            </div>
-
-            <div class="relative group stagger-item">
-              <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
-              <div class="space-y-2">
-                <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">2022</span>
-                <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">Como Textile Labs</h3>
-                <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
-                  Collaborating directly with double-knit circular loom mills in Como, Italy, we develop a heavyweight viscosity crepe fabric with elastic memory.
-                </p>
-              </div>
-            </div>
-
-            <div class="relative group stagger-item">
-              <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
-              <div class="space-y-2">
-                <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">2024</span>
-                <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">Virtual Consultation Launch</h3>
-                <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
-                  Launching remote personal styling programs, guiding clients internationally to identify shape proportions, fabric drape, and wardrobe geometry.
-                </p>
-              </div>
-            </div>
-
-            <div class="relative group stagger-item">
-              <div class="absolute -left-[41px] top-1.5 h-[17px] w-[17px] rounded-full border border-sbg-black bg-sbg-white group-hover:border-sbg-gold group-hover:bg-sbg-gold transition-colors duration-300"></div>
-              <div class="space-y-2">
-                <span class="font-display text-2xl font-light text-sbg-gold tracking-wide block">2026</span>
-                <h3 class="font-display text-lg font-bold text-sbg-black uppercase tracking-wider">Storefront Debut</h3>
-                <p class="text-xs tracking-wider leading-relaxed text-sbg-grey max-w-2xl">
-                  SBG launches our digital storefront offering the signature customizable 'One for All' dress, introducing structural fitting to the public.
-                </p>
-              </div>
-            </div>
-          {%- endif -%}
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 7: Bottom Call-to-Actions -->
+    <!-- SECTION 6: Bottom Call-to-Actions -->
     <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-16 reveal-on-scroll">
       <a
         href="{{ routes.root_url }}collections/all"
