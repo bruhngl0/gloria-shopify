@@ -10,6 +10,17 @@
     will-change: opacity, transform;
   }
 
+  .hero-cover-image {
+    transform: scale(0.86);
+    transform-origin: center center;
+  }
+
+  @media (min-width: 768px) {
+    .hero-cover-image {
+      transform: scale(0.82);
+    }
+  }
+
   .sbg-loaded .hero-animate-center {
     opacity: 1;
     transform: scale(1);
@@ -52,7 +63,7 @@
       <img
         src="{{ 'buybox-white-motion.jpg' | asset_url }}"
         alt="{{ section.settings.hero_title }}"
-        class="w-full h-full object-cover"
+        class="hero-cover-image w-full h-full object-cover"
       >
     </div>
   </div>
