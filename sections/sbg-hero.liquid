@@ -828,13 +828,13 @@
     });
   {%- endif -%}
 
-  // Automatically rotate the two editorial buy-box images every three seconds.
+  // Automatically rotate the two editorial buy-box images every ten seconds.
   document.addEventListener('DOMContentLoaded', function() {
     window.setInterval(function() {
       if (typeof window.navigateHeroImage === 'function') {
         window.navigateHeroImage(1);
       }
-    }, 3000);
+    }, 10000);
   });
 </script>
 
