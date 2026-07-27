@@ -51,62 +51,8 @@
   {%- comment -%} Unconditional rendering with mock fallback {%- endcomment -%}
     <!-- 1. DESKTOP WORKSPACE LAYOUT (Saint Laurent Grid Structure) -->
     <div class="hidden md:grid md:grid-cols-12 h-[calc(100vh-64px)] overflow-hidden w-full">
-      <!-- --- LEFT COLUMN: Brand Wordmark Track & Editorial Navigation --- -->
-      <div class="col-span-3 flex h-full border-r border-sbg-border bg-sbg-white">
-        <!-- Vertical brand title container -->
-        <div class="w-[60px] lg:w-[65px] h-full border-r border-sbg-border flex items-center justify-center relative py-8">
-          <span class="hero-vertical-title font-display text-[18px] lg:text-[20px] font-bold tracking-[0.25em] uppercase whitespace-nowrap text-sbg-black origin-center">
-            {{ section.settings.vertical_title | default: "ONE FOR ALL" }}
-          </span>
-        </div>
-
-        <!-- Navigation panel -->
-        <div class="flex-1 flex flex-col justify-between p-6">
-          <div class="space-y-6 mt-8 reveal-on-scroll" data-stagger-children="0.08">
-            <div class="stagger-item">
-              <a href="{{ section.settings.shop_link_url | default: '/collections/all' }}" class="font-bold tracking-[0.25em] text-[9px] uppercase text-sbg-black hover:text-sbg-grey transition-colors block">
-                {{ section.settings.shop_link_text | default: 'SHOP PIECES >' }}
-              </a>
-              <span class="text-[8px] tracking-widest text-sbg-grey uppercase block mt-0.5">
-                {{ section.settings.shop_link_subtext | default: 'Signature Collection' }}
-              </span>
-            </div>
-            <div class="space-y-3 pt-3 border-t border-sbg-border/60 stagger-item">
-              <a href="{{ section.settings.link_1_url | default: '/pages/services' }}" class="tracking-[0.2em] text-[9px] uppercase text-sbg-grey hover:text-sbg-black transition-colors block">
-                {{ section.settings.link_1_text | default: 'SERVICES' }}
-              </a>
-            </div>
-            <div class="stagger-item">
-              <a href="{{ section.settings.link_2_url | default: '/pages/about' }}" class="tracking-[0.2em] text-[9px] uppercase text-sbg-grey hover:text-sbg-black transition-colors block">
-                {{ section.settings.link_2_text | default: 'THE FOUNDER' }}
-              </a>
-            </div>
-            <div class="stagger-item">
-              <a href="{{ section.settings.link_3_url | default: '/pages/contact' }}" class="tracking-[0.2em] text-[9px] uppercase text-sbg-grey hover:text-sbg-black transition-colors block">
-                {{ section.settings.link_3_text | default: 'CONTACT OFFICE' }}
-              </a>
-            </div>
-          </div>
-
-          <!-- Bottom info panel -->
-          <div class="space-y-3.5 text-[8px] tracking-[0.18em] text-sbg-grey uppercase leading-relaxed mb-2 reveal-on-scroll" data-stagger-children="0.08">
-            <div class="stagger-item">
-              <span class="text-sbg-black block font-bold">SHIPPING TO</span>
-              <span>{{ cart.currency.iso_code }} / INTERNATIONAL</span>
-            </div>
-            <div class="stagger-item">
-              <span class="text-sbg-black block font-bold">LANGUAGE</span>
-              <span>ENGLISH</span>
-            </div>
-            <div class="pt-3 border-t border-sbg-border/60 text-[7.5px] tracking-widest text-sbg-grey/70 stagger-item">
-              SBG © {{ 'now' | date: '%Y' }}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- --- CENTER COLUMN: Full-Height Immersive Lookbook Cover --- -->
-      <div class="col-span-6 flex flex-col relative h-full bg-sbg-offwhite border-r border-sbg-border overflow-hidden group/center">
+      <div class="col-span-8 flex flex-col relative h-full bg-sbg-offwhite border-r border-sbg-border overflow-hidden group/center">
         <!-- Main Visual Slider -->
         <div class="absolute inset-0 w-full h-full">
           <div id="hero-image-wrapper" class="hero-main-image-container relative w-full h-full transition-opacity duration-500">
@@ -139,7 +85,7 @@
       </div>
 
       <!-- --- RIGHT COLUMN: Purchasing Drawer & Sizing configs --- -->
-      <div class="col-span-3 flex flex-col justify-between h-full p-6 bg-sbg-white overflow-y-auto">
+      <div class="col-span-4 flex flex-col justify-between h-full p-6 bg-sbg-white overflow-y-auto">
         <div class="flex justify-between items-center text-[9px] tracking-[0.2em] text-sbg-grey uppercase border-b border-sbg-border/60 pb-4">
           <button onclick="window.sbg.openCart()" class="font-bold text-sbg-black hover:text-sbg-grey transition-colors flex items-center">
             BAG (<span class="cart-count-badge">0</span>) &gt;
