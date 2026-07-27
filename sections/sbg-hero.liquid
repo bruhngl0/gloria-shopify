@@ -111,12 +111,7 @@
           <div class="stagger-item">
             <span class="text-[8px] tracking-[0.25em] font-bold text-sbg-grey uppercase block mb-3">ATELIER SHOT</span>
             <div class="relative aspect-[4/3] w-full bg-sbg-offwhite border border-sbg-border overflow-hidden shadow-sm">
-              <!-- Default detail image placeholder -->
-              {%- if use_mock -%}
-                <img id="hero-detail-img" src="{{ 'two.png' | asset_url }}" class="w-full h-full object-cover">
-              {%- else -%}
-                <img id="hero-detail-img" src="{{ product_to_show.images[1] | default: product_to_show.featured_image | image_url: width: 400 }}" class="w-full h-full object-cover">
-              {%- endif -%}
+              <img id="hero-detail-img" src="{{ 'buybox-white-motion.jpg' | asset_url }}" alt="Atelier motion shot" class="w-full h-full object-cover">
             </div>
           </div>
 
