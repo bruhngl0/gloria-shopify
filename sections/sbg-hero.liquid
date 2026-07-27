@@ -542,12 +542,12 @@
         'detail': '{{ "buybox-white-motion.jpg" | asset_url }}'
       },
       'Red': {
-        'main': '{{ "two.png" | asset_url }}',
-        'detail': '{{ "three.png" | asset_url }}'
+        'main': '{{ "buybox-white-front.jpg" | asset_url }}',
+        'detail': '{{ "buybox-white-motion.jpg" | asset_url }}'
       },
       'Baby Blue': {
-        'main': '{{ "three.png" | asset_url }}',
-        'detail': '{{ "one.png" | asset_url }}'
+        'main': '{{ "buybox-white-front.jpg" | asset_url }}',
+        'detail': '{{ "buybox-white-motion.jpg" | asset_url }}'
       }
     };
     const mockColorLabels = {
@@ -642,12 +642,7 @@
       '{{ "buybox-white-front.jpg" | asset_url }}',
       '{{ "buybox-white-motion.jpg" | asset_url }}'
     ];
-    const productImages = [
-      ...editorialImages,
-      {%- for image in product_to_show.images -%}
-        "{{ image | image_url: width: 1200 }}",
-      {%- endfor -%}
-    ];
+    const productImages = editorialImages;
 
     let currentOptionValues = [
       {%- for option in product_to_show.options_with_values -%}
@@ -722,21 +717,6 @@
           mobileBtn.classList.remove('bg-sbg-black', 'text-sbg-white');
         }
 
-        // Swap main hero image if variant image exists
-        if (matchingVariant.featured_image) {
-          const newImgUrl = matchingVariant.featured_image.src;
-          const desktopImg = document.getElementById('hero-main-img');
-          const mobileImg = document.getElementById('hero-mobile-img');
-          if (desktopImg) desktopImg.src = newImgUrl;
-          if (mobileImg) mobileImg.src = newImgUrl;
-
-          // Sync current index in image slider
-          const imgIndex = productImages.findIndex(src => src.includes(matchingVariant.featured_image.src.split('?')[0]));
-          if (imgIndex !== -1) {
-            currentImageIndex = imgIndex;
-            updateHeroPagination(imgIndex);
-          }
-        }
       }
     }
 
@@ -847,6 +827,15 @@
       if (mobileForm) mobileForm.addEventListener('submit', handleFormSubmit);
     });
   {%- endif -%}
+
+  // Automatically rotate the two editorial buy-box images every three seconds.
+  document.addEventListener('DOMContentLoaded', function() {
+    window.setInterval(function() {
+      if (typeof window.navigateHeroImage === 'function') {
+        window.navigateHeroImage(1);
+      }
+    }, 3000);
+  });
 </script>
 
 {% schema %}
