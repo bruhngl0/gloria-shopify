@@ -23,13 +23,13 @@
   assign body_types = product_to_show.metafields.sbg.body_types.value
 -%}
 
-<section class="bg-sbg-white w-full py-16 md:py-28 select-none">
+<section class="bg-sbg-white w-full py-20 md:py-32 border-t border-sbg-border/60 select-none">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         <!-- Left Column: Image -->
         <div class="lg:col-span-7 relative group reveal-on-scroll">
           <div class="absolute inset-0 border border-sbg-border translate-x-4 translate-y-4 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2 pointer-events-none"></div>
-          <div class="relative w-full aspect-[3/4] border border-sbg-black overflow-hidden bg-sbg-offwhite z-10">
+          <div class="relative w-full aspect-[4/3] border border-sbg-black overflow-hidden bg-sbg-offwhite z-10">
             <img src="{{ product_image }}" alt="{{ product_title }}" class="w-full h-full object-cover">
           </div>
         </div>

@@ -49,7 +49,7 @@
       <!-- Right Column: Mirror Immersive Image -->
       <div class="lg:col-span-7 relative group order-1 lg:order-2 reveal-on-scroll">
         <div class="absolute inset-0 border border-sbg-border translate-x-4 -translate-y-4 transition-transform duration-500 group-hover:translate-x-2 group-hover:-translate-y-2 pointer-events-none"></div>
-        <div class="relative w-full aspect-[4/5] border border-sbg-black overflow-hidden bg-sbg-offwhite z-10">
+        <div class="relative w-full aspect-[4/3] border border-sbg-black overflow-hidden bg-sbg-offwhite z-10">
           <div class="w-full h-full scale-x-[-1]">
             {%- if section.settings.fabric_image != blank -%}
               <img src="{{ section.settings.fabric_image | image_url: width: 1000 }}" alt="Fabric detail zoom" class="w-full h-full object-cover">
