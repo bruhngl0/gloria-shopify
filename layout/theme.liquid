@@ -25,10 +25,11 @@
     {% comment %} Dynamic Open Graph & Meta Tags {% endcomment %}
     {%- render 'meta-tags' -%}
 
-    <!-- Google Fonts -->
+    <!-- Fonts: keep the connection warm and let text render immediately while fonts load. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Pinyon+Script&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Pinyon+Script&display=swap" rel="stylesheet"></noscript>
 
     <!-- Shopify Routes Setup -->
     <script>
@@ -84,6 +85,10 @@
         pointer-events: none;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
       }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+        .noise-overlay { display: none; }
+      }
     </style>
 
     {{ content_for_header }}
@@ -91,7 +96,7 @@
 
   <body class="min-h-full flex flex-col font-body bg-sbg-white text-sbg-black overflow-x-hidden">
     {%- render 'splash-screen' -%}
-    <div class="noise-overlay"></div>
+    <div class="noise-overlay" aria-hidden="true"></div>
 
     {%- section 'sbg-header' -%}
 
@@ -126,19 +131,28 @@
           const drawerContent = document.getElementById('CartDrawerContent');
           if (drawerContent) {
             drawerContent.classList.add('opacity-50');
-            fetch(window.Shopify.routes.root + 'cart?view=drawer')
-              .then(res => res.text())
+            fetch(window.Shopify.routes.root + 'cart?view=drawer', { credentials: 'same-origin' })
+              .then(res => {
+                if (!res.ok) throw new Error('Cart drawer failed: ' + res.status);
+                return res.text();
+              })
               .then(html => {
                 drawerContent.innerHTML = html;
                 drawerContent.classList.remove('opacity-50');
                 this.updateCartCount();
               })
-              .catch(err => console.error('Error refreshing cart drawer:', err));
+              .catch(err => {
+                console.error('Error refreshing cart drawer:', err);
+                drawerContent.classList.remove('opacity-50');
+              });
           }
         },
         updateCartCount: function() {
-          fetch(window.Shopify.routes.root + 'cart.js')
-            .then(res => res.json())
+          fetch(window.Shopify.routes.root + 'cart.js', { credentials: 'same-origin' })
+            .then(res => {
+              if (!res.ok) throw new Error('Cart count failed: ' + res.status);
+              return res.json();
+            })
             .then(cart => {
               const badges = document.querySelectorAll('.cart-count-badge');
               badges.forEach(badge => {
@@ -175,9 +189,7 @@
         }
       };
 
-      document.addEventListener('DOMContentLoaded', function() {
-        window.sbg.updateCartCount();
-      });
+      // Cart state is fetched when the drawer opens, avoiding an extra request on every page view.
     </script>
   </body>
 </html>

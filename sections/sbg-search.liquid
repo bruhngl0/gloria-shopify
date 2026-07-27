@@ -63,13 +63,12 @@
             {%- for item in search.results -%}
               {%- if item.object_type == 'product' -%}
                 {%- liquid
-                  assign current_variant = item.selected_or_first_available_variant
                 -%}
                 <a href="{{ item.url }}" class="search-card group block relative border border-sbg-border/50 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item">
                   <div class="relative overflow-hidden bg-sbg-offwhite aspect-[3/4]">
                     <!-- Image -->
                     {%- if item.featured_image != blank -%}
-                      <img src="{{ item.featured_image | image_url: width: 800 }}" alt="{{ item.title }}" class="search-card-img object-cover w-full h-full">
+                      <img src="{{ item.featured_image | image_url: width: 800 }}" alt="{{ item.featured_image.alt | default: item.title | escape }}" width="800" height="1067" loading="lazy" decoding="async" class="search-card-img object-cover w-full h-full">
                     {%- else -%}
                       {{ 'product-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
                     {%- endif -%}
@@ -93,7 +92,7 @@
                 <a href="{{ item.url }}" class="search-card group block relative border border-sbg-border/50 p-6 bg-sbg-offwhite text-left flex flex-col justify-between hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 aspect-[3/4] stagger-item">
                   <div class="space-y-4">
                     <span class="text-[8px] font-bold tracking-[0.25em] text-sbg-gold uppercase block">
-                      {{ item.object_type | uppercase }}
+                      {{ item.object_type | upcase }}
                     </span>
                     <h3 class="font-display text-lg font-bold tracking-wide uppercase text-sbg-black line-clamp-3 group-hover:text-sbg-gold transition-colors duration-300">
                       {{ item.title }}

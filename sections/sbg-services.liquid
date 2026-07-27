@@ -192,7 +192,7 @@
       <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center reveal-on-scroll">
         <!-- Stylist Image -->
         <div class="md:col-span-5 relative aspect-square w-full border border-sbg-border overflow-hidden bg-sbg-offwhite rounded-full max-w-[240px] mx-auto md:max-w-none">
-          <img src="{{ 'gloria.jpg' | asset_url }}" alt="Gloria G. - Lead Stylist" class="object-cover w-full h-full">
+          <img src="{{ 'gloria.jpg' | asset_url }}" alt="Gloria G. - Lead Stylist" width="800" height="800" loading="lazy" decoding="async" class="object-cover w-full h-full">
         </div>
 
         <!-- Bio Content -->
@@ -303,6 +303,8 @@
             <button
               type="button"
               onclick="toggleFaq({{ idx }})"
+              aria-expanded="false"
+              aria-controls="faq-ans-{{ idx }}"
               class="flex w-full items-center justify-between text-left group focus:outline-none"
             >
               <span class="font-display text-base md:text-lg font-bold tracking-wide text-sbg-black group-hover:text-sbg-gold transition-colors duration-300">
@@ -362,11 +364,13 @@
   function toggleFaq(idx) {
     const ans = document.getElementById('faq-ans-' + idx);
     const sign = document.getElementById('faq-sign-' + idx);
+    const trigger = document.querySelector('[aria-controls="faq-ans-' + idx + '"]');
 
     if (ans && sign) {
       if (ans.classList.contains('open')) {
         ans.classList.remove('open');
         sign.textContent = '+';
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
       } else {
         // Close all other FAQs first
         document.querySelectorAll('.sbg-faq-answer').forEach(function(el) {
@@ -375,9 +379,13 @@
         document.querySelectorAll('[id^="faq-sign-"]').forEach(function(el) {
           el.textContent = '+';
         });
+        document.querySelectorAll('[aria-controls^="faq-ans-"]').forEach(function(el) {
+          el.setAttribute('aria-expanded', 'false');
+        });
 
         ans.classList.add('open');
         sign.textContent = '−';
+        if (trigger) trigger.setAttribute('aria-expanded', 'true');
       }
     }
   }

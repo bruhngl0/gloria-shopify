@@ -24,7 +24,7 @@
         {%- for block in section.blocks -%}
           <div class="flex flex-col items-center justify-center p-2" {{ block.shopify_attributes }}>
             {%- if block.settings.badge_image != blank -%}
-              <img src="{{ block.settings.badge_image | image_url: height: 40 }}" alt="{{ block.settings.label }}" class="h-8 w-auto object-contain">
+              <img src="{{ block.settings.badge_image | image_url: height: 40 }}" alt="{{ block.settings.label | escape }}" width="40" height="40" loading="lazy" decoding="async" class="h-8 w-auto object-contain">
             {%- endif -%}
             {%- if block.settings.label != blank -%}
               <span class="text-[8px] tracking-widest text-sbg-grey uppercase mt-1.5 block font-semibold">

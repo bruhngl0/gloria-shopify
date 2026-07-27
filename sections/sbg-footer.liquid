@@ -134,7 +134,7 @@
 
       <div id="footer-menu2" class="footer-accordion-content md:block">
         <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
-          <li><a href="/collections/bespoke" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Bespoke</a></li>
+          <li><a href="{{ routes.collections_url }}/bespoke" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Bespoke</a></li>
           <li><a href="/pages/shipping-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Shipping Policy</a></li>
           <li><a href="/pages/return-exchange" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Return & Exchange</a></li>
           <li><a href="/pages/privacy-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Privacy Policy</a></li>
@@ -202,7 +202,7 @@
   <!-- Bottom Copyright Bar -->
   <div class="py-4 text-center">
     <p class="font-body text-[9px] tracking-widest text-sbg-white/50 uppercase">
-      &copy; {{ 'now' | date: '%Y' }} {{ shop.name | uppercase }}. {{ 'general.meta.copyright' | t | upcase }}
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name | upcase }}. {{ 'general.meta.copyright' | t | upcase }}
     </p>
   </div>
 </footer>

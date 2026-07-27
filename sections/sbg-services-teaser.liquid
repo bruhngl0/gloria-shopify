@@ -13,7 +13,7 @@
           {{ section.settings.headline_end | default: 'with noise!' }}
           <span class="inline-block relative w-[48px] h-[48px] sm:w-[65px] sm:h-[65px] md:w-[95px] md:h-[95px] border-2 border-sbg-black overflow-hidden rounded bg-sbg-offwhite ml-3 sm:ml-4 md:ml-6 align-middle -translate-y-1 md:-translate-y-2 select-none shadow-[2px_2px_0px_rgba(10,10,10,1)]">
             {%- if section.settings.inline_image != blank -%}
-              <img src="{{ section.settings.inline_image | image_url: width: 200 }}" alt="Signature cowl neck styling shot" class="w-full h-full object-cover">
+              <img src="{{ section.settings.inline_image | image_url: width: 200 }}" alt="Signature cowl neck styling shot" width="200" height="200" loading="lazy" decoding="async" class="w-full h-full object-cover">
             {%- else -%}
               {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover bg-sbg-hover opacity-60' }}
             {%- endif -%}
@@ -32,7 +32,7 @@
             <!-- Screen inner container -->
             <div class="relative w-full h-[88%] bg-black rounded-lg overflow-hidden border border-black">
               {%- if section.settings.monitor_image != blank -%}
-                <img src="{{ section.settings.monitor_image | image_url: width: 600 }}" class="object-cover w-full h-full grayscale contrast-125 opacity-85">
+                <img src="{{ section.settings.monitor_image | image_url: width: 600 }}" alt="Styling services monitor" width="600" height="450" loading="lazy" decoding="async" class="object-cover w-full h-full grayscale contrast-125 opacity-85">
               {%- else -%}
                 {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover grayscale contrast-125 opacity-80' }}
               {%- endif -%}

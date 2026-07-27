@@ -63,6 +63,10 @@
               <img
                 src="{{ block.settings.image | image_url: width: 1200 }}"
                 alt="{{ block.settings.title | default: 'Lookbook' }}"
+                width="1200"
+                height="900"
+                loading="lazy"
+                decoding="async"
                 class="sbg-collage-img object-cover w-full h-full"
               >
             {%- else -%}
@@ -97,7 +101,7 @@
       {%- else -%}
         <!-- Fallback Collage Blocks -->
         <div class="sbg-collage-card group bg-sbg-offwhite rounded-sm md:col-span-8 md:row-span-2 stagger-item">
-          <img src="{{ 'about-hero.jpg' | asset_url }}" class="sbg-collage-img object-cover w-full h-full">
+          <img src="{{ 'about-hero.jpg' | asset_url }}" alt="Atelier story" width="1536" height="1024" loading="lazy" decoding="async" class="sbg-collage-img object-cover w-full h-full">
           <div class="absolute inset-0 bg-sbg-black/25 flex flex-col justify-end p-6 text-sbg-white text-left">
             <span class="text-[8px] font-bold tracking-[0.25em] uppercase text-sbg-white/80 block">Atelier Story</span>
             <h3 class="font-display text-lg md:text-xl font-bold tracking-wider uppercase">DESIGN BLUEPRINT</h3>
@@ -105,7 +109,7 @@
         </div>
 
         <div class="sbg-collage-card group bg-sbg-offwhite rounded-sm md:col-span-4 md:row-span-2 stagger-item">
-          <img src="{{ 'dress-black-model.jpg' | asset_url }}" class="sbg-collage-img object-cover w-full h-full">
+          <img src="{{ 'dress-black-model.jpg' | asset_url }}" alt="Signature look" width="1536" height="1024" loading="lazy" decoding="async" class="sbg-collage-img object-cover w-full h-full">
           <div class="absolute inset-0 bg-sbg-black/25 flex flex-col justify-end p-6 text-sbg-white text-left">
             <span class="text-[8px] font-bold tracking-[0.25em] uppercase text-sbg-white/80 block">Signature Look</span>
             <h3 class="font-display text-lg md:text-xl font-bold tracking-wider uppercase">THE ONE DRESS</h3>

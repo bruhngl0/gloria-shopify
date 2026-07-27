@@ -40,7 +40,7 @@
           <a href="{{ col_link }}" class="collection-card group block relative border border-sbg-border/60 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item" {{ block.shopify_attributes }}>
             <div class="relative overflow-hidden bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% else %}aspect-[3/4]{% endif %}">
               {%- if col_image != blank -%}
-                <img src="{{ col_image | image_url: width: 800 }}" alt="{{ col_title }}" class="collection-card-img object-cover w-full h-full">
+                <img src="{{ col_image | image_url: width: 800 }}" alt="{{ col_title | escape }}" width="800" height="1067" loading="lazy" decoding="async" class="collection-card-img object-cover w-full h-full">
               {%- else -%}
                 {{ 'collection-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover opacity-80' }}
               {%- endif -%}
@@ -73,7 +73,7 @@
             <a href="{{ col_link }}" class="collection-card group block relative border border-sbg-border/60 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item">
               <div class="relative overflow-hidden bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% else %}aspect-[3/4]{% endif %}">
                 {%- if col_image != blank -%}
-                  <img src="{{ col_image | image_url: width: 800 }}" alt="{{ col_title }}" class="collection-card-img object-cover w-full h-full">
+                  <img src="{{ col_image | image_url: width: 800 }}" alt="{{ col_title | escape }}" width="800" height="1067" loading="lazy" decoding="async" class="collection-card-img object-cover w-full h-full">
                 {%- else -%}
                   {{ 'collection-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover opacity-80' }}
                 {%- endif -%}

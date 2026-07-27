@@ -37,7 +37,7 @@
             <div class="relative overflow-hidden bg-sbg-offwhite aspect-[3/4]">
               <!-- Primary Image -->
               {%- if product.featured_image != blank -%}
-                <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" class="product-grid-card-img object-cover w-full h-full">
+                <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}" width="800" height="1067" loading="lazy" decoding="async" class="product-grid-card-img object-cover w-full h-full">
               {%- else -%}
                 {{ 'product-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
               {%- endif -%}

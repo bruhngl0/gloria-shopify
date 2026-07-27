@@ -26,7 +26,11 @@
       <div class="w-full aspect-[21/9] overflow-hidden border border-sbg-border bg-sbg-offwhite mb-12 reveal-on-scroll">
         <img
           src="{{ article.image | image_url: width: 1400 }}"
-          alt="{{ article.title }}"
+          alt="{{ article.title | escape }}"
+          width="1400"
+          height="600"
+          loading="lazy"
+          decoding="async"
           class="w-full h-full object-cover"
         >
       </div>

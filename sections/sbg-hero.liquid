@@ -71,11 +71,11 @@
         <div class="absolute inset-0 w-full h-full">
           <div id="hero-image-wrapper" class="hero-main-image-container relative w-full h-full transition-opacity duration-500">
             {%- if use_mock -%}
-              <img id="hero-main-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
+              <img id="hero-main-img" src="{{ 'buybox-white-front-optimized.jpg' | asset_url }}" alt="{{ product_title | escape }}" width="1800" height="2700" fetchpriority="high" decoding="async" class="object-cover object-center w-full h-full">
             {%- elsif current_variant.image -%}
-              <img id="hero-main-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
+              <img id="hero-main-img" src="{{ 'buybox-white-front-optimized.jpg' | asset_url }}" alt="{{ product_title | escape }}" width="1800" height="2700" fetchpriority="high" decoding="async" class="object-cover object-center w-full h-full">
             {%- else -%}
-              <img id="hero-main-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
+              <img id="hero-main-img" src="{{ 'buybox-white-front-optimized.jpg' | asset_url }}" alt="{{ product_title | escape }}" width="1800" height="2700" fetchpriority="high" decoding="async" class="object-cover object-center w-full h-full">
             {%- endif -%}
           </div>
           <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-sbg-white/40 to-transparent pointer-events-none"></div>
@@ -111,7 +111,7 @@
           <div class="stagger-item">
             <span class="text-[8px] tracking-[0.25em] font-bold text-sbg-grey uppercase block mb-3">ATELIER SHOT</span>
             <div class="relative aspect-[4/3] w-full bg-sbg-offwhite border border-sbg-border overflow-hidden shadow-sm">
-              <img id="hero-detail-img" src="{{ 'buybox-white-motion.jpg' | asset_url }}" alt="Atelier motion shot" class="w-full h-full object-cover">
+              <img id="hero-detail-img" src="{{ 'buybox-white-motion-optimized.jpg' | asset_url }}" alt="Atelier motion shot" width="1800" height="2700" loading="lazy" decoding="async" class="w-full h-full object-cover">
             </div>
           </div>
 
@@ -170,7 +170,7 @@
           </form>
         {%- else -%}
           <!-- Buy Form -->
-          <form method="post" action="/cart/add" id="sbg-product-form-desktop" class="space-y-6 pt-4 border-t border-sbg-border/60 reveal-on-scroll" data-stagger-children="0.1" enctype="multipart/form-data">
+          <form method="post" action="{{ routes.cart_add_url }}" id="sbg-product-form-desktop" class="space-y-6 pt-4 border-t border-sbg-border/60 reveal-on-scroll" data-stagger-children="0.1" enctype="multipart/form-data">
             <input type="hidden" name="form_type" value="product">
             <input type="hidden" name="utf8" value="✓">
             <!-- Hidden real variant selector -->
@@ -282,11 +282,11 @@
       <!-- Mobile Lookbook Carousel Image Hero -->
       <section class="relative w-full aspect-[3/4] bg-sbg-offwhite overflow-hidden">
         {%- if use_mock -%}
-          <img id="hero-mobile-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover w-full h-full">
+          <img id="hero-mobile-img" src="{{ 'buybox-white-front-optimized.jpg' | asset_url }}" alt="{{ product_title | escape }}" width="1800" height="2700" fetchpriority="high" decoding="async" class="object-cover w-full h-full">
         {%- elsif current_variant.image -%}
-          <img id="hero-mobile-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover w-full h-full">
+          <img id="hero-mobile-img" src="{{ 'buybox-white-front-optimized.jpg' | asset_url }}" alt="{{ product_title | escape }}" width="1800" height="2700" fetchpriority="high" decoding="async" class="object-cover w-full h-full">
         {%- else -%}
-          <img id="hero-mobile-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover w-full h-full">
+          <img id="hero-mobile-img" src="{{ 'buybox-white-front-optimized.jpg' | asset_url }}" alt="{{ product_title | escape }}" width="1800" height="2700" fetchpriority="high" decoding="async" class="object-cover w-full h-full">
         {%- endif -%}
 
         <!-- Mobile Carousel Indicator overlay -->
@@ -350,7 +350,7 @@
             </div>
           </form>
         {%- else -%}
-          <form method="post" action="/cart/add" id="sbg-product-form-mobile" class="space-y-6" enctype="multipart/form-data">
+          <form method="post" action="{{ routes.cart_add_url }}" id="sbg-product-form-mobile" class="space-y-6" enctype="multipart/form-data">
             <input type="hidden" name="form_type" value="product">
             <input type="hidden" name="utf8" value="✓">
             <input type="hidden" name="id" id="sbg-mobile-variant-input" value="{{ current_variant.id }}">
@@ -538,16 +538,16 @@
     // Mock image arrays
     const mockImages = {
       'Black': {
-        'main': '{{ "buybox-white-front.jpg" | asset_url }}',
-        'detail': '{{ "buybox-white-motion.jpg" | asset_url }}'
+        'main': '{{ "buybox-white-front-optimized.jpg" | asset_url }}',
+        'detail': '{{ "buybox-white-motion-optimized.jpg" | asset_url }}'
       },
       'Red': {
-        'main': '{{ "buybox-white-front.jpg" | asset_url }}',
-        'detail': '{{ "buybox-white-motion.jpg" | asset_url }}'
+        'main': '{{ "buybox-white-front-optimized.jpg" | asset_url }}',
+        'detail': '{{ "buybox-white-motion-optimized.jpg" | asset_url }}'
       },
       'Baby Blue': {
-        'main': '{{ "buybox-white-front.jpg" | asset_url }}',
-        'detail': '{{ "buybox-white-motion.jpg" | asset_url }}'
+        'main': '{{ "buybox-white-front-optimized.jpg" | asset_url }}',
+        'detail': '{{ "buybox-white-motion-optimized.jpg" | asset_url }}'
       }
     };
     const mockColorLabels = {
@@ -639,8 +639,8 @@
   {%- else -%}
     const productVariants = {{ product_to_show.variants | json }};
     const editorialImages = [
-      '{{ "buybox-white-front.jpg" | asset_url }}',
-      '{{ "buybox-white-motion.jpg" | asset_url }}'
+      '{{ "buybox-white-front-optimized.jpg" | asset_url }}',
+      '{{ "buybox-white-motion-optimized.jpg" | asset_url }}'
     ];
     const productImages = editorialImages;
 
@@ -828,10 +828,18 @@
     });
   {%- endif -%}
 
-  // Automatically rotate the two editorial buy-box images every ten seconds.
+  // Rotate editorial images only while the hero is visible and motion is allowed.
   document.addEventListener('DOMContentLoaded', function() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const heroSection = document.querySelector('.hero-main-image-container');
+    if (reduceMotion || !heroSection) return;
+    let heroVisible = true;
+    const visibilityObserver = new IntersectionObserver(function(entries) {
+      heroVisible = entries[0].isIntersecting;
+    }, { threshold: 0.1 });
+    visibilityObserver.observe(heroSection);
     window.setInterval(function() {
-      if (typeof window.navigateHeroImage === 'function') {
+      if (heroVisible && document.visibilityState === 'visible' && typeof window.navigateHeroImage === 'function') {
         window.navigateHeroImage(1);
       }
     }, 10000);

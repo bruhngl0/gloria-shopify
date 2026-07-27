@@ -10,13 +10,13 @@
   if product_to_show == blank
     assign use_mock = true
     assign product_title = "THE ONE FOR ALL DRESS"
-    assign product_image = 'buybox-white-front.jpg' | asset_url
+    assign product_image = 'buybox-white-front-optimized.jpg' | asset_url
     assign product_desc = "A single dress engineered to honor a multitude of shapes. Made from our heavy stretch crepe, this piece features customizable ruching and a cowl neck that drapes to your exact proportions."
     assign product_url = "/collections/all"
   else
     assign use_mock = false
     assign product_title = product_to_show.title
-    assign product_image = 'buybox-white-front.jpg' | asset_url
+    assign product_image = 'buybox-white-front-optimized.jpg' | asset_url
     assign product_desc = section.settings.description | default: product_to_show.description | strip_html | truncatewords: 45
     assign product_url = product_to_show.url
   endif
@@ -30,7 +30,7 @@
         <div class="lg:col-span-7 relative group reveal-on-scroll">
           <div class="absolute inset-0 border border-sbg-border translate-x-4 translate-y-4 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2 pointer-events-none"></div>
           <div class="relative w-full aspect-[4/3] border border-sbg-black overflow-hidden bg-sbg-offwhite z-10">
-            <img src="{{ product_image }}" alt="{{ product_title }}" class="w-full h-full object-cover">
+            <img src="{{ product_image }}" alt="{{ product_title | escape }}" width="1800" height="2700" loading="lazy" decoding="async" class="w-full h-full object-cover">
           </div>
         </div>
 

@@ -40,7 +40,7 @@
               <!-- Featured Image -->
               <a href="{{ article.url }}" class="block overflow-hidden relative aspect-video bg-sbg-white border border-sbg-border/40">
                 {%- if article.image != blank -%}
-                  <img src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title }}" class="blog-card-img object-cover w-full h-full">
+                  <img src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title | escape }}" width="800" height="450" loading="lazy" decoding="async" class="blog-card-img object-cover w-full h-full">
                 {%- else -%}
                   {{ 'image' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover opacity-85' }}
                 {%- endif -%}

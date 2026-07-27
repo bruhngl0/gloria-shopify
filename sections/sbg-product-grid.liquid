@@ -37,20 +37,19 @@
         {%- for product in col.products limit: limit -%}
           {%- liquid
             assign current_variant = product.selected_or_first_available_variant
-            assign price = current_variant.price
           -%}
           <a href="{{ product.url }}" class="product-grid-card group block relative border border-sbg-border/50 hover:border-sbg-gold/30 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-500 stagger-item">
             <div class="relative overflow-hidden bg-sbg-offwhite {% if section.settings.aspect_ratio == 'square' %}aspect-square{% else %}aspect-[3/4]{% endif %}">
               <!-- Primary Image -->
               {%- if product.featured_image != blank -%}
-                <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" class="product-grid-card-img object-cover w-full h-full">
+                <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}" width="800" height="1067" loading="lazy" decoding="async" class="product-grid-card-img object-cover w-full h-full">
               {%- else -%}
                 {{ 'product-1' | placeholder_svg_tag: 'object-cover w-full h-full bg-sbg-hover' }}
               {%- endif -%}
               
               <!-- Secondary Image on Hover -->
               {%- if section.settings.show_second_image and product.images[1] != blank -%}
-                <img src="{{ product.images[1] | image_url: width: 800 }}" alt="{{ product.title }}" class="absolute inset-0 object-cover w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                <img src="{{ product.images[1] | image_url: width: 800 }}" alt="{{ product.title | escape }} alternate view" width="800" height="1067" loading="lazy" decoding="async" class="absolute inset-0 object-cover w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-700">
               {%- endif -%}
               
               <!-- Badges -->

@@ -26,6 +26,10 @@
             <img
               src="{{ section.settings.image | image_url: width: 1200 }}"
               alt="{{ section.settings.image.alt | default: section.settings.title }}"
+              width="1200"
+              height="1600"
+              loading="lazy"
+              decoding="async"
               class="sbg-split-img object-cover w-full h-full"
             >
           {%- else -%}

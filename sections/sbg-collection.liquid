@@ -59,21 +59,22 @@
 
 <section class="bg-sbg-white w-full py-16 md:py-24 border-b border-sbg-border/60 select-none">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <!-- Screenshot-matched filter row -->
-    <div class="shop-filter-row border-t border-b border-sbg-border/60 py-6 mb-16 text-[9px] tracking-widest text-sbg-grey uppercase">
+    <!-- Screenshot-matched filter row. These controls submit Shopify-compatible collection filters. -->
+    <form action="{{ collection.url }}" method="get" id="shop-filter-form" class="border-t border-b border-sbg-border/60 py-6 mb-16 text-[9px] tracking-widest text-sbg-grey uppercase">
+    <div class="shop-filter-row">
       <div class="space-y-3">
         <span class="font-bold block">SHOP BY BODY TYPE</span>
         <div class="flex flex-wrap gap-2">
           {%- assign body_filters = 'ALL BODY TYPES|HOURGLASS|PEAR|RECTANGLE|INVERTED TRIANGLE|APPLE' | split: '|' -%}
           {%- for filter in body_filters -%}
-            <button type="button" class="shop-filter-button border border-sbg-border/60 px-6 py-5 font-semibold hover:border-sbg-black transition-colors {% if forloop.last %}active{% endif %}">{{ filter }}</button>
+            <button type="submit" name="filter.p.tag" value="{% unless forloop.first %}{{ filter | handleize }}{% endunless %}" class="shop-filter-button border border-sbg-border/60 px-6 py-5 font-semibold hover:border-sbg-black transition-colors {% if forloop.first %}active{% endif %}">{{ filter }}</button>
           {%- endfor -%}
         </div>
       </div>
 
       <div class="space-y-3">
         <span class="font-bold block">SHOP BY SIZE</span>
-        <select class="shop-filter-select border border-sbg-border/60 bg-sbg-white px-4 py-3 text-[8px] font-semibold tracking-widest text-sbg-grey uppercase focus:outline-none focus:border-sbg-black">
+        <select name="filter.v.option.size" class="shop-filter-select border border-sbg-border/60 bg-sbg-white px-4 py-3 text-[8px] font-semibold tracking-widest text-sbg-grey uppercase focus:outline-none focus:border-sbg-black" aria-label="Shop by size">
           <option value="">SELECT SIZE</option>
           <option value="xs">XS</option>
           <option value="s">S</option>
@@ -85,7 +86,7 @@
 
       <div class="space-y-3">
         <span class="font-bold block">SHOP BY COLOR</span>
-        <select class="shop-filter-select border border-sbg-border/60 bg-sbg-white px-4 py-3 text-[8px] font-semibold tracking-widest text-sbg-grey uppercase focus:outline-none focus:border-sbg-black">
+        <select name="filter.v.option.color" class="shop-filter-select border border-sbg-border/60 bg-sbg-white px-4 py-3 text-[8px] font-semibold tracking-widest text-sbg-grey uppercase focus:outline-none focus:border-sbg-black" aria-label="Shop by color">
           <option value="">SELECT COLOR</option>
           <option value="black">BLACK</option>
           <option value="red">RED</option>
@@ -93,19 +94,20 @@
         </select>
       </div>
     </div>
+    </form>
 
     <!-- Product image and detail panel -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start reveal-on-scroll">
       <div class="lg:col-span-5 relative group">
         <div class="relative aspect-[3/4] overflow-hidden bg-sbg-offwhite border border-sbg-border">
-          <img id="shop-main-image" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ shop_title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]">
+          <img id="shop-main-image" src="{{ 'buybox-white-front-optimized.jpg' | asset_url }}" alt="{{ shop_title | escape }}" width="1800" height="2700" fetchpriority="high" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]">
           <span class="absolute top-4 left-4 bg-sbg-black text-sbg-white text-[9px] font-bold tracking-widest uppercase px-3 py-2">NEW</span>
         </div>
         <div class="shop-image-placeholders grid grid-cols-4 gap-3 mt-4" aria-label="Product image placeholders">
-          <img src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ shop_title }} front view" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-black cursor-pointer">
-          <img src="{{ 'buybox-white-motion.jpg' | asset_url }}" alt="{{ shop_title }} motion view" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
-          <img src="{{ 'dress-red-front.jpg' | asset_url }}" alt="{{ shop_title }} red view" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
-          <img src="{{ 'dress-blue-front.jpg' | asset_url }}" alt="{{ shop_title }} blue view" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
+          <img src="{{ 'buybox-white-front-optimized.jpg' | asset_url }}" alt="{{ shop_title | escape }} front view" width="1800" height="2700" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-black cursor-pointer">
+          <img src="{{ 'buybox-white-motion-optimized.jpg' | asset_url }}" alt="{{ shop_title | escape }} motion view" width="1800" height="2700" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
+          <img src="{{ 'dress-red-front.jpg' | asset_url }}" alt="{{ shop_title | escape }} red view" width="1122" height="1402" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
+          <img src="{{ 'dress-blue-front.jpg' | asset_url }}" alt="{{ shop_title | escape }} blue view" width="1122" height="1402" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
         </div>
         <div class="pt-8 px-1 space-y-1">
           <h2 class="font-display text-sm font-bold tracking-wide uppercase text-sbg-black">{{ shop_title }}</h2>
@@ -131,7 +133,7 @@
         </div>
 
         {%- if shop_variant != blank -%}
-          <form method="post" action="/cart/add" id="shop-add-to-cart-form" class="pt-4">
+          <form method="post" action="{{ routes.cart_add_url }}" id="shop-add-to-cart-form" class="pt-4">
             <input type="hidden" name="id" value="{{ shop_variant.id }}">
             <button type="submit" class="w-full border border-sbg-black bg-sbg-black text-sbg-white px-6 py-4 text-xs font-bold tracking-[0.25em] uppercase hover:bg-sbg-white hover:text-sbg-black transition-colors">ADD TO CART</button>
           </form>
@@ -210,14 +212,16 @@
     });
   });
 
-  document.querySelectorAll('.shop-filter-button').forEach(function(button) {
-    button.addEventListener('click', function() {
-      this.parentElement.querySelectorAll('.shop-filter-button').forEach(function(item) {
-        item.classList.remove('active');
-      });
-      this.classList.add('active');
+  const shopFilterForm = document.getElementById('shop-filter-form');
+  if (shopFilterForm) {
+    shopFilterForm.querySelectorAll('select').forEach(function(select) {
+      select.addEventListener('change', function() { shopFilterForm.submit(); });
     });
-  });
+    const activeTag = new URLSearchParams(window.location.search).get('filter.p.tag');
+    shopFilterForm.querySelectorAll('.shop-filter-button').forEach(function(button) {
+      button.classList.toggle('active', button.value === activeTag || (!activeTag && button.value === ''));
+    });
+  }
 </script>
 
 {% schema %}

@@ -22,7 +22,7 @@
       <!-- Layer 2: Center Image Card -->
       <div class="w-[180px] h-[240px] md:w-[240px] md:h-[320px] relative z-10 bg-sbg-offwhite border border-sbg-border/60 shadow-sm overflow-hidden select-none">
         {%- if section.settings.center_image != blank -%}
-          <img src="{{ section.settings.center_image | image_url: width: 600 }}" alt="{{ section.settings.center_image.alt | default: 'Atelier cowl detail' }}" class="w-full h-full object-cover">
+          <img src="{{ section.settings.center_image | image_url: width: 600 }}" alt="{{ section.settings.center_image.alt | default: 'Atelier cowl detail' | escape }}" width="600" height="800" loading="lazy" decoding="async" class="w-full h-full object-cover">
         {%- else -%}
           {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover opacity-70 bg-sbg-hover' }}
         {%- endif -%}
