@@ -71,7 +71,7 @@
         <div class="absolute inset-0 w-full h-full">
           <div id="hero-image-wrapper" class="hero-main-image-container relative w-full h-full transition-opacity duration-500">
             {%- if use_mock -%}
-              <img id="hero-main-img" src="{{ 'rrhero.png' | asset_url }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
+              <img id="hero-main-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
             {%- elsif current_variant.image -%}
               <img id="hero-main-img" src="{{ current_variant.image | image_url: width: 1200 }}" alt="{{ product_title }}" class="object-cover object-center w-full h-full">
             {%- else -%}
@@ -287,7 +287,7 @@
       <!-- Mobile Lookbook Carousel Image Hero -->
       <section class="relative w-full aspect-[3/4] bg-sbg-offwhite overflow-hidden">
         {%- if use_mock -%}
-          <img id="hero-mobile-img" src="{{ 'rrhero.png' | asset_url }}" alt="{{ product_title }}" class="object-cover w-full h-full">
+          <img id="hero-mobile-img" src="{{ 'buybox-white-front.jpg' | asset_url }}" alt="{{ product_title }}" class="object-cover w-full h-full">
         {%- elsif current_variant.image -%}
           <img id="hero-mobile-img" src="{{ current_variant.image | image_url: width: 800 }}" alt="{{ product_title }}" class="object-cover w-full h-full">
         {%- else -%}
@@ -543,8 +543,8 @@
     // Mock image arrays
     const mockImages = {
       'Black': {
-        'main': '{{ "rrhero.png" | asset_url }}',
-        'detail': '{{ "two.png" | asset_url }}'
+        'main': '{{ "buybox-white-front.jpg" | asset_url }}',
+        'detail': '{{ "buybox-white-motion.jpg" | asset_url }}'
       },
       'Red': {
         'main': '{{ "two.png" | asset_url }}',
@@ -643,9 +643,14 @@
     });
   {%- else -%}
     const productVariants = {{ product_to_show.variants | json }};
+    const editorialImages = [
+      '{{ "buybox-white-front.jpg" | asset_url }}',
+      '{{ "buybox-white-motion.jpg" | asset_url }}'
+    ];
     const productImages = [
+      ...editorialImages,
       {%- for image in product_to_show.images -%}
-        "{{ image | image_url: width: 1200 }}"{%- unless forloop.last -%},{%- endunless -%}
+        "{{ image | image_url: width: 1200 }}",
       {%- endfor -%}
     ];
 
