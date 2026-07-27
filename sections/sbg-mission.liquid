@@ -1,17 +1,8 @@
 {%- comment -%}
-  SBG Brand Mission section with grid line accents and infinite moving marquee banner
+  SBG Brand Mission section with grid line accents
 {%- endcomment -%}
 
 <style type="text/css">
-  @keyframes sg-ticker-slide {
-    0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(-50%, 0, 0); }
-  }
-  .sg-ticker-wrapper {
-    display: inline-flex;
-    animation: sg-ticker-slide 20s linear infinite;
-    width: max-content;
-  }
   .sg-mission-grid-bg {
     position: absolute;
     inset: 0;
@@ -39,17 +30,6 @@
     </span>
   </div>
 
-  <!-- Infinite Moving Marquee Banner (Thinner Height) -->
-  <div class="w-full bg-sbg-black py-1.5 overflow-hidden border-t border-sbg-black relative z-10">
-    <div class="sg-ticker-wrapper">
-      {%- assign marquee_text = section.settings.marquee_word | default: 'ONE FOR ALL' -%}
-      {%- for i in (1..24) -%}
-        <span class="inline-flex items-center mx-6 text-sbg-white text-[9px] md:text-[10px] font-bold tracking-[0.3em] font-body">
-          {{ marquee_text }} <span class="text-sbg-grey/50 ml-12">•</span>
-        </span>
-      {%- endfor -%}
-    </div>
-  </div>
 </section>
 
 {% schema %}
@@ -68,12 +48,6 @@
       "label": "Sub-label Text",
       "default": "Our Foundational Promise"
     },
-    {
-      "type": "text",
-      "id": "marquee_word",
-      "label": "Marquee Repeating Word",
-      "default": "ONE FOR ALL"
-    }
   ],
   "presets": [
     {
