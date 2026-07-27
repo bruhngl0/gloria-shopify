@@ -1,121 +1,85 @@
 {%- comment -%}
-  SBG Home page Cover Collage Hero with scroll down indicator
+  SBG full-bleed image hero with centered overlay text.
 {%- endcomment -%}
 
 <style type="text/css">
-  /* Fade & slide animations synced with Splash Screen Loader */
-  .hero-animate-left {
-    opacity: 0;
-    transform: translate3d(-40px, 40px, 0);
-    transition: opacity 1.4s ease-out, transform 1.4s ease-out;
-    transition-delay: 0.4s;
-    will-change: opacity, transform;
-  }
-  .sbg-loaded .hero-animate-left {
-    opacity: 0.85;
-    transform: translate3d(0, 0, 0);
-  }
-
   .hero-animate-center {
     opacity: 0;
-    transform: translate3d(0, 30px, 0);
-    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
-    transition-delay: 0.2s;
+    transform: scale(1.04);
+    transition: opacity 1.4s ease-out, transform 1.4s ease-out;
     will-change: opacity, transform;
   }
+
   .sbg-loaded .hero-animate-center {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+    transform: scale(1);
   }
 
-  .hero-animate-right {
-    opacity: 0;
-    transform: translate3d(40px, 40px, 0);
-    transition: opacity 1.4s ease-out, transform 1.4s ease-out;
-    transition-delay: 0.5s;
-    will-change: opacity, transform;
-  }
-  .sbg-loaded .hero-animate-right {
-    opacity: 0.85;
-    transform: translate3d(0, 0, 0);
-  }
-
+  .hero-animate-copy,
   .hero-animate-scroll {
     opacity: 0;
-    transition: opacity 1.2s ease-out;
-    transition-delay: 0.9s;
-    will-change: opacity;
+    transform: translateY(20px);
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+    transition-delay: 0.35s;
   }
+
+  .sbg-loaded .hero-animate-copy,
   .sbg-loaded .hero-animate-scroll {
     opacity: 1;
+    transform: translateY(0);
   }
 </style>
 
-<section class="relative w-full min-h-screen pt-20 flex items-center justify-center bg-sbg-white overflow-hidden select-none border-b border-sbg-border">
-  <!-- Top Dark Vignette overlay for Header legibility -->
-  <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/45 via-black/10 to-transparent z-30 pointer-events-none"></div>
-
-  <!-- Editorial Grid Background -->
-  <div class="absolute inset-0 bg-[linear-gradient(to_right,#F0F0F0_1px,transparent_1px),linear-gradient(to_bottom,#F0F0F0_1px,transparent_1px)] bg-[size:40px_40px] opacity-30 pointer-events-none"></div>
-
-  <!-- Center Image Collage (Symmetrical Staggered Triptych) -->
-  <div class="relative w-full h-[72vh] md:h-[65vh] max-w-5xl mx-auto flex items-center justify-center gap-0 md:gap-8 z-10 px-4">
-    
-    <!-- Left Card -->
-    <div class="hero-animate-left absolute left-4 top-2 md:relative md:left-auto md:top-auto w-[40%] sm:w-[25%] md:w-[24%] aspect-[3/4] border border-sbg-border/60 bg-sbg-offwhite z-0 shadow-sm md:shadow-md overflow-hidden md:mt-12 hover:scale-105 transition-transform duration-500">
-      {%- if section.settings.image_left != blank -%}
-        <img src="{{ section.settings.image_left | image_url: width: 600 }}" alt="{{ section.settings.image_left.alt | default: 'SBG campaign' }}" class="w-full h-full object-cover">
-      {%- else -%}
-        {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-sbg-hover object-cover opacity-50' }}
-      {%- endif -%}
-    </div>
-
-    <!-- Main Center Portrait Image Card -->
-    <div class="hero-animate-center relative w-[56%] sm:w-[45%] md:w-[42%] aspect-[3/4] border-2 border-sbg-black bg-sbg-offwhite z-10 shadow-md md:shadow-[10px_10px_0px_rgba(10,10,10,1)] overflow-hidden hover:scale-[1.02] transition-transform duration-500">
+<section class="relative isolate w-full min-h-screen overflow-hidden bg-sbg-black select-none border-b border-sbg-border">
+  <!-- Full-bleed hero image -->
+  <div class="absolute inset-0">
+    <div class="hero-animate-center absolute inset-0">
       {%- if section.settings.image_center != blank -%}
-        <img src="{{ section.settings.image_center | image_url: width: 800 }}" alt="{{ section.settings.image_center.alt | default: 'SBG silhouette campaign' }}" class="w-full h-full object-cover">
+        <img
+          src="{{ section.settings.image_center | image_url: width: 2400 }}"
+          alt="{{ section.settings.image_center.alt | default: section.settings.hero_title }}"
+          class="w-full h-full object-cover"
+        >
       {%- else -%}
-        {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-sbg-hover object-cover opacity-80' }}
+        <img
+          src="{{ 'rrhero.png' | asset_url }}"
+          alt="{{ section.settings.hero_title }}"
+          class="w-full h-full object-cover"
+        >
       {%- endif -%}
     </div>
+    <div class="absolute inset-0 bg-black/35"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/25"></div>
+  </div>
 
-    <!-- Right Card -->
-    <div class="hero-animate-right absolute right-4 bottom-2 md:relative md:right-auto md:top-auto w-[40%] sm:w-[25%] md:w-[24%] aspect-[3/4] border border-sbg-border/60 bg-sbg-offwhite z-0 shadow-sm md:shadow-md overflow-hidden md:mt-12 hover:scale-105 transition-transform duration-500">
-      {%- if section.settings.image_right != blank -%}
-        <img src="{{ section.settings.image_right | image_url: width: 600 }}" alt="{{ section.settings.image_right.alt | default: 'SBG lookbook' }}" class="w-full h-full object-cover">
-      {%- else -%}
-        {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-sbg-hover object-cover opacity-50' }}
+  <!-- Overlay copy -->
+  <div class="hero-animate-copy relative z-10 flex min-h-screen items-center justify-center px-6 text-center text-sbg-white">
+    <div class="max-w-3xl">
+      <p class="mb-5 text-[10px] md:text-xs font-semibold tracking-[0.35em] uppercase text-white/80">
+        {{ section.settings.top_label | default: 'BODY-TYPE INTENTIONAL FASHION' }}
+      </p>
+      <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-medium leading-[0.9] tracking-[0.08em] uppercase">
+        {{ section.settings.hero_title | default: 'ONE FOR ALL' }}
+      </h1>
+      {%- if section.settings.hero_subtitle != blank -%}
+        <p class="mx-auto mt-6 max-w-xl text-xs md:text-sm leading-relaxed tracking-[0.16em] uppercase text-white/85">
+          {{ section.settings.hero_subtitle }}
+        </p>
       {%- endif -%}
+      <a href="{{ section.settings.button_url | default: '/collections/all' }}" class="mt-9 inline-flex border border-white px-7 py-3 text-[10px] font-bold tracking-[0.25em] uppercase text-white transition-colors duration-300 hover:bg-white hover:text-sbg-black">
+        {{ section.settings.button_text | default: 'SHOP THE COLLECTION' }}
+      </a>
     </div>
   </div>
 
-  <!-- Bottom Title & Scroll Indicator -->
-  <div onclick="document.getElementById('sbg-buy-box')?.scrollIntoView({ behavior: 'smooth' })" class="hero-animate-scroll absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 cursor-pointer z-20 text-center w-full px-4">
-    <p class="text-[10px] md:text-xs tracking-[0.25em] font-semibold text-sbg-black uppercase select-none">
-      {{ section.settings.top_label | default: 'BODY-TYPE INTENTIONAL FASHION' }}
-    </p>
-    <div class="flex flex-col items-center space-y-2">
-      <span class="text-[8.5px] tracking-[0.2em] text-sbg-grey uppercase select-none">
-        {{ 'sections.cover_hero.explore_collection' | t }}
-      </span>
-      <div id="scroll-line" class="w-[1px] h-8 bg-sbg-black/60 transition-transform duration-1000"></div>
-    </div>
+  <!-- Scroll indicator -->
+  <div onclick="document.getElementById('sbg-buy-box')?.scrollIntoView({ behavior: 'smooth' })" class="hero-animate-scroll absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 cursor-pointer flex-col items-center space-y-2 text-center text-white">
+    <span class="text-[8.5px] tracking-[0.2em] uppercase text-white/75">
+      {{ 'sections.cover_hero.explore_collection' | t }}
+    </span>
+    <div class="h-8 w-px bg-white/70"></div>
   </div>
 </section>
-
-<script>
-  (function() {
-    const scrollLine = document.getElementById('scroll-line');
-    if (scrollLine) {
-      setInterval(() => {
-        scrollLine.style.transform = 'translateY(8px)';
-        setTimeout(() => {
-          scrollLine.style.transform = 'translateY(0)';
-        }, 900);
-      }, 1800);
-    }
-  })();
-</script>
 
 {% schema %}
 {
@@ -123,24 +87,37 @@
   "settings": [
     {
       "type": "image_picker",
-      "id": "image_left",
-      "label": "Left Collage Image"
-    },
-    {
-      "type": "image_picker",
       "id": "image_center",
-      "label": "Center Collage Image"
-    },
-    {
-      "type": "image_picker",
-      "id": "image_right",
-      "label": "Right Collage Image"
+      "label": "Hero Image"
     },
     {
       "type": "text",
       "id": "top_label",
-      "label": "Top Label Text",
+      "label": "Eyebrow Text",
       "default": "BODY-TYPE INTENTIONAL FASHION"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero Title",
+      "default": "ONE FOR ALL"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Hero Subtitle",
+      "default": "A signature silhouette designed around your proportions."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "SHOP THE COLLECTION"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button Link"
     }
   ],
   "presets": [
