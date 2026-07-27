@@ -106,7 +106,6 @@
     const mobileTrigger = document.getElementById('mobile-menu-trigger');
     const mobileClose = document.getElementById('mobile-menu-close');
     const mobileMenu = document.getElementById('MobileMenuOverlay');
-    let lastScrollY = window.scrollY;
 
     // Check if we are on Homepage/About page for background transparency
     const isOverlayPage = window.location.pathname === '/' || window.location.pathname === window.Shopify.routes.root || window.location.pathname.includes('/about');
@@ -138,18 +137,8 @@
         });
       }
 
-      // Hide / Reveal Header on Scroll
-      if (currentScrollY < 50) {
-        header.classList.remove('-translate-y-full');
-      } else {
-        if (lastScrollY > currentScrollY) {
-          header.classList.remove('-translate-y-full');
-        } else {
-          header.classList.add('-translate-y-full');
-        }
-      }
-
-      lastScrollY = currentScrollY;
+      // Keep the sticky header visible while scrolling in either direction.
+      header.classList.remove('-translate-y-full');
     }
 
     window.addEventListener('scroll', updateHeader, { passive: true });
