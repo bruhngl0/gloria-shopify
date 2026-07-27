@@ -32,9 +32,9 @@
   },
   "order": [
     "cover-hero",
+    "featured-product",
     "buy-box",
     "mission",
-    "fabric",
-    "featured-product"
+    "fabric"
   ]
 }
