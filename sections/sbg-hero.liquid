@@ -45,6 +45,13 @@
     opacity: 1;
     transform: scale(1);
   }
+
+  .vertical-product-title {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    opacity: 1;
+  }
 </style>
 
 <section id="sbg-buy-box" class="relative w-full border-b border-sbg-border bg-sbg-white select-none selection:bg-sbg-black selection:text-sbg-white">
@@ -55,7 +62,7 @@
       <div class="col-span-8 flex flex-col relative h-full bg-sbg-offwhite border-r border-sbg-border overflow-hidden group/center">
         <!-- Vertical product label -->
         <div class="absolute left-4 top-1/2 -translate-y-1/2 z-20 pointer-events-none">
-          <span class="hero-vertical-title font-display text-[18px] lg:text-[20px] font-bold tracking-[0.25em] uppercase whitespace-nowrap text-sbg-black origin-center">
+          <span class="vertical-product-title font-display text-[18px] lg:text-[20px] font-bold tracking-[0.25em] uppercase text-sbg-black">
             {{ section.settings.vertical_title | default: 'ONE FOR ALL' }}
           </span>
         </div>
