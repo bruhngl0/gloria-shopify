@@ -22,9 +22,14 @@
   <div class="sg-mission-grid-bg"></div>
   
   <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center pb-16 md:pb-24 relative z-10">
-    <p class="animate-text-words font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light tracking-wide leading-snug text-sbg-black max-w-4xl mx-auto">
-      "{{ section.settings.mission_text | default: 'We believe clothing should work for your body — not the other way around.' }}"
-    </p>
+    <h2 class="animate-text-words font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light tracking-wide leading-snug text-sbg-black max-w-4xl mx-auto">
+      {{ section.settings.mission_heading | default: "You weren't made to fit clothes, clothes were made to fit you." }}
+    </h2>
+    <div class="mt-8 max-w-2xl mx-auto space-y-5 text-xs md:text-sm tracking-wider leading-relaxed text-sbg-black/75">
+      <p>{{ section.settings.mission_text | default: 'Dressing for your body type starts here. At Styled by Gloria, we design body type intentional clothes made to fit your specific shape, not the compiled average. By creating pieces intentionally designed to flatter your shape, suddenly, clarity begins, disappointment is a distant memory and love for your body increases.' }}</p>
+      <p>{{ section.settings.mission_closing | default: "Because you're finally seeing yourself wear clothes, not letting clothes wear you." }}</p>
+      <p class="font-semibold text-sbg-black">{{ section.settings.mission_final | default: 'Love for yourself starts with intentionality, it starts with you.' }}</p>
+    </div>
     <span class="mt-6 md:mt-8 block text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase text-sbg-grey">
       {{ section.settings.sub_label | default: 'Our Foundational Promise' }}
     </span>
@@ -38,9 +43,27 @@
   "settings": [
     {
       "type": "textarea",
+      "id": "mission_heading",
+      "label": "Mission Heading",
+      "default": "You weren't made to fit clothes, clothes were made to fit you."
+    },
+    {
+      "type": "textarea",
       "id": "mission_text",
       "label": "Mission Text",
-      "default": "We believe clothing should work for your body — not the other way around."
+      "default": "Dressing for your body type starts here. At Styled by Gloria, we design body type intentional clothes made to fit your specific shape, not the compiled average. By creating pieces intentionally designed to flatter your shape, suddenly, clarity begins, disappointment is a distant memory and love for your body increases."
+    },
+    {
+      "type": "textarea",
+      "id": "mission_closing",
+      "label": "Mission Closing",
+      "default": "Because you're finally seeing yourself wear clothes, not letting clothes wear you."
+    },
+    {
+      "type": "textarea",
+      "id": "mission_final",
+      "label": "Mission Final Line",
+      "default": "Love for yourself starts with intentionality, it starts with you."
     },
     {
       "type": "text",

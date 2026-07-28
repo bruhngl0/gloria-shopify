@@ -31,7 +31,7 @@
 <footer class="bg-sbg-black border-t border-white/10 w-full overflow-hidden select-none font-body">
   {%- assign instagram_url = settings.social_instagram_link | default: 'https://instagram.com/styledbygloria_g' -%}
   {%- assign tiktok_url = settings.social_tiktok_link | default: 'https://tiktok.com/@styledbygloria_g' -%}
-  {%- assign youtube_url = settings.social_youtube_link | default: 'https://youtube.com' -%}
+  {%- assign youtube_url = settings.social_youtube_link | default: 'https://youtube.com/@styledbygloria_g' -%}
   <!-- 5-Column Grid Layout -->
   <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-white/10 border-b border-white/10 w-full">
 
@@ -127,7 +127,6 @@
 
       <div id="footer-menu2" class="footer-accordion-content md:block">
         <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
-          <li><a href="{{ routes.collections_url }}/bespoke" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Bespoke</a></li>
           <li><a href="/pages/shipping-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Shipping Policy</a></li>
           <li><a href="/pages/return-exchange" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Return & Exchange</a></li>
           <li><a href="/pages/privacy-policy" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Privacy Policy</a></li>
@@ -140,21 +139,18 @@
     <div class="col-span-1 md:col-span-2 p-6 md:p-8 flex flex-col md:space-y-4">
       <button onclick="toggleFooterAccordion('footer-menu3', 'chevron-menu3')" class="w-full flex items-center justify-between text-left md:hidden">
         <span class="font-body text-[10px] tracking-[0.18em] font-bold text-sbg-white/80">
-          03/ {{ section.settings.menu3_title | default: 'Collections' }}
+          03/ {{ section.settings.menu3_title | default: 'Popular Now' }}
         </span>
         <svg id="chevron-menu3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer-chevron h-4 w-4 text-sbg-white/70"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
 
       <span class="hidden md:inline font-body text-[10px] tracking-[0.18em] font-bold text-sbg-white/80">
-        03/ {{ section.settings.menu3_title | default: 'Collections' }}
+        03/ {{ section.settings.menu3_title | default: 'Popular Now' }}
       </span>
 
       <div id="footer-menu3" class="footer-accordion-content md:block">
         <ul class="font-body space-y-3 text-[11px] font-normal tracking-[0.12em] pb-2 pt-2 md:pt-0">
-          <li><a href="/products/the-cowl-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">The Cowl Dress</a></li>
-          <li><a href="/products/onyx-black-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Onyx Black Dress</a></li>
-          <li><a href="/products/crimson-red-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">Crimson Red Dress</a></li>
-          <li><a href="/products/french-blue-dress" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">French Blue Dress</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}" class="text-sbg-white/70 hover:text-white hover:underline underline-offset-4">One for All</a></li>
         </ul>
       </div>
     </div>

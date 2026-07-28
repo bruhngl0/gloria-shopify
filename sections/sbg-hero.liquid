@@ -9,15 +9,16 @@
   assign current_variant = product_to_show.selected_or_first_available_variant
   
   assign use_mock = false
+  assign written_product_description = "More than elegance and grace, the One for All dress was designed to flatter every body type. It was created to solve a problem most women know too well: falling in love with a dress, only to realize it doesn't look the same on them as it does on the model, even in the right size. It was never your body shape, it was the shape of the dress. This isn't simply a dress that fits. The combination of every cut, shape and proportion was designed to balance and compliment your natural shape. From the refined boat neckline that flatters the upper silhouette, to the softly flared sleeves that add elegance and balance at just the right length. The A-line skirt creates graceful movement while adding subtle volume through the lower half, bringing harmony across all body types. Thoughtfully designed to work with your natural shape, the One for All takes the guesswork out of getting dressed, so you can spend less time questioning your clothes and more time feeling confident in them."
   if product_to_show == blank or current_variant == blank
     assign use_mock = true
     assign product_title = "THE ONE FOR ALL DRESS"
     assign product_price = 18500
-    assign product_description = "HEAVYWEIGHT 280G STRETCH CREPE DRESS DESIGNED AROUND SPECIFIC BODY SHAPES. FEATURES AN ADJUSTABLE DRAPED NECK AND SIDE RUCHING FOR CUSTOM PROFILE CONTOURING."
+    assign product_description = written_product_description
   else
     assign product_title = product_to_show.title
     assign product_price = current_variant.price
-    assign product_description = product_to_show.description
+    assign product_description = section.settings.description | default: written_product_description
   endif
 -%}
 
@@ -854,6 +855,12 @@
       "type": "product",
       "id": "featured_product",
       "label": "Featured Product"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Product Description",
+      "default": "More than elegance and grace, the One for All dress was designed to flatter every body type. It was created to solve a problem most women know too well: falling in love with a dress, only to realize it doesn't look the same on them as it does on the model, even in the right size. It was never your body shape, it was the shape of the dress. This isn't simply a dress that fits. The combination of every cut, shape and proportion was designed to balance and compliment your natural shape. From the refined boat neckline that flatters the upper silhouette, to the softly flared sleeves that add elegance and balance at just the right length. The A-line skirt creates graceful movement while adding subtle volume through the lower half, bringing harmony across all body types. Thoughtfully designed to work with your natural shape, the One for All takes the guesswork out of getting dressed, so you can spend less time questioning your clothes and more time feeling confident in them."
     },
     {
       "type": "text",
