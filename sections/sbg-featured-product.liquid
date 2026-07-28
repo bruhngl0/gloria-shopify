@@ -7,12 +7,12 @@
   assign product_to_show = product | default: featured_product | default: collections.all.products.first
   
   assign use_mock = false
-  assign written_product_description = "More than elegance and grace, the One for All dress was designed to flatter every body type. It was created to solve a problem most women know too well: falling in love with a dress, only to realize it doesn't look the same on them as it does on the model, even in the right size. It was never your body shape, it was the shape of the dress. This isn't simply a dress that fits. The combination of every cut, shape and proportion was designed to balance and compliment your natural shape. From the refined boat neckline that flatters the upper silhouette, to the softly flared sleeves that add elegance and balance at just the right length. The A-line skirt creates graceful movement while adding subtle volume through the lower half, bringing harmony across all body types. Thoughtfully designed to work with your natural shape, the One for All takes the guesswork out of getting dressed, so you can spend less time questioning your clothes and more time feeling confident in them."
+  assign written_product_description = "Dressing for your body type starts here. At Styled by Gloria, we design body type intentional clothes made to fit your specific shape, not the compiled average. By creating pieces intentionally designed to flatter your shape, suddenly, clarity begins, disappointment is a distant memory and love for your body increases. Because you're finally seeing yourself wear clothes, not letting clothes wear you. Love for yourself starts with intentionality, it starts with you."
   if product_to_show == blank
     assign use_mock = true
     assign product_title = "THE ONE FOR ALL DRESS"
     assign product_image = 'buybox-white-front-optimized.jpg' | asset_url
-    assign product_desc = "A single dress engineered to honor a multitude of shapes. Made from our heavy stretch crepe, this piece features customizable ruching and a cowl neck that drapes to your exact proportions."
+    assign product_desc = written_product_description
     assign product_url = "/collections/all"
   else
     assign use_mock = false

@@ -54,7 +54,7 @@
   assign shop_variant = shop_product.selected_or_first_available_variant
   assign shop_title = shop_product.title | default: 'THE ONE FOR ALL DRESS'
   assign shop_price = shop_product.price | default: 18500
-  assign shop_description = shop_product.description | default: 'A signature silhouette designed around your proportions. Heavyweight stretch crepe with an adjustable draped neck and side ruching for a custom profile.'
+  assign shop_description = "More than elegance and grace, the One for All dress was designed to flatter every body type. It was created to solve a problem most women know too well: falling in love with a dress, only to realize it doesn't look the same on them as it does on the model, even in the right size. It was never your body shape, it was the shape of the dress. This isn't simply a dress that fits. The combination of every cut, shape and proportion was designed to balance and compliment your natural shape. From the refined boat neckline that flatters the upper silhouette, to the softly flared sleeves that add elegance and balance at just the right length. The A-line skirt creates graceful movement while adding subtle volume through the lower half, bringing harmony across all body types. Thoughtfully designed to work with your natural shape, the One for All takes the guesswork out of getting dressed, so you can spend less time questioning your clothes and more time feeling confident in them."
 -%}
 
 <section class="bg-sbg-white w-full py-16 md:py-24 border-b border-sbg-border/60 select-none">
@@ -76,9 +76,7 @@
         <span class="font-bold block">SHOP BY COLOR</span>
         <select name="filter.v.option.color" class="shop-filter-select border border-sbg-border/60 bg-sbg-white px-4 py-3 text-[8px] font-semibold tracking-widest text-sbg-grey uppercase focus:outline-none focus:border-sbg-black" aria-label="Shop by color">
           <option value="">SELECT COLOR</option>
-          <option value="black">BLACK</option>
-          <option value="red">RED</option>
-          <option value="baby-blue">BABY BLUE</option>
+          <option value="light-blue">LIGHT BLUE</option>
         </select>
       </div>
     </div>
@@ -94,8 +92,8 @@
         <div class="shop-image-placeholders grid grid-cols-4 gap-3 mt-4" aria-label="Product image placeholders">
           <img src="{{ 'buybox-white-front-optimized.jpg' | asset_url }}" alt="{{ shop_title | escape }} front view" width="1800" height="2700" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-black cursor-pointer">
           <img src="{{ 'buybox-white-motion-optimized.jpg' | asset_url }}" alt="{{ shop_title | escape }} motion view" width="1800" height="2700" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
-          <img src="{{ 'dress-red-front.jpg' | asset_url }}" alt="{{ shop_title | escape }} red view" width="1122" height="1402" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
-          <img src="{{ 'dress-blue-front.jpg' | asset_url }}" alt="{{ shop_title | escape }} blue view" width="1122" height="1402" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
+          <img src="{{ 'buybox-replacement-1.jpg' | asset_url }}" alt="{{ shop_title | escape }} alternate view" width="1280" height="1920" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
+          <img src="{{ 'buybox-replacement-2.jpg' | asset_url }}" alt="{{ shop_title | escape }} alternate view" width="1280" height="1920" loading="lazy" decoding="async" class="shop-thumbnail aspect-[4/5] w-full object-cover border border-sbg-border/60 cursor-pointer">
         </div>
         <div class="pt-8 px-1 space-y-1">
           <h2 class="font-display text-sm font-bold tracking-wide uppercase text-sbg-black">{{ shop_title }}</h2>
@@ -156,12 +154,11 @@
 
         <div class="border-t border-sbg-border/60 pt-8 space-y-6 text-xs tracking-wider leading-relaxed text-sbg-grey">
           <p>{{ shop_description | strip_html }}</p>
-          <p>Featuring a flexible cowl-inspired neckline that adapts to varying bust sizes and custom side-ruching that allows you to adjust the length and drape to match your proportions.</p>
         </div>
 
         <div class="border-t border-sbg-border/60 text-xs font-bold tracking-wider uppercase text-sbg-black">
           <details class="border-b border-sbg-border/60 py-5"><summary class="cursor-pointer">FABRIC &amp; CARE</summary><p class="pt-4 text-xs font-normal normal-case leading-relaxed text-sbg-grey">Heavyweight stretch crepe. Machine wash cold on gentle cycle and lay flat to dry.</p></details>
-          <details class="border-b border-sbg-border/60 py-5"><summary class="cursor-pointer">SHIPPING &amp; RETURNS</summary><p class="pt-4 text-xs font-normal normal-case leading-relaxed text-sbg-grey">Complimentary express shipping on orders over $250. Returns accepted within 14 days.</p></details>
+          <details class="border-b border-sbg-border/60 py-5"><summary class="cursor-pointer">SHIPPING &amp; RETURNS</summary><p class="pt-4 text-xs font-normal normal-case leading-relaxed text-sbg-grey">Orders are processed and packaged within 1-3 business days. Estimated delivery is 3-8 business days within Canada, 5-10 business days to the United States, and 10-21 business days worldwide, plus any customs time. Shipping is calculated at checkout, with free standard shipping on orders of $299 CAD or more. Returns or exchanges are accepted within 30 days of delivery; items must be unworn, unwashed, tagged, and in original packaging. Email info@styledbygloria.com with your order number to begin.</p></details>
           <details class="border-b border-sbg-border/60 py-5"><summary class="cursor-pointer">FIT &amp; CONSTRUCTION ADVICE</summary><p class="pt-4 text-xs font-normal normal-case leading-relaxed text-sbg-grey">Fits true to size. Adjustable ruching allows the silhouette to be tailored to your proportions.</p></details>
         </div>
       </div>

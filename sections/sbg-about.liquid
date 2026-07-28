@@ -41,22 +41,20 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center mb-24">
       
       <!-- Narrative Left Column -->
-      <div class="lg:col-span-7 space-y-8 text-sbg-grey text-center reveal-on-scroll" data-stagger-children="0.1">
+      <div class="lg:col-span-7 space-y-8 text-sbg-grey text-left reveal-on-scroll" data-stagger-children="0.1">
         <div class="space-y-6 stagger-item">
           <h2 class="font-display text-2xl md:text-3xl font-bold text-sbg-black uppercase tracking-[0.2em]">
             {{ section.settings.narrative_title | default: "The Origin Story" }}
           </h2>
-          <div class="w-12 h-[1px] bg-sbg-black/35 mx-auto"></div>
+          <div class="w-12 h-[1px] bg-sbg-black/35"></div>
           
           <div class="space-y-5 text-xs tracking-wider leading-relaxed text-sbg-black/80 font-normal italic">
             {%- if section.settings.narrative_text != blank -%}
               {{ section.settings.narrative_text }}
             {%- else -%}
               <p>Styled by Gloria &amp; Co. was born from a simple mission: to help people love their bodies more.</p>
-              <p>It began as a styling social media presence and service, where the founder Gloria posted videos styling strangers she met at the mall. What started as a leap of faith grew into a community, one that valued her honest, educational advice, and a practice serving clients who came to love their bodies a little more with every session.</p>
-              <p>By July 28, 2026, that social media presence and styling service had grown into something new: a clothing brand.</p>
+              <p>By July 28, 2026, that mission had grown into something new: a clothing brand.</p>
               <p>On the clothing brand side of the business, the mission stays exactly the same, to help people love their bodies more, but here we pursue it through body-type intentional fashion. That means clothes designed to flatter distinctive body types, not the compiled average, because you weren't made to fit clothes. Clothes should be made to fit you.</p>
-              <p>Today, Styled by Gloria &amp; Co. is three parts of one whole: the social media, the styling services, and the clothing brand all united under one mission. To help people love their bodies more.</p>
             {%- endif -%}
           </div>
         </div>
@@ -133,7 +131,7 @@
         </span>
         <div class="h-[1.5px] bg-sbg-gold mx-auto w-16"></div>
         <p class="font-display text-xl md:text-3xl font-light tracking-wide text-sbg-black italic max-w-2xl mx-auto leading-relaxed pt-2">
-          {{ section.settings.mission_quote | default: '"To educate, empower, and design for real silhouettes — helping every woman respect and love her body more."' }}
+          {{ section.settings.mission_quote | default: 'To help you love your body more.' }}
         </p>
         <div class="text-[9px] font-bold tracking-[0.25em] uppercase text-sbg-grey/85 pt-4">
           — Gloria G., Founder
@@ -260,7 +258,7 @@
       "type": "textarea",
       "id": "mission_quote",
       "label": "Mission Quote Content",
-      "default": "\"To educate, empower, and design for real silhouettes — helping every woman respect and love her body more.\""
+      "default": "To help you love your body more."
     }
   ],
   "blocks": [

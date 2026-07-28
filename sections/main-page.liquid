@@ -9,7 +9,12 @@
     </h1>
     <div class="h-[1px] w-16 bg-sbg-black mx-auto mb-12"></div>
     <div class="prose prose-sbg text-xs tracking-wider leading-relaxed text-sbg-grey uppercase-none">
-      {{ page.content }}
+      {%- assign policy_handles = 'shipping-policy,returns-exchanges,personal-styling-services-policy,privacy-policy,terms-of-service' | split: ',' -%}
+      {%- if policy_handles contains page.handle -%}
+        {% render 'sbg-policy-content', policy_key: page.handle %}
+      {%- else -%}
+        {{ page.content }}
+      {%- endif -%}
     </div>
   </div>
 </section>

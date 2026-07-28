@@ -9,7 +9,20 @@
   assign current_variant = product_to_show.selected_or_first_available_variant
   
   assign use_mock = false
-  assign written_product_description = "More than elegance and grace, the One for All dress was designed to flatter every body type. It was created to solve a problem most women know too well: falling in love with a dress, only to realize it doesn't look the same on them as it does on the model, even in the right size. It was never your body shape, it was the shape of the dress. This isn't simply a dress that fits. The combination of every cut, shape and proportion was designed to balance and compliment your natural shape. From the refined boat neckline that flatters the upper silhouette, to the softly flared sleeves that add elegance and balance at just the right length. The A-line skirt creates graceful movement while adding subtle volume through the lower half, bringing harmony across all body types. Thoughtfully designed to work with your natural shape, the One for All takes the guesswork out of getting dressed, so you can spend less time questioning your clothes and more time feeling confident in them."
+  assign has_color_option = false
+  assign has_size_option = false
+  if product_to_show != blank
+    for option in product_to_show.options_with_values
+      assign option_name_down = option.name | downcase
+      if option_name_down contains 'color'
+        assign has_color_option = true
+      endif
+      if option_name_down contains 'size'
+        assign has_size_option = true
+      endif
+    endfor
+  endif
+  assign written_product_description = "A graceful boat neckline, softly flared sleeves, and an A-line skirt—made to move with you, flatter your natural shape, and feel entirely yours."
   if product_to_show == blank or current_variant == blank
     assign use_mock = true
     assign product_title = "THE ONE FOR ALL DRESS"
@@ -121,7 +134,7 @@
               {{ product_title }} &mdash; <span id="sbg-desktop-price">{{ product_price | money }}</span>
             </p>
             <div class="text-[8.5px] tracking-wider text-sbg-grey normal-case leading-relaxed">
-              {{ product_description | strip_html | truncatewords: 25 }}
+              {{ product_description | strip_html }}
             </div>
           </div>
         </div>
@@ -132,16 +145,14 @@
             <div class="space-y-2 variant-option-group stagger-item" data-option-index="0">
               <div class="flex justify-between items-center">
                 <span class="text-[8px] tracking-[0.2em] font-bold text-sbg-black uppercase">
-                  COLORWAY
+                  COLORS
                 </span>
                 <span id="mock-desktop-color-label" class="text-[8px] tracking-[0.2em] text-sbg-grey uppercase">
-                  Onyx Black
+                  Light Blue
                 </span>
               </div>
               <div class="flex flex-wrap gap-1.5">
-                <button type="button" onclick="selectMockOption(0, 'Black', this)" class="sbg-swatch w-5.5 h-5.5 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none ring-1 ring-offset-2 ring-sbg-black border-sbg-black" style="background-color: #0A0A0A;" title="Black" data-value="Black"></button>
-                <button type="button" onclick="selectMockOption(0, 'Red', this)" class="sbg-swatch w-5.5 h-5.5 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none hover:scale-110" style="background-color: #A62626;" title="Red" data-value="Red"></button>
-                <button type="button" onclick="selectMockOption(0, 'Baby Blue', this)" class="sbg-swatch w-5.5 h-5.5 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none hover:scale-110" style="background-color: #5F85A6;" title="Baby Blue" data-value="Baby Blue"></button>
+                <button type="button" onclick="selectMockOption(0, 'Light Blue', this)" class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center border-sbg-black bg-sbg-black text-sbg-white font-bold" title="Light Blue" data-value="Light Blue">LIGHT BLUE</button>
               </div>
             </div>
 
@@ -151,9 +162,6 @@
                 <span class="text-[8px] tracking-[0.2em] font-bold text-sbg-black uppercase">
                   SELECT SIZE
                 </span>
-                <button type="button" onclick="openSizingChart()" class="text-[8px] tracking-[0.2em] text-sbg-grey hover:text-sbg-black underline uppercase">
-                  SIZING CHART
-                </button>
               </div>
               <div class="flex flex-wrap gap-1.5">
                 <button type="button" onclick="selectMockOption(1, 'XS', this)" class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black" data-value="XS">XS</button>
@@ -176,20 +184,19 @@
             <input type="hidden" name="utf8" value="✓">
             <!-- Hidden real variant selector -->
             <input type="hidden" name="id" id="sbg-desktop-variant-input" value="{{ current_variant.id }}">
+            <input type="hidden" name="properties[Colorway]" id="sbg-desktop-color-property" value="">
+            <input type="hidden" name="properties[Size]" id="sbg-desktop-size-property" value="">
 
             <!-- Size / Color swatches custom rendering -->
             {%- for option in product_to_show.options_with_values -%}
               {%- assign option_name_down = option.name | downcase -%}
-              
-              <div class="space-y-2 variant-option-group stagger-item" data-option-index="{{ forloop.index0 }}">
+              {%- unless option_name_down == 'title' -%}
+              <div class="space-y-2 variant-option-group stagger-item" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option.name | escape }}">
                 <div class="flex justify-between items-center">
                   <span class="text-[8px] tracking-[0.2em] font-bold text-sbg-black uppercase">
                     {{ option.name }}
                   </span>
                   {%- if option_name_down contains 'size' -%}
-                    <button type="button" onclick="openSizingChart()" class="text-[8px] tracking-[0.2em] text-sbg-grey hover:text-sbg-black underline uppercase">
-                      SIZING CHART
-                    </button>
                   {%- endif -%}
                 </div>
 
@@ -207,12 +214,12 @@
                           assign bg_color = '#5F85A6'
                         endif
                       -%}
-                      <button type="button" 
-                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)" 
-                        class="sbg-swatch w-5.5 h-5.5 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none {% if option.selected_value == value %}ring-1 ring-offset-2 ring-sbg-black border-sbg-black{% else %}hover:scale-110{% endif %}" 
-                        style="background-color: {{ bg_color }};" 
+                      <button type="button"
+                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)"
+                        class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black{% endif %}"
                         title="{{ value | escape }}"
                         data-value="{{ value | escape }}">
+                        {{ value | upcase }}
                       </button>
                     {%- else -%}
                       <button type="button" 
@@ -225,7 +232,12 @@
                   {%- endfor -%}
                 </div>
               </div>
+              {%- endunless -%}
             {%- endfor -%}
+
+            {%- unless has_color_option or has_size_option -%}
+              <p class="text-[9px] tracking-wider text-sbg-grey uppercase">Color and size selections will appear here once product variants are configured.</p>
+            {%- endunless -%}
 
             <!-- Submit Button -->
             <button type="submit" id="sbg-desktop-add-to-bag" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center stagger-item">
@@ -236,36 +248,13 @@
 
         <!-- Product Details Accordion -->
         <div class="sbg-accordion border-t border-sbg-border mt-8 w-full reveal-on-scroll" data-stagger-children="0.1">
-          <!-- Item 1 -->
-          <div class="border-b border-sbg-border stagger-item">
-            <button type="button" onclick="toggleAccordion('sbg-acc-fabric')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
-              <span>Fabric & Care</span>
-              <svg id="sbg-acc-fabric-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div id="sbg-acc-fabric" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
-              Heavyweight stretch crepe (280 g/m²). Composition: 58% spandex, 42% rayon. Offers high recovery and smoothing compression. Machine wash cold on gentle cycle, lay flat to dry. Do not bleach. Cool iron if needed.
-            </div>
-          </div>
-
-          <!-- Item 2 -->
           <div class="border-b border-sbg-border stagger-item">
             <button type="button" onclick="toggleAccordion('sbg-acc-shipping')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
               <span>Shipping & Returns</span>
               <svg id="sbg-acc-shipping-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div id="sbg-acc-shipping" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
-              Complimentary express shipping on orders over $250. Orders are processed within 1-2 business days. Returns are accepted within 14 days of delivery for store credit or exchange. Items must be unworn and in original packaging.
-            </div>
-          </div>
-
-          <!-- Item 3 -->
-          <div class="border-b border-sbg-border stagger-item">
-            <button type="button" onclick="toggleAccordion('sbg-acc-fit')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
-              <span>Fit & Construction Advice</span>
-              <svg id="sbg-acc-fit-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div id="sbg-acc-fit" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
-              Features a double-lined bodice for maximum smoothing and drape. The side ruching is highly adjustable: pull it tight to raise the hem and create dynamic draping, or loosen it for a longer, sleek columnar silhouette. Fits true to size; if you are in between sizes, choose your size based on your hip measurement.
+              Orders are processed and packaged within 1-3 business days. Estimated delivery is 3-8 business days within Canada, 5-10 business days to the United States, and 10-21 business days worldwide, plus any customs time. Shipping is calculated at checkout, with free standard shipping on orders of $299 CAD or more. Returns or exchanges are accepted within 30 days of delivery; items must be unworn, unwashed, tagged, and in original packaging. Email info@styledbygloria.com with your order number to begin.
             </div>
           </div>
         </div>
@@ -309,7 +298,7 @@
             </span>
           </div>
           <div class="text-[9px] tracking-[0.2em] text-sbg-grey uppercase leading-relaxed">
-            {{ product_description | strip_html | truncatewords: 25 }}
+            {{ product_description | strip_html }}
           </div>
         </div>
 
@@ -318,13 +307,11 @@
             <!-- Mock Color Option -->
             <div class="space-y-2 variant-option-group" data-option-index="0">
               <div class="flex justify-between items-center text-[8px] tracking-[0.2em]">
-                <span class="font-bold text-sbg-black uppercase">COLORWAY</span>
-                <span id="mock-mobile-color-label" class="text-sbg-grey uppercase">Onyx Black</span>
+                <span class="font-bold text-sbg-black uppercase">COLORS</span>
+                <span id="mock-mobile-color-label" class="text-sbg-grey uppercase">Light Blue</span>
               </div>
               <div class="flex items-center space-x-2.5">
-                <button type="button" onclick="selectMockOption(0, 'Black', this)" class="sbg-swatch w-6 h-6 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none ring-1 ring-offset-2 ring-sbg-black border-sbg-black" style="background-color: #0A0A0A;" data-value="Black"></button>
-                <button type="button" onclick="selectMockOption(0, 'Red', this)" class="sbg-swatch w-6 h-6 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none" style="background-color: #A62626;" data-value="Red"></button>
-                <button type="button" onclick="selectMockOption(0, 'Baby Blue', this)" class="sbg-swatch w-6 h-6 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none" style="background-color: #5F85A6;" data-value="Baby Blue"></button>
+                <button type="button" onclick="selectMockOption(0, 'Light Blue', this)" class="sbg-button-option h-8 px-3 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center border-sbg-black bg-sbg-black text-sbg-white font-bold" data-value="Light Blue">LIGHT BLUE</button>
               </div>
             </div>
 
@@ -332,7 +319,6 @@
             <div class="space-y-2">
               <div class="flex justify-between items-center text-[8px] tracking-[0.2em]">
                 <span class="font-bold text-sbg-black uppercase">SELECT SIZE</span>
-                <button type="button" onclick="openSizingChart()" class="text-sbg-grey underline uppercase">SIZING CHART</button>
               </div>
               <div class="flex gap-1.5">
                 <button type="button" onclick="selectMockOption(1, 'XS', this)" class="sbg-button-option h-8 flex-1 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center min-w-[32px] border-sbg-border bg-sbg-white text-sbg-black" data-value="XS">XS</button>
@@ -355,16 +341,17 @@
             <input type="hidden" name="form_type" value="product">
             <input type="hidden" name="utf8" value="✓">
             <input type="hidden" name="id" id="sbg-mobile-variant-input" value="{{ current_variant.id }}">
+            <input type="hidden" name="properties[Colorway]" id="sbg-mobile-color-property" value="">
+            <input type="hidden" name="properties[Size]" id="sbg-mobile-size-property" value="">
 
             <!-- Size / Color swatches mobile custom rendering -->
             {%- for option in product_to_show.options_with_values -%}
               {%- assign option_name_down = option.name | downcase -%}
-              
-              <div class="space-y-2 variant-option-group" data-option-index="{{ forloop.index0 }}">
+              {%- unless option_name_down == 'title' -%}
+              <div class="space-y-2 variant-option-group" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option.name | escape }}">
                 <div class="flex justify-between items-center text-[8px] tracking-[0.2em]">
                   <span class="font-bold text-sbg-black uppercase">{{ option.name }}</span>
                   {%- if option_name_down contains 'size' -%}
-                    <button type="button" onclick="openSizingChart()" class="text-sbg-grey underline uppercase">SIZING CHART</button>
                   {%- endif -%}
                 </div>
 
@@ -382,11 +369,11 @@
                           assign bg_color = '#5F85A6'
                         endif
                       -%}
-                      <button type="button" 
-                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)" 
-                        class="sbg-swatch w-6 h-6 rounded-full border border-sbg-border transition-all flex items-center justify-center focus:outline-none {% if option.selected_value == value %}ring-1 ring-offset-2 ring-sbg-black border-sbg-black{% endif %}" 
-                        style="background-color: {{ bg_color }};"
+                      <button type="button"
+                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)"
+                        class="sbg-button-option h-8 px-3 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black{% endif %}"
                         data-value="{{ value | escape }}">
+                        {{ value | upcase }}
                       </button>
                     {%- else -%}
                       <button type="button" 
@@ -399,7 +386,12 @@
                   {%- endfor -%}
                 </div>
               </div>
+              {%- endunless -%}
             {%- endfor -%}
+
+            {%- unless has_color_option or has_size_option -%}
+              <p class="text-[9px] tracking-wider text-sbg-grey uppercase">Color and size selections will appear here once product variants are configured.</p>
+            {%- endunless -%}
 
             <div class="pt-2">
               <button type="submit" id="sbg-mobile-add-to-bag" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white flex items-center justify-center">
@@ -411,38 +403,16 @@
 
         <!-- Mobile Product Details Accordion -->
         <div class="sbg-accordion border-t border-sbg-border mt-8 w-full">
-          <!-- Item 1 -->
-          <div class="border-b border-sbg-border">
-            <button type="button" onclick="toggleAccordion('sbg-m-acc-fabric')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
-              <span>Fabric & Care</span>
-              <svg id="sbg-m-acc-fabric-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div id="sbg-m-acc-fabric" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
-              Heavyweight stretch crepe (280 g/m²). Composition: 58% spandex, 42% rayon. Offers high recovery and smoothing compression. Machine wash cold on gentle cycle, lay flat to dry. Do not bleach. Cool iron if needed.
-            </div>
-          </div>
-
-          <!-- Item 2 -->
           <div class="border-b border-sbg-border">
             <button type="button" onclick="toggleAccordion('sbg-m-acc-shipping')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
               <span>Shipping & Returns</span>
               <svg id="sbg-m-acc-shipping-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div id="sbg-m-acc-shipping" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
-              Complimentary express shipping on orders over $250. Orders are processed within 1-2 business days. Returns are accepted within 14 days of delivery for store credit or exchange. Items must be unworn and in original packaging.
+              Orders are processed and packaged within 1-3 business days. Estimated delivery is 3-8 business days within Canada, 5-10 business days to the United States, and 10-21 business days worldwide, plus any customs time. Shipping is calculated at checkout, with free standard shipping on orders of $299 CAD or more. Returns or exchanges are accepted within 30 days of delivery; items must be unworn, unwashed, tagged, and in original packaging. Email info@styledbygloria.com with your order number to begin.
             </div>
           </div>
 
-          <!-- Item 3 -->
-          <div class="border-b border-sbg-border">
-            <button type="button" onclick="toggleAccordion('sbg-m-acc-fit')" class="w-full py-4 flex justify-between items-center text-xs tracking-wider uppercase text-sbg-black font-semibold text-left focus:outline-none">
-              <span>Fit & Construction Advice</span>
-              <svg id="sbg-m-acc-fit-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform duration-300"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div id="sbg-m-acc-fit" class="hidden pb-4 text-[10px] tracking-wider text-sbg-grey uppercase leading-relaxed">
-              Features a double-lined bodice for maximum smoothing and drape. The side ruching is highly adjustable: pull it tight to raise the hem and create dynamic draping, or loosen it for a longer, sleek columnar silhouette. Fits true to size; if you are in between sizes, choose your size based on your hip measurement.
-            </div>
-          </div>
         </div>
       </section>
     </div>
@@ -538,26 +508,16 @@
   {%- if use_mock -%}
     // Mock image arrays
     const mockImages = {
-      'Black': {
-        'main': '{{ "buybox-white-front-optimized.jpg" | asset_url }}',
-        'detail': '{{ "buybox-white-motion-optimized.jpg" | asset_url }}'
-      },
-      'Red': {
-        'main': '{{ "buybox-white-front-optimized.jpg" | asset_url }}',
-        'detail': '{{ "buybox-white-motion-optimized.jpg" | asset_url }}'
-      },
-      'Baby Blue': {
+      'Light Blue': {
         'main': '{{ "buybox-white-front-optimized.jpg" | asset_url }}',
         'detail': '{{ "buybox-white-motion-optimized.jpg" | asset_url }}'
       }
     };
     const mockColorLabels = {
-      'Black': 'Onyx Black',
-      'Red': 'Crimson Red',
-      'Baby Blue': 'French Blue'
+      'Light Blue': 'Light Blue'
     };
-    const mockColors = ['Black', 'Red', 'Baby Blue'];
-    let mockActiveColor = 'Black';
+    const mockColors = ['Light Blue'];
+    let mockActiveColor = 'Light Blue';
     let mockIsDetail = false;
 
     window.selectMockOption = function(optionIdx, value, btn) {
@@ -568,7 +528,7 @@
         // Update Swatches highlight
         const container = btn.closest('.variant-option-group');
         if (container) {
-          container.querySelectorAll('.sbg-swatch').forEach(sw => {
+          container.querySelectorAll('.sbg-swatch, .sbg-button-option').forEach(sw => {
             sw.classList.remove('ring-1', 'ring-offset-2', 'ring-sbg-black', 'border-sbg-black');
             sw.classList.add('hover:scale-110');
           });
@@ -639,6 +599,7 @@
     });
   {%- else -%}
     const productVariants = {{ product_to_show.variants | json }};
+    const productOptionNames = {{ product_to_show.options | json }};
     const editorialImages = [
       '{{ "buybox-white-front-optimized.jpg" | asset_url }}',
       '{{ "buybox-white-motion-optimized.jpg" | asset_url }}'
@@ -652,6 +613,53 @@
     ];
 
     let currentImageIndex = 0;
+
+    function updateOrderProperties() {
+      const colorIndex = productOptionNames.findIndex(name => name.toLowerCase().includes('color'));
+      const sizeIndex = productOptionNames.findIndex(name => name.toLowerCase().includes('size'));
+      const colorValue = colorIndex > -1 ? currentOptionValues[colorIndex] : '';
+      const sizeValue = sizeIndex > -1 ? currentOptionValues[sizeIndex] : '';
+      document.querySelectorAll('[id$="-color-property"]').forEach(input => { input.value = colorValue; });
+      document.querySelectorAll('[id$="-size-property"]').forEach(input => { input.value = sizeValue; });
+    }
+
+    function updateVariantState(matchingVariant) {
+      const desktopBtnText = document.getElementById('sbg-desktop-button-text');
+      const mobileBtnText = document.getElementById('sbg-mobile-button-text');
+      const desktopBtn = document.getElementById('sbg-desktop-add-to-bag');
+      const mobileBtn = document.getElementById('sbg-mobile-add-to-bag');
+      if (!desktopBtn || !mobileBtn) return;
+
+      if (!matchingVariant) {
+        document.querySelectorAll('[id$="-variant-input"]').forEach(input => { input.value = ''; });
+        desktopBtnText.innerText = 'SELECT AVAILABLE OPTIONS';
+        mobileBtnText.innerText = 'SELECT AVAILABLE OPTIONS';
+        desktopBtn.disabled = true;
+        mobileBtn.disabled = true;
+        desktopBtn.classList.add('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
+        mobileBtn.classList.add('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
+        return;
+      }
+
+      const formattedPrice = window.Shopify.formatMoney ? window.Shopify.formatMoney(matchingVariant.price) : `$${(matchingVariant.price / 100).toFixed(2)}`;
+      document.getElementById('sbg-desktop-price').innerText = formattedPrice;
+      document.getElementById('sbg-mobile-price').innerText = formattedPrice;
+      const availableText = matchingVariant.available ? `ADD TO BAG — ${formattedPrice}` : 'OUT OF STOCK';
+      desktopBtnText.innerText = availableText;
+      mobileBtnText.innerText = availableText;
+      desktopBtn.disabled = !matchingVariant.available;
+      mobileBtn.disabled = !matchingVariant.available;
+      desktopBtn.classList.toggle('bg-sbg-offwhite', !matchingVariant.available);
+      desktopBtn.classList.toggle('text-sbg-grey', !matchingVariant.available);
+      desktopBtn.classList.toggle('cursor-not-allowed', !matchingVariant.available);
+      desktopBtn.classList.toggle('bg-sbg-black', matchingVariant.available);
+      desktopBtn.classList.toggle('text-sbg-white', matchingVariant.available);
+      mobileBtn.classList.toggle('bg-sbg-offwhite', !matchingVariant.available);
+      mobileBtn.classList.toggle('text-sbg-grey', !matchingVariant.available);
+      mobileBtn.classList.toggle('cursor-not-allowed', !matchingVariant.available);
+      mobileBtn.classList.toggle('bg-sbg-black', matchingVariant.available);
+      mobileBtn.classList.toggle('text-sbg-white', matchingVariant.available);
+    }
 
     function selectOption(optionIndex, value, buttonEl) {
       currentOptionValues[optionIndex] = value;
@@ -677,7 +685,7 @@
 
       // Resolve variant based on options
       const matchingVariant = productVariants.find(variant => {
-        return variant.options.every((optValue, idx) => {
+        return (variant.options || []).length === currentOptionValues.length && (variant.options || []).every((optValue, idx) => {
           return optValue === currentOptionValues[idx];
         });
       });
@@ -687,38 +695,9 @@
         document.getElementById('sbg-desktop-variant-input').value = matchingVariant.id;
         document.getElementById('sbg-mobile-variant-input').value = matchingVariant.id;
 
-        // Update Prices
-        const formattedPrice = window.Shopify.formatMoney ? window.Shopify.formatMoney(matchingVariant.price) : `$${(matchingVariant.price / 100).toFixed(2)}`;
-        document.getElementById('sbg-desktop-price').innerText = formattedPrice;
-        document.getElementById('sbg-mobile-price').innerText = formattedPrice;
-
-        // Update Add to bag texts
-        const desktopBtnText = document.getElementById('sbg-desktop-button-text');
-        const mobileBtnText = document.getElementById('sbg-mobile-button-text');
-        const desktopBtn = document.getElementById('sbg-desktop-add-to-bag');
-        const mobileBtn = document.getElementById('sbg-mobile-add-to-bag');
-
-        if (matchingVariant.available) {
-          desktopBtnText.innerText = `ADD TO BAG — ${formattedPrice}`;
-          mobileBtnText.innerText = `ADD TO BAG — ${formattedPrice}`;
-          desktopBtn.disabled = false;
-          mobileBtn.disabled = false;
-          desktopBtn.classList.remove('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
-          desktopBtn.classList.add('bg-sbg-black', 'text-sbg-white');
-          mobileBtn.classList.remove('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
-          mobileBtn.classList.add('bg-sbg-black', 'text-sbg-white');
-        } else {
-          desktopBtnText.innerText = 'OUT OF STOCK';
-          mobileBtnText.innerText = 'OUT OF STOCK';
-          desktopBtn.disabled = true;
-          mobileBtn.disabled = true;
-          desktopBtn.classList.add('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
-          desktopBtn.classList.remove('bg-sbg-black', 'text-sbg-white');
-          mobileBtn.classList.add('bg-sbg-offwhite', 'text-sbg-grey', 'cursor-not-allowed', 'border-sbg-border');
-          mobileBtn.classList.remove('bg-sbg-black', 'text-sbg-white');
-        }
-
+        updateOrderProperties();
       }
+      updateVariantState(matchingVariant);
     }
 
     function syncOptionUI(optionIndex, value) {
@@ -800,10 +779,16 @@
 
         const variantId = form.querySelector('input[name="id"]').value;
 
+        const properties = {};
+        form.querySelectorAll('input[name^="properties["]').forEach(input => {
+          const propertyName = input.name.match(/^properties\[(.*)\]$/);
+          if (propertyName && input.value) properties[propertyName[1]] = input.value;
+        });
+
         fetch(window.Shopify.routes.root + 'cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
+          body: JSON.stringify({ items: [{ id: Number(variantId), quantity: 1, properties }] })
         })
         .then(res => res.json())
         .then(item => {
@@ -826,6 +811,8 @@
       const mobileForm = document.getElementById('sbg-product-form-mobile');
       if (desktopForm) desktopForm.addEventListener('submit', handleFormSubmit);
       if (mobileForm) mobileForm.addEventListener('submit', handleFormSubmit);
+      updateOrderProperties();
+      updateVariantState(productVariants.find(variant => variant.id === Number(document.getElementById('sbg-desktop-variant-input').value)));
     });
   {%- endif -%}
 
@@ -860,7 +847,7 @@
       "type": "textarea",
       "id": "description",
       "label": "Product Description",
-      "default": "More than elegance and grace, the One for All dress was designed to flatter every body type. It was created to solve a problem most women know too well: falling in love with a dress, only to realize it doesn't look the same on them as it does on the model, even in the right size. It was never your body shape, it was the shape of the dress. This isn't simply a dress that fits. The combination of every cut, shape and proportion was designed to balance and compliment your natural shape. From the refined boat neckline that flatters the upper silhouette, to the softly flared sleeves that add elegance and balance at just the right length. The A-line skirt creates graceful movement while adding subtle volume through the lower half, bringing harmony across all body types. Thoughtfully designed to work with your natural shape, the One for All takes the guesswork out of getting dressed, so you can spend less time questioning your clothes and more time feeling confident in them."
+      "default": "A graceful boat neckline, softly flared sleeves, and an A-line skirt—made to move with you, flatter your natural shape, and feel entirely yours."
     },
     {
       "type": "text",

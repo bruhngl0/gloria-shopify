@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "sbg-policy-page", "settings": { "policy_key": "styling" } }
+  },
+  "order": ["main"]
+}
