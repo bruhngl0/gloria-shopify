@@ -29,6 +29,9 @@
 </style>
 
 <footer class="bg-sbg-black border-t border-white/10 w-full overflow-hidden select-none font-body">
+  {%- assign instagram_url = settings.social_instagram_link | default: 'https://instagram.com/styledbygloria_g' -%}
+  {%- assign tiktok_url = settings.social_tiktok_link | default: 'https://tiktok.com/@styledbygloria_g' -%}
+  {%- assign youtube_url = settings.social_youtube_link | default: 'https://youtube.com' -%}
   <!-- 5-Column Grid Layout -->
   <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-white/10 border-b border-white/10 w-full">
 
@@ -47,16 +50,10 @@
         <h2 class="font-display text-xl md:text-3xl font-bold tracking-[0.2em] uppercase text-sbg-white mb-4">
           {{ section.settings.brand_title | default: shop.name }}
         </h2>
-        <p class="font-body text-[10px] tracking-[0.15em] leading-relaxed uppercase text-sbg-white/80">
-          {{ section.settings.brand_address | newline_to_br }}
-        </p>
       </div>
 
       <!-- Mobile Collapsible Content -->
       <div id="footer-brand" class="footer-accordion-content md:hidden space-y-6">
-        <p class="font-body text-[10px] tracking-[0.15em] leading-relaxed uppercase text-sbg-white/80 pt-2">
-          {{ section.settings.brand_address | newline_to_br }}
-        </p>
         <div class="space-y-2 pb-2">
           <p class="font-body text-[9px] font-bold tracking-[0.2em] uppercase text-sbg-white/50">
             {{ 'general.social.follow_us' | t }}
@@ -67,11 +64,9 @@
                 <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M3 4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.11-.9-2-2-2H3zm18 4.75L12 14.12 3 8.75V6l9 5.38L21 6v2.75z"/></svg>
               </a>
             {%- endif -%}
-            {%- if settings.social_instagram_link != blank -%}
-              <a href="{{ settings.social_instagram_link }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="{{ 'general.accessibility.instagram_profile' | t }}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-              </a>
-            {%- endif -%}
+            <a href="{{ instagram_url }}" target="_blank" rel="noopener noreferrer" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg></a>
+            <a href="{{ tiktok_url }}" target="_blank" rel="noopener noreferrer" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M15.5 3h3.1c.3 1.7 1.3 3 2.9 3.7v3.2c-1.1-.1-2.1-.4-3-.9v6.1c0 3.6-2.5 5.9-6 5.9-3.2 0-5.5-2.1-5.5-5.1 0-3.2 2.6-5.4 6.1-5.4.4 0 .8 0 1.1.1v3.2c-.4-.1-.7-.2-1.1-.2-1.5 0-2.6.9-2.6 2.2 0 1.1.8 1.9 2 1.9 1.4 0 2.4-1 2.4-2.8V3z"/></svg></a>
+            <a href="{{ youtube_url }}" target="_blank" rel="noopener noreferrer" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a>
           </div>
         </div>
       </div>
@@ -87,11 +82,9 @@
               <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M3 4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.11-.9-2-2-2H3zm18 4.75L12 14.12 3 8.75V6l9 5.38L21 6v2.75z"/></svg>
             </a>
           {%- endif -%}
-          {%- if settings.social_instagram_link != blank -%}
-            <a href="{{ settings.social_instagram_link }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Instagram Profile">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            </a>
-          {%- endif -%}
+          <a href="{{ instagram_url }}" target="_blank" rel="noopener noreferrer" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg></a>
+          <a href="{{ tiktok_url }}" target="_blank" rel="noopener noreferrer" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M15.5 3h3.1c.3 1.7 1.3 3 2.9 3.7v3.2c-1.1-.1-2.1-.4-3-.9v6.1c0 3.6-2.5 5.9-6 5.9-3.2 0-5.5-2.1-5.5-5.1 0-3.2 2.6-5.4 6.1-5.4.4 0 .8 0 1.1.1v3.2c-.4-.1-.7-.2-1.1-.2-1.5 0-2.6.9-2.6 2.2 0 1.1.8 1.9 2 1.9 1.4 0 2.4-1 2.4-2.8V3z"/></svg></a>
+          <a href="{{ youtube_url }}" target="_blank" rel="noopener noreferrer" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a>
         </div>
       </div>
     </div>
@@ -181,19 +174,26 @@
         </h3>
       </div>
 
-      <div id="footer-newsletter" class="footer-accordion-content md:block pt-2">
-        <div class="flex space-x-5 pb-2">
-          {%- if section.settings.email_address != blank -%}
-            <a href="mailto:{{ section.settings.email_address }}" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="{{ 'general.accessibility.email_newsletter' | t }}">
-              <svg viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7"><path d="M3 4c-1.11 0-2 .89-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.11-.9-2-2-2H3zm18 4.75L12 14.12 3 8.75V6l9 5.38L21 6v2.75z"/></svg>
-            </a>
+      <div id="footer-newsletter" class="footer-accordion-content md:block pt-2 w-full text-left">
+        <p class="text-[10px] tracking-[0.16em] leading-relaxed uppercase text-sbg-white/70 mb-4">
+          Sign up for our newsletter and offers
+        </p>
+        {%- form 'customer', id: 'FooterNewsletterForm', class: 'space-y-3 mb-6 w-full' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="text-[10px] tracking-wider text-sbg-white/80">Thanks for signing up.</p>
+          {%- else -%}
+            <div class="flex w-full flex-col justify-start sm:flex-row gap-2">
+              <label class="sr-only" for="FooterNewsletterEmail">Email address</label>
+              <input id="FooterNewsletterEmail" type="email" name="contact[email]" value="{{ form.email }}" required autocomplete="email" placeholder="Your email address" class="min-w-0 flex-1 border border-white/30 bg-transparent px-3 py-3 text-[10px] tracking-wider text-sbg-white placeholder:text-sbg-white/50 focus:border-sbg-white focus:outline-none">
+              <button type="submit" class="border border-sbg-white bg-sbg-white px-4 py-3 text-[10px] font-bold tracking-widest text-sbg-black transition-colors hover:bg-transparent hover:text-sbg-white">SIGN UP</button>
+            </div>
+            {%- if form.errors -%}
+              <p class="text-[10px] tracking-wider text-red-200">{{ form.errors | default_errors }}</p>
+            {%- endif -%}
           {%- endif -%}
-          {%- if section.settings.whatsapp_number != blank -%}
-            <a href="https://wa.me/{{ section.settings.whatsapp_number | replace: ' ', '' | replace: '+', '' }}" target="_blank" class="text-sbg-white hover:opacity-80 transition-opacity" aria-label="{{ 'general.accessibility.chat_whatsapp' | t }}">
-              <svg viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7"><path d="M12.012 2c-5.506 0-9.988 4.482-9.988 9.988 0 1.76.459 3.475 1.33 4.996L2.025 22l5.176-1.358c1.477.807 3.137 1.23 4.811 1.23 5.505 0 9.987-4.482 9.987-9.988C22 6.482 17.518 2 12.012 2zm6.046 14.28c-.246.696-1.245 1.286-1.745 1.344-.45.053-1.042.083-1.685-.121-.409-.13-1.61-.532-3.455-1.344-3.155-1.385-5.187-4.577-5.344-4.789-.158-.212-1.28-1.706-1.28-3.256 0-1.55.808-2.31 1.097-2.61.29-.3.633-.377.844-.377.211 0 .422.003.606.012.193.009.45-.072.702.536.257.62.877 2.134.954 2.293.076.158.127.342.023.551-.105.21-.158.342-.317.525-.158.183-.332.408-.475.547-.158.152-.323.318-.14.63.183.313.812 1.342 1.74 2.17 1.196 1.066 2.204 1.396 2.518 1.553.314.158.497.13.682-.083.185-.212.788-.918.998-1.232.211-.314.422-.26.712-.152.29.108 1.84.869 2.157 1.028.317.158.528.236.606.37.079.135.079.782-.167 1.478z"/></svg>
-            </a>
-          {%- endif -%}
-        </div>
+        {%- endform -%}
+
       </div>
     </div>
 
@@ -231,12 +231,6 @@
       "id": "brand_title",
       "label": "Brand Title",
       "default": "STYLED BY GLORIA"
-    },
-    {
-      "type": "textarea",
-      "id": "brand_address",
-      "label": "Brand Address",
-      "default": "@STYLED BY GLORIA\nHAUTE ATELIER SECTOR, 4B\nCREATIVE CLUSTER\nBANGALORE, INDIA"
     },
     {
       "type": "text",

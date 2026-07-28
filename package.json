@@ -6,7 +6,8 @@
   "scripts": {
     "css:build": "npx tailwindcss -i ./src/input.css -o ./assets/sbg-theme.css --minify",
     "css:watch": "npx tailwindcss -i ./src/input.css -o ./assets/sbg-theme.css --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:theme": "shopify theme check --path .",
+    "test": "npm run css:build && npm run lint:theme"
   },
   "repository": {
     "type": "git",

@@ -29,5 +29,16 @@
         "default": "https://youtube.com"
       }
     ]
+  },
+  {
+    "name": "Lead Capture",
+    "settings": [
+      {
+        "type": "url",
+        "id": "lead_endpoint",
+        "label": "Cloudflare Worker endpoint",
+        "info": "Enter the deployed Worker URL, for example https://leads.yourdomain.com"
+      }
+    ]
   }
 ]

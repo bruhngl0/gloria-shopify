@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "styled-by-gloria-leads",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate": "psql \"$DATABASE_URL\" -f schema.sql"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260728.1",
+    "wrangler": "^4.25.0"
+  }
+}

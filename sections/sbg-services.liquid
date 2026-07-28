@@ -73,9 +73,7 @@
         </p>
         <div class="pt-2">
           <a
-            href="{{ section.settings.consult_link | default: 'https://calendly.com/styledbygloria/30min' }}"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="{{ routes.root_url }}pages/contact"
             class="inline-flex items-center justify-center px-8 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-black text-sbg-white hover:bg-sbg-white hover:text-sbg-black transition-all duration-300 w-full sm:w-auto"
           >
             Book Your Consultation
@@ -174,6 +172,52 @@
               </a>
             </div>
           </div>
+
+          <div class="border border-sbg-border p-8 md:p-10 flex flex-col justify-between space-y-8 bg-sbg-white hover:border-sbg-gold/40 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-300 group stagger-item">
+            <div class="space-y-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="bg-sbg-hover text-sbg-grey text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 border border-sbg-border/30 group-hover:bg-sbg-gold/10 transition-colors duration-300">Virtual or In-Person</span>
+                <span class="text-[9px] font-bold tracking-wider uppercase text-sbg-grey/85">Hourly Program</span>
+              </div>
+              <h3 class="font-display text-lg md:text-xl font-bold tracking-wide text-sbg-black uppercase group-hover:text-sbg-gold transition-colors duration-300">
+                Personal Shopping
+              </h3>
+              <ul class="space-y-3 text-xs tracking-wider text-sbg-grey list-disc pl-4 leading-relaxed">
+                <li>Curated search for garments matching your body lines</li>
+                <li>Private fitting session support with expert tailoring advice</li>
+                <li>Strategic wardrobe building with zero impulse buying</li>
+                <li>Access to exclusive boutique partnerships</li>
+              </ul>
+            </div>
+            <div class="pt-4 border-t border-sbg-border/60">
+              <a href="{{ routes.root_url }}pages/contact?subject=Styling%20Services&service=Personal%20Shopping" class="inline-flex items-center justify-center px-6 py-3.5 border border-sbg-black text-[10px] font-bold uppercase tracking-widest bg-sbg-white text-sbg-black hover:bg-sbg-black hover:text-sbg-white transition-all duration-300 w-full">
+                Enquire About This Service
+              </a>
+            </div>
+          </div>
+
+          <div class="border border-sbg-border p-8 md:p-10 flex flex-col justify-between space-y-8 bg-sbg-white hover:border-sbg-gold/40 hover:shadow-xl hover:shadow-sbg-gold/5 transition-all duration-300 group stagger-item">
+            <div class="space-y-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="bg-sbg-hover text-sbg-grey text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 border border-sbg-border/30 group-hover:bg-sbg-gold/10 transition-colors duration-300">Virtual or In-Person</span>
+                <span class="text-[9px] font-bold tracking-wider uppercase text-sbg-grey/85">Complete Bundle</span>
+              </div>
+              <h3 class="font-display text-lg md:text-xl font-bold tracking-wide text-sbg-black uppercase group-hover:text-sbg-gold transition-colors duration-300">
+                Full Styling Experience
+              </h3>
+              <ul class="space-y-3 text-xs tracking-wider text-sbg-grey list-disc pl-4 leading-relaxed">
+                <li>All-inclusive transformation: Closet Audit + Education + Shopping</li>
+                <li>Creation of a personalized digital Lookbook of 15+ outfits</li>
+                <li>Continuous 30-day stylist messaging support</li>
+                <li>Lifetime body-positive dressing blueprint</li>
+              </ul>
+            </div>
+            <div class="pt-4 border-t border-sbg-border/60">
+              <a href="{{ routes.root_url }}pages/contact?subject=Styling%20Services&service=Full%20Styling%20Experience" class="inline-flex items-center justify-center px-6 py-3.5 border border-sbg-black text-[10px] font-bold uppercase tracking-widest bg-sbg-white text-sbg-black hover:bg-sbg-black hover:text-sbg-white transition-all duration-300 w-full">
+                Enquire About This Service
+              </a>
+            </div>
+          </div>
         {%- endif -%}
       </div>
     </div>
@@ -191,8 +235,8 @@
 
       <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center reveal-on-scroll">
         <!-- Stylist Image -->
-        <div class="md:col-span-5 relative aspect-square w-full border border-sbg-border overflow-hidden bg-sbg-offwhite rounded-full max-w-[240px] mx-auto md:max-w-none">
-          <img src="{{ 'gloria.jpg' | asset_url }}" alt="Gloria G. - Lead Stylist" width="800" height="800" loading="lazy" decoding="async" class="object-cover w-full h-full">
+        <div class="md:col-span-5 relative aspect-square w-full border border-sbg-border overflow-hidden bg-sbg-offwhite rounded-full max-w-[240px] mx-auto md:max-w-none" style="margin-top: 4rem;">
+          <img src="{{ 'founder-portrait-optimized.jpg' | asset_url }}" alt="Gloria G. - Lead Stylist" width="800" height="800" loading="lazy" decoding="async" class="object-cover object-top w-full h-full">
         </div>
 
         <!-- Bio Content -->
@@ -444,8 +488,8 @@
     {
       "type": "text",
       "id": "consult_link",
-      "label": "Booking Link URL",
-      "default": "https://calendly.com/styledbygloria/30min"
+      "label": "Contact Form URL",
+      "default": "/pages/contact"
     }
   ],
   "blocks": [

@@ -1,0 +1,12 @@
+name = "styled-by-gloria-leads"
+main = "src/index.ts"
+compatibility_date = "2026-07-27"
+
+[vars]
+ALLOWED_ORIGIN = "https://styled-by-gloria-2.myshopify.com"
+
+[secrets]
+required = ["DATABASE_URL", "ADMIN_TOKEN"]
+
+[observability]
+enabled = true

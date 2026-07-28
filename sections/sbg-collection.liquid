@@ -73,18 +73,6 @@
       </div>
 
       <div class="space-y-3">
-        <span class="font-bold block">SHOP BY SIZE</span>
-        <select name="filter.v.option.size" class="shop-filter-select border border-sbg-border/60 bg-sbg-white px-4 py-3 text-[8px] font-semibold tracking-widest text-sbg-grey uppercase focus:outline-none focus:border-sbg-black" aria-label="Shop by size">
-          <option value="">SELECT SIZE</option>
-          <option value="xs">XS</option>
-          <option value="s">S</option>
-          <option value="m">M</option>
-          <option value="l">L</option>
-          <option value="xl">XL</option>
-        </select>
-      </div>
-
-      <div class="space-y-3">
         <span class="font-bold block">SHOP BY COLOR</span>
         <select name="filter.v.option.color" class="shop-filter-select border border-sbg-border/60 bg-sbg-white px-4 py-3 text-[8px] font-semibold tracking-widest text-sbg-grey uppercase focus:outline-none focus:border-sbg-black" aria-label="Shop by color">
           <option value="">SELECT COLOR</option>
@@ -133,8 +121,33 @@
         </div>
 
         {%- if shop_variant != blank -%}
+          {%- assign size_option = blank -%}
+          {%- for option in shop_product.options_with_values -%}
+            {%- assign option_name = option.name | downcase -%}
+            {%- if option_name == 'size' -%}
+              {%- assign size_option = option -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign display_sizes = 'XS|S|M|L|XL' | split: '|' -%}
+          {%- if size_option != blank -%}
+            {%- assign display_sizes = size_option.values -%}
+          {%- endif -%}
           <form method="post" action="{{ routes.cart_add_url }}" id="shop-add-to-cart-form" class="pt-4">
             <input type="hidden" name="id" value="{{ shop_variant.id }}">
+            <div class="mb-5 space-y-3">
+              <label class="block text-xs font-bold tracking-[0.18em] uppercase text-sbg-black" for="shop-size-options">SELECT SIZE</label>
+              <div id="shop-size-options" class="flex flex-wrap gap-2" role="group" aria-label="Select size">
+                {%- for size in display_sizes -%}
+                  {%- assign size_variant = blank -%}
+                  {%- for variant in shop_product.variants -%}
+                    {%- if size_variant == blank and variant.available and variant.options contains size -%}
+                      {%- assign size_variant = variant -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  <button type="button" class="shop-size-option border border-sbg-border/60 px-5 py-3 text-[11px] font-semibold tracking-wider text-sbg-grey uppercase hover:border-sbg-black transition-colors" data-variant-id="{{ size_variant.id | default: shop_variant.id }}" aria-pressed="false">{{ size }}</button>
+                {%- endfor -%}
+              </div>
+            </div>
             <button type="submit" class="w-full border border-sbg-black bg-sbg-black text-sbg-white px-6 py-4 text-xs font-bold tracking-[0.25em] uppercase hover:bg-sbg-white hover:text-sbg-black transition-colors">ADD TO CART</button>
           </form>
         {%- else -%}
@@ -159,6 +172,23 @@
 <script>
   const shopCartForm = document.getElementById('shop-add-to-cart-form');
   if (shopCartForm) {
+    const shopSizeOptions = document.querySelectorAll('.shop-size-option');
+    shopSizeOptions.forEach(function(option) {
+      option.addEventListener('click', function() {
+        const variantInput = shopCartForm.querySelector('input[name="id"]');
+        if (!variantInput) return;
+        variantInput.value = this.dataset.variantId;
+        shopSizeOptions.forEach(function(item) {
+          item.classList.remove('border-sbg-black', 'bg-sbg-black', 'text-sbg-white');
+          item.classList.add('border-sbg-border/60', 'text-sbg-grey');
+          item.setAttribute('aria-pressed', 'false');
+        });
+        this.classList.add('border-sbg-black', 'bg-sbg-black', 'text-sbg-white');
+        this.classList.remove('border-sbg-border/60', 'text-sbg-grey');
+        this.setAttribute('aria-pressed', 'true');
+      });
+    });
+
     shopCartForm.addEventListener('submit', function(event) {
       event.preventDefault();
       const submitButton = shopCartForm.querySelector('button[type="submit"]');

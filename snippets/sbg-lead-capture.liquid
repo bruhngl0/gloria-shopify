@@ -1,0 +1,46 @@
+{%- comment -%}
+  Sends contact and styling-service enquiries to the Cloudflare Worker when configured.
+  Native Shopify contact-form submission remains the fallback if the endpoint is blank or unavailable.
+{%- endcomment -%}
+<script>
+  window.sbgLeadConfig = { endpoint: {{ settings.lead_endpoint | default: '' | json }} };
+  document.addEventListener('DOMContentLoaded', function() {
+    const endpoint = window.sbgLeadConfig.endpoint;
+    if (!endpoint) return;
+    document.querySelectorAll('form[action*="/contact"]').forEach(function(form) {
+      if (form.dataset.sbgLeadReady === 'true') return;
+      form.dataset.sbgLeadReady = 'true';
+      const trap = document.createElement('input');
+      trap.type = 'text'; trap.name = 'website'; trap.tabIndex = -1; trap.autocomplete = 'off';
+      trap.setAttribute('aria-hidden', 'true'); trap.style.cssText = 'position:absolute;left:-9999px;opacity:0;height:0;width:0';
+      form.appendChild(trap);
+      const submitLead = async function(event) {
+        event.preventDefault();
+        const submit = form.querySelector('button[type="submit"]');
+        const original = submit ? submit.textContent : '';
+        if (submit) { submit.disabled = true; submit.textContent = 'SENDING...'; }
+        const data = new FormData(form);
+        const payload = {
+          name: data.get('contact[name]') || '', email: data.get('contact[email]') || '',
+          subject: data.get('contact[subject]') || '', message: data.get('contact[body]') || '',
+          source: form.id === 'StylingServicesContactForm' ? 'styling-services' : 'contact',
+          page_url: window.location.href, website: data.get('website') || ''
+        };
+        try {
+          const response = await fetch(endpoint.replace(/\/$/, '') + '/api/submissions', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), keepalive: true
+          });
+          if (!response.ok) throw new Error('Lead capture failed');
+          form.innerHTML = '<div class="py-12 text-center space-y-4"><h3 class="font-display text-xl font-bold tracking-wider uppercase">Message Sent</h3><p class="text-xs tracking-wider text-sbg-grey">Thank you for reaching out. Our styling lead will follow up shortly.</p></div>';
+        } catch (error) {
+          // Preserve the Shopify contact flow if the Worker is unavailable.
+          form.removeEventListener('submit', submitLead);
+          form.submit();
+        } finally {
+          if (submit && document.body.contains(submit)) { submit.disabled = false; submit.textContent = original; }
+        }
+      };
+      form.addEventListener('submit', submitLead);
+    });
+  });
+</script>

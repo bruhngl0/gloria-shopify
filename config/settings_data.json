@@ -11,7 +11,8 @@
   "current": {
     "social_instagram_link": "https://instagram.com/styledbygloria_g",
     "social_tiktok_link": "https://tiktok.com/@styledbygloria_g",
-    "social_youtube_link": "https://youtube.com"
+    "social_youtube_link": "https://youtube.com",
+    "lead_endpoint": "https://styled-by-gloria-leads.adityashrm500.workers.dev"
   },
   "presets": {}
 }

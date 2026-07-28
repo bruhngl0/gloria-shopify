@@ -25,7 +25,7 @@
   }
 </style>
 
-<header id="SBG-Header" class="fixed top-0 left-0 w-full z-40 transition-all duration-300 ease-in-out bg-transparent border-b border-transparent">
+<header id="SBG-Header" class="fixed top-0 left-0 w-full z-40 transition-all duration-300 ease-in-out {% if request.page_type == 'index' %}bg-transparent border-b border-transparent{% else %}bg-sbg-white/95 border-b border-sbg-border/60 backdrop-blur-md shadow-sm{% endif %}">
   <!-- Desktop Grid Layout -->
   <div class="hidden md:grid grid-cols-12 h-16 w-full items-center">
     <!-- Logo / Wordmark (Left partition) -->
@@ -38,6 +38,7 @@
     <!-- Desktop Nav Links -->
     <div class="col-span-6 flex items-center justify-center h-full">
       <nav class="flex space-x-8">
+        <a href="{{ routes.root_url }}" class="header-text-color text-sm tracking-wider uppercase transition-colors nav-link-fancy pb-1 text-sbg-black hover:text-sbg-grey font-normal">HOME</a>
         {%- for link in section.settings.menu.links -%}
           {%- assign link_title_downcase = link.title | downcase -%}
           {%- unless link_title_downcase == 'catalog' -%}
@@ -97,6 +98,7 @@
 
   <!-- Navigation -->
   <nav class="flex flex-col space-y-6 px-8 py-12 justify-center flex-1">
+    <a href="{{ routes.root_url }}" class="font-display text-3xl font-light tracking-[0.1em] uppercase text-sbg-black hover:text-sbg-grey transition-colors">HOME</a>
     {%- for link in section.settings.menu.links -%}
       {%- assign link_title_downcase = link.title | downcase -%}
       {%- unless link_title_downcase == 'catalog' -%}
@@ -130,7 +132,7 @@
     const mobileMenu = document.getElementById('MobileMenuOverlay');
 
     // Check if we are on Homepage/About page for background transparency
-    const isOverlayPage = window.location.pathname === '/' || window.location.pathname === window.Shopify.routes.root || window.location.pathname.includes('/about');
+    const isOverlayPage = window.location.pathname === '/' || window.location.pathname === window.Shopify.routes.root;
 
     function updateHeader() {
       const currentScrollY = window.scrollY;
@@ -141,14 +143,8 @@
         header.classList.remove('bg-sbg-white/95', 'border-sbg-border/60', 'backdrop-blur-md', 'shadow-sm');
         header.classList.add('bg-transparent', 'border-transparent');
         header.querySelectorAll('.header-text-color').forEach(el => {
-          // If on about page, load white text when header is transparent
-          if (window.location.pathname.includes('/about')) {
-            el.classList.add('text-white');
-            el.classList.remove('text-sbg-black');
-          } else {
-            el.classList.add('text-sbg-black');
-            el.classList.remove('text-white');
-          }
+          el.classList.add('text-sbg-black');
+          el.classList.remove('text-white');
         });
       } else {
         header.classList.add('bg-sbg-white/95', 'border-sbg-border/60', 'backdrop-blur-md', 'shadow-sm');

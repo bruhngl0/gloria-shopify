@@ -118,7 +118,7 @@
 
     <!-- 3. CTA Buttons in One Row -->
     <div class="mt-16 pt-10 border-t border-sbg-black/15 flex flex-col md:flex-row w-full items-center justify-center gap-6">
-      <a href="{{ section.settings.booking_url | default: '/pages/services' }}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-[#2B2B2B] text-[10px] font-bold uppercase tracking-widest bg-[#2B2B2B] text-[#F2F2F2] hover:bg-transparent hover:text-[#2B2B2B] transition-all duration-300 w-full md:w-72 shadow-[4px_4px_0px_rgba(10,10,10,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 text-center">
+      <a href="{{ section.settings.booking_url | default: routes.root_url | append: 'pages/services' }}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-[#2B2B2B] text-[10px] font-bold uppercase tracking-widest bg-[#2B2B2B] text-[#F2F2F2] hover:bg-transparent hover:text-[#2B2B2B] transition-all duration-300 w-full md:w-72 shadow-[4px_4px_0px_rgba(10,10,10,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 text-center">
         {{ section.settings.booking_label | default: 'Book a Consultation' }}
       </a>
 
