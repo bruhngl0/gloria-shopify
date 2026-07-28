@@ -219,7 +219,7 @@
                         class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black{% endif %}"
                         title="{{ value | escape }}"
                         data-value="{{ value | escape }}">
-                        {{ value | upcase }}
+                        {{ value | replace: 'Blue', 'Light Blue' | replace: 'blue', 'light blue' | upcase }}
                       </button>
                     {%- else -%}
                       <button type="button" 
@@ -373,7 +373,7 @@
                         onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)"
                         class="sbg-button-option h-8 px-3 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black{% endif %}"
                         data-value="{{ value | escape }}">
-                        {{ value | upcase }}
+                        {{ value | replace: 'Blue', 'Light Blue' | replace: 'blue', 'light blue' | upcase }}
                       </button>
                     {%- else -%}
                       <button type="button" 
