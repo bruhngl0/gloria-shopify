@@ -1,8 +1,26 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "sbg-services",
-      "settings": {}
+      "settings": {
+        "header_sub": "Elevate Your Style",
+        "header_title": "Styling Services",
+        "header_description": "Every service is designed with a body-first philosophy. We focus on how garments serve your lines, teaching you how to dress with lasting confidence.",
+        "consult_badge": "Start Here",
+        "consult_title": "30-Minute Initial Consultation",
+        "consult_description": "New to SBG? Every full styling experience begins here. In this virtual meet-up, we'll discuss your styling goals, identify your shape profile, and match you with the perfect program.",
+        "consult_price": "$25.00 CAD",
+        "consult_link": "/pages/contact"
+      }
     }
   },
   "order": [

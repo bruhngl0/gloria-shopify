@@ -12,7 +12,57 @@
     "social_instagram_link": "https://instagram.com/styledbygloria_g",
     "social_tiktok_link": "https://tiktok.com/@styledbygloria_g",
     "social_youtube_link": "https://youtube.com",
-    "lead_endpoint": "https://styled-by-gloria-leads.adityashrm500.workers.dev"
+    "lead_endpoint": "https://styled-by-gloria-leads.adityashrm500.workers.dev",
+    "sections": {
+      "sbg-header": {
+        "type": "sbg-header",
+        "settings": {
+          "logo_text": "Styled by Gloria",
+          "menu": "main-menu"
+        }
+      },
+      "sbg-footer": {
+        "type": "sbg-footer",
+        "settings": {
+          "brand_title": "STYLED BY GLORIA",
+          "email_address": "info@styledbygloria.com",
+          "whatsapp_number": "",
+          "menu1": "",
+          "menu1_title": "General",
+          "menu2": "",
+          "menu2_title": "Customer Service",
+          "menu3": "",
+          "menu3_title": "Popular Now",
+          "promo_text": "REACH OUT"
+        }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
+      },
+      "sbg-size-guide": {
+        "type": "sbg-size-guide",
+        "settings": {
+          "title": "Size Guide",
+          "description": "Structural Silhouette Chart",
+          "note": "Measurements are shown in inches. Styled by Gloria specializes in body-type proportions. Custom adjustments are available via styling programs."
+        }
+      },
+      "sbg-promo-popup": {
+        "type": "sbg-promo-popup",
+        "settings": {
+          "enable_popup": false,
+          "trigger_exit_intent": false,
+          "trigger_delay": 0,
+          "sub_label": "Atelier Invitation",
+          "title": "Join The Dispatch",
+          "description": "Subscribe to receive 10% off your initial draping order, structural body tutorials, and boutique drops.",
+          "placeholder": "jane@example.com",
+          "button_text": "Subscribe"
+        }
+      }
+    },
+    "content_for_index": []
   },
   "presets": {}
 }
