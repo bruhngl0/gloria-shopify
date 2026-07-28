@@ -1,25 +1,77 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "cover-hero": {
       "type": "sbg-cover-hero",
-      "settings": {}
-    },
-    "buy-box": {
-      "type": "sbg-hero",
-      "settings": {}
-    },
-    "mission": {
-      "type": "sbg-mission",
-      "settings": {}
+      "settings": {
+        "top_label": "BODY-TYPE INTENTIONAL FASHION",
+        "hero_title": "ONE FOR ALL",
+        "hero_subtitle": "Clothes made for your body type",
+        "button_text": "SHOP",
+        "button_url": ""
+      }
     },
     "featured-product": {
       "type": "sbg-featured-product",
-      "settings": {}
+      "settings": {
+        "featured_product": "one-for-all",
+        "description": ""
+      }
+    },
+    "sbg_fabric_QLxnWE": {
+      "type": "sbg-fabric",
+      "disabled": true,
+      "name": "SBG Fabric Details",
+      "settings": {
+        "sub_label": "Atelier & Textiles",
+        "title": "The Architecture of Stretch Crepe",
+        "description": "Our signature capsule collections leverage a bespoke heavyweight crepe engineered with structural memory. Unlike standard fabrics that stretch thin and pull, our Viscose-rich weave contours to your lines, holding its shape while adapting dynamically to your movements.",
+        "weight_index": "380 GSM (Heavyweight)",
+        "composition": "74% Viscose, 18% Polyamide, 8% Elastane",
+        "weave_structure": "Double-knit stretch crepe with structural memory",
+        "mill_location": "Como, Italy"
+      }
+    },
+    "buy-box": {
+      "type": "sbg-hero",
+      "settings": {
+        "featured_product": "",
+        "description": "A graceful boat neckline, softly flared sleeves, and an A-line skirt—made to move with you, flatter your natural shape, and feel entirely yours.",
+        "vertical_title": "ONE FOR ALL",
+        "shop_link_text": "SHOP PIECES >",
+        "shop_link_subtext": "Signature Collection",
+        "shop_link_url": "",
+        "link_1_text": "SERVICES",
+        "link_1_url": "",
+        "link_2_text": "THE FOUNDER",
+        "link_2_url": "",
+        "link_3_text": "CONTACT OFFICE",
+        "link_3_url": ""
+      }
+    },
+    "mission": {
+      "type": "sbg-mission",
+      "settings": {
+        "mission_heading": "You weren't made to fit clothes, clothes were made to fit you.",
+        "mission_text": "Dressing for your body type starts here. At Styled by Gloria, we design body type intentional clothes made to fit your specific shape, not the compiled average. By creating pieces intentionally designed to flatter your shape, suddenly, clarity begins, disappointment is a distant memory and love for your body increases.",
+        "mission_closing": "Because you're finally seeing yourself wear clothes, not letting clothes wear you.",
+        "mission_final": "Love for yourself starts with intentionality, it starts with you.",
+        "sub_label": "Our Foundational Promise"
+      }
     }
   },
   "order": [
     "cover-hero",
     "featured-product",
+    "sbg_fabric_QLxnWE",
     "buy-box",
     "mission"
   ]
