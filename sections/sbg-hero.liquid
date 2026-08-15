@@ -189,6 +189,7 @@
 
             <!-- Size / Color swatches custom rendering -->
             {%- for option in product_to_show.options_with_values -%}
+              {%- assign option_index = forloop.index0 -%}
               {%- assign option_name_down = option.name | downcase -%}
               {%- unless option_name_down == 'title' -%}
               <div class="space-y-2 variant-option-group stagger-item" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option.name | escape }}">
@@ -215,7 +216,7 @@
                         endif
                       -%}
                       <button type="button"
-                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)"
+                        onclick="selectOption({{ option_index }}, {{ value | json | escape }}, this)"
                         class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black{% endif %}"
                         title="{{ value | escape }}"
                         data-value="{{ value | escape }}">
@@ -223,7 +224,7 @@
                       </button>
                     {%- else -%}
                       <button type="button" 
-                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)" 
+                        onclick="selectOption({{ option_index }}, {{ value | json | escape }}, this)"
                         class="sbg-button-option h-7 px-2.5 border text-[9px] tracking-widest transition-all focus:outline-none flex items-center justify-center min-w-[32px] {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black hover:border-sbg-black{% endif %}"
                         data-value="{{ value | escape }}">
                         {{ value }}
@@ -346,6 +347,7 @@
 
             <!-- Size / Color swatches mobile custom rendering -->
             {%- for option in product_to_show.options_with_values -%}
+              {%- assign option_index = forloop.index0 -%}
               {%- assign option_name_down = option.name | downcase -%}
               {%- unless option_name_down == 'title' -%}
               <div class="space-y-2 variant-option-group" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option.name | escape }}">
@@ -370,14 +372,14 @@
                         endif
                       -%}
                       <button type="button"
-                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)"
+                        onclick="selectOption({{ option_index }}, {{ value | json | escape }}, this)"
                         class="sbg-button-option h-8 px-3 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black{% endif %}"
                         data-value="{{ value | escape }}">
                         {{ value | replace: 'Blue', 'Light Blue' | replace: 'blue', 'light blue' | upcase }}
                       </button>
                     {%- else -%}
                       <button type="button" 
-                        onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value | escape }}', this)" 
+                        onclick="selectOption({{ option_index }}, {{ value | json | escape }}, this)"
                         class="sbg-button-option h-8 flex-1 border text-[9px] tracking-widest focus:outline-none flex items-center justify-center min-w-[32px] {% if option.selected_value == value %}border-sbg-black bg-sbg-black text-sbg-white font-bold{% else %}border-sbg-border bg-sbg-white text-sbg-black{% endif %}"
                         data-value="{{ value | escape }}">
                         {{ value }}
@@ -606,11 +608,10 @@
     ];
     const productImages = editorialImages;
 
-    let currentOptionValues = [
-      {%- for option in product_to_show.options_with_values -%}
-        "{{ option.selected_value | escape }}"{%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    ];
+    // Use the selected variant's option values as the single source of truth.
+    // `option.selected_value` can differ when Shopify resolves a variant URL,
+    // which previously left the hidden variant input on the initial size.
+    let currentOptionValues = {{ current_variant.options | json }};
 
     let currentImageIndex = 0;
 
@@ -690,13 +691,9 @@
         });
       });
 
-      if (matchingVariant) {
-        // Update hidden input fields
-        document.getElementById('sbg-desktop-variant-input').value = matchingVariant.id;
-        document.getElementById('sbg-mobile-variant-input').value = matchingVariant.id;
-
-        updateOrderProperties();
-      }
+      document.getElementById('sbg-desktop-variant-input').value = matchingVariant ? matchingVariant.id : '';
+      document.getElementById('sbg-mobile-variant-input').value = matchingVariant ? matchingVariant.id : '';
+      updateOrderProperties();
       updateVariantState(matchingVariant);
     }
 

@@ -120,32 +120,32 @@
 
         {%- if shop_variant != blank -%}
           {%- assign size_option = blank -%}
+          {%- assign size_option_index = blank -%}
           {%- for option in shop_product.options_with_values -%}
             {%- assign option_name = option.name | downcase -%}
-            {%- if option_name == 'size' -%}
+            {%- if option_name contains 'size' -%}
               {%- assign size_option = option -%}
+              {%- assign size_option_index = forloop.index0 -%}
             {%- endif -%}
           {%- endfor -%}
-          {%- assign display_sizes = 'XS|S|M|L|XL' | split: '|' -%}
-          {%- if size_option != blank -%}
-            {%- assign display_sizes = size_option.values -%}
-          {%- endif -%}
           <form method="post" action="{{ routes.cart_add_url }}" id="shop-add-to-cart-form" class="pt-4">
             <input type="hidden" name="id" value="{{ shop_variant.id }}">
+            {%- if size_option != blank -%}
             <div class="mb-5 space-y-3">
               <label class="block text-xs font-bold tracking-[0.18em] uppercase text-sbg-black" for="shop-size-options">SELECT SIZE</label>
               <div id="shop-size-options" class="flex flex-wrap gap-2" role="group" aria-label="Select size">
-                {%- for size in display_sizes -%}
+                {%- for size in size_option.values -%}
                   {%- assign size_variant = blank -%}
                   {%- for variant in shop_product.variants -%}
-                    {%- if size_variant == blank and variant.available and variant.options contains size -%}
+                    {%- if size_variant == blank and variant.available and variant.options[size_option_index] == size -%}
                       {%- assign size_variant = variant -%}
                     {%- endif -%}
                   {%- endfor -%}
-                  <button type="button" class="shop-size-option border border-sbg-border/60 px-5 py-3 text-[11px] font-semibold tracking-wider text-sbg-grey uppercase hover:border-sbg-black transition-colors" data-variant-id="{{ size_variant.id | default: shop_variant.id }}" aria-pressed="false">{{ size }}</button>
+                  <button type="button" class="shop-size-option border border-sbg-border/60 px-5 py-3 text-[11px] font-semibold tracking-wider text-sbg-grey uppercase hover:border-sbg-black transition-colors disabled:cursor-not-allowed disabled:opacity-40" data-variant-id="{{ size_variant.id }}" aria-pressed="{% if shop_variant.options[size_option_index] == size %}true{% else %}false{% endif %}" {% if size_variant == blank %}disabled{% endif %}>{{ size }}</button>
                 {%- endfor -%}
               </div>
             </div>
+            {%- endif -%}
             <button type="submit" class="w-full border border-sbg-black bg-sbg-black text-sbg-white px-6 py-4 text-xs font-bold tracking-[0.25em] uppercase hover:bg-sbg-white hover:text-sbg-black transition-colors">ADD TO CART</button>
           </form>
         {%- else -%}
