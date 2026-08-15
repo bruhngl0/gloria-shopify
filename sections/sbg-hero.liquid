@@ -506,7 +506,7 @@
     }
   }
 
-  // Variant Option Selection & AJAX Cart Additions
+  /* Variant Option Selection & AJAX Cart Additions */
   {%- if use_mock -%}
     // Mock image arrays
     const mockImages = {
@@ -611,7 +611,13 @@
     // Use the selected variant's option values as the single source of truth.
     // `option.selected_value` can differ when Shopify resolves a variant URL,
     // which previously left the hidden variant input on the initial size.
+    // Keep the option order aligned with product.options. Some Shopify
+    // responses omit `variant.options`, so fall back to option1/2/3.
     let currentOptionValues = {{ current_variant.options | json }};
+    if (!Array.isArray(currentOptionValues) || !currentOptionValues.length) {
+      currentOptionValues = [{{ current_variant.option1 | json }}, {{ current_variant.option2 | json }}, {{ current_variant.option3 | json }}]
+        .filter(value => value !== null && value !== undefined);
+    }
 
     let currentImageIndex = 0;
 
@@ -686,8 +692,11 @@
 
       // Resolve variant based on options
       const matchingVariant = productVariants.find(variant => {
-        return (variant.options || []).length === currentOptionValues.length && (variant.options || []).every((optValue, idx) => {
-          return optValue === currentOptionValues[idx];
+        const variantOptions = Array.isArray(variant.options) && variant.options.length
+          ? variant.options
+          : [variant.option1, variant.option2, variant.option3].filter(value => value !== null && value !== undefined);
+        return variantOptions.length === currentOptionValues.length && variantOptions.every((optValue, idx) => {
+          return String(optValue) === String(currentOptionValues[idx]);
         });
       });
 
