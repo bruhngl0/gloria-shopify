@@ -74,11 +74,11 @@
               </p>
               <p class="text-xs font-semibold tracking-wider text-sbg-black/80">
                 {%- if product.price_varies -%}
-                  From {{ product.price_min | money }}
+                  From {% render 'sbg-promo-price', price: product.price_min %}
                 {%- else -%}
-                  {{ product.price | money }}
+                  {% render 'sbg-promo-price', price: product.price %}
                 {%- endif -%}
-                {%- if product.compare_at_price > product.price -%}
+                {%- if product.compare_at_price > product.price and settings.sbg_promo_enabled == false -%}
                   <span class="text-sbg-grey line-through pl-1.5 font-normal text-[10px]">{{ product.compare_at_price | money }}</span>
                 {%- endif -%}
               </p>

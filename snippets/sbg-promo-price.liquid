@@ -1,0 +1,16 @@
+{%- comment -%}
+  Storewide promotional price. Pass a price in cents: {% render 'sbg-promo-price', price: product.price %}
+{%- endcomment -%}
+{%- liquid
+  assign promotion_enabled = settings.sbg_promo_enabled
+  assign promotion_percent = settings.sbg_promo_percent | default: 25
+  assign discount_factor = 100 | minus: promotion_percent
+  assign promotional_price = price | times: discount_factor | divided_by: 100
+-%}
+{%- if promotion_enabled -%}
+  <span class="text-sbg-black">{{ promotional_price | money }}</span>
+  <s class="text-sbg-grey pl-1.5 font-normal text-[10px]">{{ price | money }}</s>
+  <span class="sr-only">{{ promotion_percent }}% off</span>
+{%- else -%}
+  {{ price | money }}
+{%- endif -%}

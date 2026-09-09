@@ -40,5 +40,32 @@
         "info": "Enter the deployed Worker URL, for example https://leads.yourdomain.com"
       }
     ]
+  },
+  {
+    "name": "Storewide promotion",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "sbg_promo_enabled",
+        "label": "Show storewide promotion",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "sbg_promo_percent",
+        "label": "Discount percentage",
+        "min": 1,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "default": 25
+      },
+      {
+        "type": "text",
+        "id": "sbg_promo_code",
+        "label": "Shopify discount code",
+        "info": "Enter the exact code created in Shopify. It is applied when the customer goes to checkout."
+      }
+    ]
   }
 ]

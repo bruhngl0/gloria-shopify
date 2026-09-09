@@ -83,7 +83,7 @@
                       {{ item.title }}
                     </p>
                     <p class="text-xs font-semibold tracking-wider text-sbg-black/80">
-                      {{ item.price | money }}
+                      {% render 'sbg-promo-price', price: item.price %}
                     </p>
                   </div>
                 </a>

@@ -3,6 +3,12 @@
 {%- endcomment -%}
 
 {%- if section.settings.show_announcement -%}
+  {%- liquid
+    assign announcement_text = section.settings.text
+    if settings.sbg_promo_enabled
+      assign announcement_text = settings.sbg_promo_percent | default: 25 | append: '% OFF SITEWIDE — USE CODE ' | append: settings.sbg_promo_code | append: ' AT CHECKOUT'
+    endif
+  -%}
   <style type="text/css">
     #SBG-AnnouncementBar {
       background-color: {{ section.settings.bg_color }};
@@ -21,14 +27,14 @@
     }
   </style>
 
-  <div id="SBG-AnnouncementBar" class="relative w-full z-50 flex items-center justify-between px-6 py-2.5 font-body uppercase select-none text-center">
+  <div id="SBG-AnnouncementBar" class="{% if section.settings.sticky %}fixed top-0 left-0{% else %}relative{% endif %} w-full z-50 flex items-center justify-between px-6 py-2.5 font-body uppercase select-none text-center">
     <div class="flex-1 flex justify-center items-center">
       {%- if section.settings.link != blank -%}
         <a href="{{ section.settings.link }}" class="hover:underline transition duration-300">
-          {{ section.settings.text }}
+          {{ announcement_text }}
         </a>
       {%- else -%}
-        <span>{{ section.settings.text }}</span>
+        <span>{{ announcement_text }}</span>
       {%- endif -%}
     </div>
 
@@ -38,6 +44,9 @@
       </button>
     {%- endif -%}
   </div>
+  {%- if section.settings.sticky -%}
+    <div id="SBG-AnnouncementSpacer" aria-hidden="true"></div>
+  {%- endif -%}
 
   <script>
     function closeAnnouncementBar() {
@@ -49,17 +58,24 @@
         if (header) {
           header.style.top = '0';
         }
+        const spacer = document.getElementById('SBG-AnnouncementSpacer');
+        if (spacer) spacer.style.height = '0';
       }
     }
 
-    // Dynamic sticky header adjustment when announcement bar is loaded
-    document.addEventListener('DOMContentLoaded', function() {
+    // The header is fixed, so it must always begin below a visible announcement bar.
+    function positionHeaderBelowAnnouncement() {
       const bar = document.getElementById('SBG-AnnouncementBar');
       const header = document.getElementById('SBG-Header');
-      if (bar && header && {{ section.settings.sticky | json }}) {
+      const spacer = document.getElementById('SBG-AnnouncementSpacer');
+      if (bar && header && bar.style.display !== 'none') {
         header.style.top = bar.offsetHeight + 'px';
+        if (spacer) spacer.style.height = bar.offsetHeight + 'px';
       }
-    });
+    }
+
+    document.addEventListener('DOMContentLoaded', positionHeaderBelowAnnouncement);
+    window.addEventListener('resize', positionHeaderBelowAnnouncement);
   </script>
 {%- endif -%}
 
@@ -77,13 +93,13 @@
       "type": "checkbox",
       "id": "sticky",
       "label": "Sticky Top Position",
-      "default": false
+      "default": true
     },
     {
       "type": "text",
       "id": "text",
       "label": "Announcement Text",
-      "default": "Free shipping on international orders over $250"
+      "default": "25% OFF SITEWIDE — USE CODE SBG25 AT CHECKOUT"
     },
     {
       "type": "url",

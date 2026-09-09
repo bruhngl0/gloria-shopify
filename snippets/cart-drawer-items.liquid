@@ -39,7 +39,11 @@
                   {{ item.product.title }}
                 </h4>
                 <p class="ml-4">
-                  {{ item.final_line_price | money }}
+                  {%- if item.final_line_price < item.original_line_price -%}
+                    {{ item.final_line_price | money }} <s class="text-sbg-grey font-normal text-[10px]">{{ item.original_line_price | money }}</s>
+                  {%- else -%}
+                    {% render 'sbg-promo-price', price: item.original_line_price %}
+                  {%- endif -%}
                 </p>
               </div>
               {%- unless item.product.has_only_default_variant -%}
@@ -77,18 +81,29 @@
 
     <!-- Summary & Checkout Buttons -->
     <div class="border-t border-sbg-border px-4 py-6 bg-sbg-offwhite space-y-6 -mx-6 -mb-4">
+      {%- liquid
+        assign promotion_percent = settings.sbg_promo_percent | default: 25
+        assign discount_factor = 100 | minus: promotion_percent
+        assign estimated_total = cart.original_total_price | times: discount_factor | divided_by: 100
+      -%}
       <div class="flex justify-between items-center text-xs tracking-wider uppercase">
         <span class="text-sbg-grey font-medium">{{ 'general.cart.subtotal' | t }}</span>
         <span class="font-bold text-sbg-black">
-          {{ cart.total_price | money }}
+          {%- if cart.total_discount > 0 -%}
+            {{ cart.total_price | money }}
+          {%- elsif settings.sbg_promo_enabled -%}
+            {{ estimated_total | money }} <s class="text-sbg-grey font-normal text-[10px]">{{ cart.original_total_price | money }}</s>
+          {%- else -%}
+            {{ cart.total_price | money }}
+          {%- endif -%}
         </span>
       </div>
       <p class="text-[10px] tracking-wider text-sbg-grey uppercase leading-normal">
-        {{ 'general.cart.shipping_note' | t }}
+        {%- if settings.sbg_promo_enabled -%}{{ promotion_percent }}% promotion applied at checkout. {%- endif -%} {{ 'general.cart.shipping_note' | t }}
       </p>
 
       <div class="space-y-3">
-        <a href="/checkout" class="w-full inline-flex items-center justify-center px-6 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.99] transition-all text-center">
+        <a href="{% if settings.sbg_promo_enabled and settings.sbg_promo_code != blank %}/discount/{{ settings.sbg_promo_code | url_encode }}?redirect=/checkout{% else %}/checkout{% endif %}" class="w-full inline-flex items-center justify-center px-6 py-4 border border-sbg-black text-xs font-bold uppercase tracking-widest bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.99] transition-all text-center">
           {{ 'general.cart.checkout' | t }}
         </a>
         <button onclick="window.sbg.closeCart()" class="w-full inline-flex items-center justify-center px-6 py-3 border border-sbg-border text-xs font-semibold uppercase tracking-widest bg-sbg-white text-sbg-black hover:bg-sbg-hover transition-colors text-center">

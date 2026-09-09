@@ -97,7 +97,7 @@
         </div>
         <div class="pt-8 px-1 space-y-1">
           <h2 class="font-display text-sm font-bold tracking-wide uppercase text-sbg-black">{{ shop_title }}</h2>
-          <p class="text-xs font-semibold tracking-wider text-sbg-black/80">{{ shop_price | money }}</p>
+          <p class="text-xs font-semibold tracking-wider text-sbg-black/80">{% render 'sbg-promo-price', price: shop_price %}</p>
         </div>
       </div>
 
@@ -105,7 +105,7 @@
         <div class="space-y-8">
           <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-sbg-grey">STYLE CODE: SBG-D001</span>
           <h2 class="font-display text-3xl md:text-5xl font-medium leading-[0.95] tracking-wide uppercase text-sbg-black">{{ shop_title }}</h2>
-          <p class="text-xl font-bold tracking-wider text-sbg-black">{{ shop_price | money }}</p>
+          <p class="text-xl font-bold tracking-wider text-sbg-black">{% render 'sbg-promo-price', price: shop_price %}</p>
         </div>
 
         <div class="space-y-4">

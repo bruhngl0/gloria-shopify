@@ -13,6 +13,9 @@
     "social_tiktok_link": "https://tiktok.com/@styledbygloria_g",
     "social_youtube_link": "https://youtube.com",
     "lead_endpoint": "https://styled-by-gloria-leads.adityashrm500.workers.dev",
+    "sbg_promo_enabled": true,
+    "sbg_promo_percent": 25,
+    "sbg_promo_code": "SBG25",
     "sections": {
       "sbg-header": {
         "type": "sbg-header",

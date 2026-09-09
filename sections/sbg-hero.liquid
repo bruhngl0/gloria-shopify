@@ -131,7 +131,7 @@
 
           <div class="space-y-2.5 text-[8.5px] tracking-[0.2em] text-sbg-grey leading-relaxed uppercase stagger-item">
             <p class="font-bold text-sbg-black">
-              {{ product_title }} &mdash; <span id="sbg-desktop-price">{{ product_price | money }}</span>
+              {{ product_title }} &mdash; <span id="sbg-desktop-price">{% render 'sbg-promo-price', price: product_price %}</span>
             </p>
             <div class="text-[8.5px] tracking-wider text-sbg-grey normal-case leading-relaxed">
               {{ product_description | strip_html }}
@@ -174,7 +174,7 @@
 
             <!-- Submit Button -->
             <button type="submit" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center stagger-item">
-              <span id="sbg-desktop-button-text">ADD TO BAG &mdash; {{ product_price | money }}</span>
+              <span id="sbg-desktop-button-text">ADD TO BAG &mdash; {% render 'sbg-promo-price', price: product_price %}</span>
             </button>
           </form>
         {%- else -%}
@@ -242,7 +242,7 @@
 
             <!-- Submit Button -->
             <button type="submit" id="sbg-desktop-add-to-bag" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center stagger-item">
-              <span id="sbg-desktop-button-text">ADD TO BAG &mdash; {{ current_variant.price | money }}</span>
+              <span id="sbg-desktop-button-text">ADD TO BAG &mdash; {% render 'sbg-promo-price', price: current_variant.price %}</span>
             </button>
           </form>
         {%- endif -%}
@@ -295,7 +295,7 @@
               {{ product_title }}
             </h2>
             <span id="sbg-mobile-price" class="text-xs font-bold tracking-wider text-sbg-grey">
-              {{ product_price | money }}
+              {% render 'sbg-promo-price', price: product_price %}
             </span>
           </div>
           <div class="text-[9px] tracking-[0.2em] text-sbg-grey uppercase leading-relaxed">
@@ -333,7 +333,7 @@
             <!-- Submit button -->
             <div class="pt-2">
               <button type="submit" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white flex items-center justify-center">
-                <span>ADD TO BAG &mdash; {{ product_price | money }}</span>
+                <span>ADD TO BAG &mdash; {% render 'sbg-promo-price', price: product_price %}</span>
               </button>
             </div>
           </form>
@@ -397,7 +397,7 @@
 
             <div class="pt-2">
               <button type="submit" id="sbg-mobile-add-to-bag" class="w-full py-3 text-[10px] font-bold uppercase tracking-[0.25em] bg-sbg-black text-sbg-white flex items-center justify-center">
-                <span id="sbg-mobile-button-text">ADD TO BAG &mdash; {{ current_variant.price | money }}</span>
+                <span id="sbg-mobile-button-text">ADD TO BAG &mdash; {% render 'sbg-promo-price', price: current_variant.price %}</span>
               </button>
             </div>
           </form>
@@ -648,9 +648,14 @@
         return;
       }
 
-      const formattedPrice = window.Shopify.formatMoney ? window.Shopify.formatMoney(matchingVariant.price) : `$${(matchingVariant.price / 100).toFixed(2)}`;
-      document.getElementById('sbg-desktop-price').innerText = formattedPrice;
-      document.getElementById('sbg-mobile-price').innerText = formattedPrice;
+      const originalPrice = window.Shopify.formatMoney ? window.Shopify.formatMoney(matchingVariant.price) : `$${(matchingVariant.price / 100).toFixed(2)}`;
+      const promoEnabled = {{ settings.sbg_promo_enabled | json }};
+      const promoPercent = {{ settings.sbg_promo_percent | default: 25 | json }};
+      const discountedAmount = Math.round(matchingVariant.price * (100 - promoPercent) / 100);
+      const formattedPrice = promoEnabled ? (window.Shopify.formatMoney ? window.Shopify.formatMoney(discountedAmount) : `$${(discountedAmount / 100).toFixed(2)}`) : originalPrice;
+      const priceMarkup = promoEnabled ? `${formattedPrice} <s class="text-sbg-grey font-normal text-[10px]">${originalPrice}</s>` : formattedPrice;
+      document.getElementById('sbg-desktop-price').innerHTML = priceMarkup;
+      document.getElementById('sbg-mobile-price').innerHTML = priceMarkup;
       const availableText = matchingVariant.available ? `ADD TO BAG — ${formattedPrice}` : 'OUT OF STOCK';
       desktopBtnText.innerText = availableText;
       mobileBtnText.innerText = availableText;
